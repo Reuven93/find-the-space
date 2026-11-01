@@ -83,7 +83,7 @@ button { cursor: pointer; }
 
 /* ---------- home ---------- */
 .home { padding-block: 16px 20px; gap: 16px; overflow-y: auto; }
-.top { display: flex; align-items: center; gap: 14px; padding-right: 70px; min-height: 56px; }
+.top { display: flex; align-items: center; gap: 14px; padding-right: 136px; min-height: 56px; }
 .logo { flex: 1; margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4.4vw, 50px); letter-spacing: 2px; line-height: 1; }
 .logo span { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .me { appearance: none; display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 14px;
@@ -150,21 +150,18 @@ button { cursor: pointer; }
 .make-form { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
 .make-form h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 52px; letter-spacing: 2px; line-height: 1; }
 .make-form .lbl { font-family: var(--label); font-weight: 700; font-size: 17px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); }
-#p-name { width: 100%; min-height: 60px; border-radius: 14px; border: 2px solid var(--edge); background: rgba(0, 0, 0, .35);
+#p-name, #p-fav { width: 100%; min-height: 60px; border-radius: 14px; border: 2px solid var(--edge); background: rgba(0, 0, 0, .35);
   padding: 8px 16px; font-family: var(--display); font-size: 32px; letter-spacing: 1px; }
-#p-name::placeholder { color: rgba(246, 242, 228, .4); }
+#p-name::placeholder, #p-fav::placeholder { color: rgba(246, 242, 228, .4); }
 .numpick { display: flex; align-items: center; gap: 14px; }
 .numpick output { min-width: 80px; text-align: center; font-family: var(--display); font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }
 .numpick .round { font-family: var(--display); font-size: 34px; }
-.kits { display: flex; flex-wrap: wrap; gap: 12px; }
-.kit { appearance: none; width: 58px; height: 58px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .25); padding: 0; background: var(--k); }
-.kit[aria-checked="true"] { border-color: var(--gold-hi); box-shadow: 0 0 0 4px rgba(255, 227, 138, .35); transform: scale(1.08); }
 .make-row { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
 .make-row .cta { flex: 1; }
 .make-cancel[hidden] { display: none; }
 
 /* ---------- playing ---------- */
-.hud { display: flex; align-items: center; gap: 14px; padding-block: 12px; padding-right: 70px; flex-wrap: wrap; border-bottom: 2px solid rgba(227, 179, 65, .35); }
+.hud { display: flex; align-items: center; gap: 14px; padding-block: 12px; padding-right: 136px; flex-wrap: wrap; border-bottom: 2px solid rgba(227, 179, 65, .35); }
 .hud-title { flex: 1; min-width: 180px; display: flex; flex-direction: column; }
 .sec-name { font-family: var(--label); font-weight: 700; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
 #title { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: 1px; line-height: 1; text-wrap: balance; }
@@ -245,7 +242,7 @@ button { cursor: pointer; }
 .match-k { font-family: var(--display); font-size: 32px; letter-spacing: 1.5px; line-height: 1; color: var(--gold-hi); }
 .match-sub { font-size: 16px; color: var(--muted); }
 .end-match { display: flex; align-items: baseline; justify-content: center; white-space: nowrap; font-family: var(--display); font-size: 34px; letter-spacing: 1px; line-height: 1; color: var(--gold-hi); }
-/* "Try it on Saturday": the bridge from the app to his real match */
+/* "Get ready for the game": the bridge from the app to his real match */
 .sat { border: 2px dashed var(--gold); border-radius: 14px; padding: 10px 14px; background: rgba(227, 179, 65, .1); }
 .sat-k { display: block; font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); }
 .sat p { margin: 4px 0 0; font-size: 17px; line-height: 1.4; }
@@ -257,6 +254,43 @@ button { cursor: pointer; }
   paint-order: stroke; stroke: rgba(0, 0, 0, .35); stroke-width: 4px; }
 .kit-light { --shirt-edge: #1A2330; }
 .kit-light .shirt text { fill: #1A2330; stroke: rgba(255, 255, 255, .5); }
+
+/* ---------- 4b: academy, coach, sounds, confetti, card upgrade ---------- */
+.sound { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); right: calc(max(16px, env(safe-area-inset-right, 0px)) + 66px); }
+.sound[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--card-ink); }
+.sound .slash { display: none; }
+.sound[aria-pressed="false"] .slash { display: inline; }
+.sound[aria-pressed="false"] .note { opacity: .45; }
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+.coach-who { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: none; }
+.coach-tag { font-family: var(--label); font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-hi); white-space: nowrap; }
+.picks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.pick { appearance: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; min-height: 44px; border-radius: 14px;
+  border: 2px solid var(--edge); background: rgba(0, 0, 0, .3); text-align: center; }
+.pick svg { width: 54px; height: 54px; }
+.pick-name { font-family: var(--label); font-weight: 700; font-size: 16px; line-height: 1.1; }
+.pick-sub { font-size: 13px; color: var(--muted); line-height: 1.2; }
+.pick[aria-checked="true"] { border-color: var(--gold-hi); background: rgba(227, 179, 65, .22); box-shadow: 0 0 0 3px rgba(255, 227, 138, .35); }
+#p-fav { font-size: 24px; min-height: 52px; }
+.lbl-opt { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--muted); }
+.make-need { margin: 0; font-size: 15px; color: var(--muted); }
+.make-need[hidden] { display: none; }
+.pc-crest { position: absolute; top: 36px; right: 22px; width: 58px; height: 58px; }
+.pc-ac { font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; text-align: center; }
+.pc-fav { font-size: 15px; font-weight: 700; opacity: .85; text-align: center; overflow-wrap: anywhere; }
+.me-crest { width: 34px; height: 40px; flex: none; }
+.upgrade { position: relative; z-index: 1; margin: -52px 0 0; align-self: center; font-family: var(--display); font-size: 32px; letter-spacing: 1.5px; line-height: 1;
+  padding: 8px 18px 6px; border-radius: 12px; border: 2px solid var(--gold); background: #1B1405; color: var(--gold-hi);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .5); animation: pop .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+.end-card .skill.flip { animation: flip .9s ease-in-out; }
+@keyframes flip { 0% { transform: rotateY(0); } 50% { transform: rotateY(90deg) scale(1.08); } 100% { transform: rotateY(0); } }
+@media (max-width: 720px) { .picks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .top { flex: none; flex-wrap: wrap; row-gap: 12px; }
+  .logo { flex: 1 1 100%; font-size: 30px; }
+  .me { margin-right: -120px; }  /* second row sits below the round buttons, so it can use the full width */
+}
+@media (prefers-reduced-motion: reduce) { .upgrade, .end-card .skill.flip { animation: none; } }
 
 /* ---------- smaller screens ---------- */
 @media (max-width: 1000px) {
@@ -399,29 +433,25 @@ button { cursor: pointer; }
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="coach-art" viewBox="0 0 64 64">
-    <circle cx="32" cy="36" r="20" fill="#F2C79B" stroke="#1A2330" stroke-width="2.5"/>
-    <path d="M12 30c0-12 9-19 20-19s20 7 20 19z" fill="#E3B341" stroke="#1A2330" stroke-width="2.5"/>
-    <path d="M40 29h18c0 3-3 5-6 5H40z" fill="#E3B341" stroke="#1A2330" stroke-width="2.5" stroke-linejoin="round"/>
-    <circle cx="25" cy="38" r="2.4" fill="#1A2330"/><circle cx="39" cy="38" r="2.4" fill="#1A2330"/>
-    <path d="M25 46c4 4 10 4 14 0" fill="none" stroke="#1A2330" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M18 52c5 6 23 6 28 0" fill="none" stroke="#E23" stroke-width="2"/>
-    <rect x="40" y="52" width="9" height="5" rx="2" fill="#C9D3DD" stroke="#1A2330" stroke-width="1.8"/>
-  </symbol>
   <symbol id="shirt-shape" viewBox="0 0 100 100">
     <path class="body" style="fill: var(--us); stroke: var(--shirt-edge); stroke-width: 3; stroke-linejoin: round" d="M34 10 L20 16 L6 34 L20 44 L26 38 L26 92 L74 92 L74 38 L80 44 L94 34 L80 16 L66 10 Q50 22 34 10 Z"/>
   </symbol>
 </svg>
 <div class="app">
   <button class="round narrate" id="narrate" aria-pressed="false" aria-label="Read aloud" title="Read aloud" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+  <button class="round sound" id="sound" aria-pressed="true" aria-label="Sounds" title="Sounds"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="note"><path d="M9 17V5l10-2v12"/><circle cx="6.5" cy="17" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></g><path class="slash" d="M3 3l18 18"/></svg></button>
+  <canvas id="confetti" aria-hidden="true"></canvas>
 
   <section class="screen make" id="make" hidden>
     <div class="make-in">
       <div class="pcard" aria-hidden="true"><span class="face">
+        <svg class="pc-crest" id="pc-crest" viewBox="0 0 100 100"></svg>
         <span class="pc-num" id="pc-num">8</span>
         <svg class="shirt" viewBox="0 0 100 100"><use href="#shirt-shape"/><text x="50" y="58" id="pc-shirt-num">8</text></svg>
         <span class="pc-name" id="pc-name">Your name</span>
-        <span class="pc-lv" id="pc-lv">Academy</span>
+        <span class="pc-ac" id="pc-ac">Pick your academy</span>
+        <span class="pc-lv" id="pc-lv">Rookie</span>
+        <span class="pc-fav" id="pc-fav" hidden></span>
       </span></div>
       <form class="make-form" id="make-form" autocomplete="off">
         <h1>Make your player</h1>
@@ -433,8 +463,14 @@ button { cursor: pointer; }
           <output id="p-num" aria-live="polite">8</output>
           <button class="round" type="button" id="num-up" aria-label="Higher number">+</button>
         </div>
-        <span class="lbl" id="kit-lbl">Team kit</span>
-        <div class="kits" id="kits" role="radiogroup" aria-labelledby="kit-lbl"></div>
+        <span class="lbl" id="ac-lbl">Your academy</span>
+        <div class="picks" id="academies" role="radiogroup" aria-labelledby="ac-lbl"></div>
+        <span class="lbl" id="co-lbl">Your coach</span>
+        <div class="picks" id="coaches" role="radiogroup" aria-labelledby="co-lbl"></div>
+        <p class="tip" id="co-hello" hidden></p>
+        <label class="lbl" for="p-fav">Favourite team <span class="lbl-opt">(if you like)</span></label>
+        <input id="p-fav" maxlength="20" placeholder="Type your team" enterkeyhint="done">
+        <p class="make-need" id="make-need">Pick your academy and your coach.</p>
         <div class="make-row">
           <button class="ghost-btn make-cancel" type="button" id="make-cancel" hidden>Back</button>
           <button class="cta" type="submit" id="make-go">Let’s go</button>
@@ -447,17 +483,17 @@ button { cursor: pointer; }
     <header class="top">
       <h1 class="logo">Find the <span>space</span></h1>
       <button class="me" id="me" aria-label="Change your player">
-        <svg class="shirt" viewBox="0 0 100 100" aria-hidden="true"><use href="#shirt-shape"/><text x="50" y="58" id="me-num">8</text></svg>
-        <span><span class="me-name" id="me-name">Player</span><span class="me-lv" id="me-lv">Academy</span></span>
+        <svg class="me-crest" id="me-crest" viewBox="0 0 100 100" aria-hidden="true" hidden></svg><svg class="shirt" viewBox="0 0 100 100" aria-hidden="true"><use href="#shirt-shape"/><text x="50" y="58" id="me-num">8</text></svg>
+        <span><span class="me-name" id="me-name">Player</span><span class="me-lv" id="me-lv">Rookie</span></span>
       </button>
     </header>
     <section class="level" aria-label="Your level">
-      <div class="lv-top"><span class="lv-name" id="lv-name">Academy</span><span class="lv-next" id="lv-next"></span></div>
+      <div class="lv-top"><span class="lv-name" id="lv-name">Rookie</span><span class="lv-next" id="lv-next"></span></div>
       <div class="lv-steps" id="lv-steps"></div>
       <div class="lv-labels" id="lv-labels"></div>
     </section>
-    <div class="coach-row"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="home-sub"></p></div>
-    <div class="sat home-sat" id="home-sat" hidden><span class="sat-k">This week’s challenge · <span id="home-sat-skill"></span></span><p id="home-sat-text"></p></div>
+    <div class="coach-row"><span class="coach-who"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><span class="coach-tag" id="coach-tag"></span></span><p class="bubble" id="home-sub"></p></div>
+    <div class="sat home-sat" id="home-sat" hidden><span class="sat-k">Your challenge for the next game · <span id="home-sat-skill"></span></span><p id="home-sat-text"></p></div>
     <div class="skills" id="skills"></div>
     <button class="match" id="match"><span class="match-k">Match mode</span><span class="match-sub">5 puzzles mixed from every skill. The ones you missed come back first.</span></button>
     <button class="reset" id="reset" hidden>Clear my stars</button>
@@ -477,7 +513,7 @@ button { cursor: pointer; }
       <aside class="side">
         <div class="stack" id="play">
           <section class="stack" id="setup">
-            <div class="coach-talk"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="prompt"></p></div>
+            <div class="coach-talk"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><p class="bubble" id="prompt"></p></div>
             <p class="how"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L4.6 14a1.5 1.5 0 0 1 2.3-1.9L9 14"/></svg><span id="how"></span></p>
             <div class="controls" id="controls" hidden></div>
             <div class="chips"><button class="chip" id="hint" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span id="hint-label">Shadows</span></button></div>
@@ -488,7 +524,7 @@ button { cursor: pointer; }
             <div class="stars" id="stars"></div>
             <ul class="checks" id="checks"></ul>
             <p class="tip also" id="also" hidden></p>
-            <div class="coach-talk" id="ask"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="ask-q"></p>
+            <div class="coach-talk" id="ask"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><p class="bubble" id="ask-q"></p>
               <div class="ask-opts" id="ask-opts" role="group" aria-label="Your answer"></div></div>
             <div class="coach-talk" id="coach-talk" hidden><p class="bubble" id="coach"></p></div>
             <div class="chips">
@@ -504,10 +540,11 @@ button { cursor: pointer; }
         </div>
         <section class="stack" id="end" hidden>
           <div class="end-card" id="end-card"></div>
+          <p class="upgrade" id="upgrade" hidden></p>
           <h2 class="sr" id="end-title"></h2>
           <p class="prompt-end" id="end-sub"></p>
           <ul class="lessons" id="lessons"></ul>
-          <div class="sat" id="sat"><span class="sat-k">Try it on Saturday</span><p id="sat-text"></p></div>
+          <div class="sat" id="sat"><span class="sat-k">Get ready for the game</span><p id="sat-text"></p></div>
           <div class="push">
             <button class="cta" id="next-skill"></button>
             <button class="ghost-btn" id="to-home">All skills</button>
@@ -1591,6 +1628,89 @@ if (typeof module !== 'undefined') module.exports = Engine;
     anim = setTimeout(() => { anim = null; done(); }, ms);
   }
 
+  // ---------- confetti: falls over the screen in his academy's colours (skipped with reduced motion) ----------
+  const fxCan = $('confetti');
+  let fxParts = [], fxRun = null, fxBursts = 0;
+  function confetti(big) {
+    if (reduceMotion() || !fxCan.getContext) return;
+    fxBursts++; fxCan.dataset.bursts = String(fxBursts);
+    const W = window.innerWidth, H = window.innerHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (fxCan.width !== Math.round(W * dpr) || fxCan.height !== Math.round(H * dpr)) { fxCan.width = Math.round(W * dpr); fxCan.height = Math.round(H * dpr); }
+    const a = player ? academyOf(player.academy) : null;
+    const cols = [a ? a.shirt : '#2F6BFF', a ? a.trim : '#FFFFFF', '#FFD23F', '#FFFFFF', '#3DD68C'];
+    const n = big ? 190 : 90;
+    for (let k = 0; k < n; k++) {
+      fxParts.push({ x: W * (0.05 + 0.9 * Math.random()), y: -20 - Math.random() * H * 0.45, vx: (Math.random() - 0.5) * 2.4, vy: 4 + Math.random() * 4,
+        r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3, w: 7 + Math.random() * 7, h: 4 + Math.random() * 4, c: cols[k % cols.length], s: Math.random() * 6.28 });
+    }
+    if (!fxRun) fxRun = requestAnimationFrame(fxStep);
+  }
+  function fxStep() {
+    const ctx = fxCan.getContext('2d'), dpr = fxCan.width / Math.max(1, window.innerWidth), H = window.innerHeight;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, fxCan.width, fxCan.height); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (const p of fxParts) {
+      p.s += 0.05; p.x += p.vx + Math.sin(p.s) * 0.8; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.scale(1, Math.cos(p.s * 1.3));
+      ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+    }
+    fxParts = fxParts.filter((p) => p.y < H + 30);
+    if (fxParts.length) fxRun = requestAnimationFrame(fxStep);
+    else { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, fxCan.width, fxCan.height); fxRun = null; }
+  }
+
+  // ---------- sounds, made in the browser (no sound files). The note button mutes them; remembered on this iPad ----------
+  const SOUND_KEY = 'fts-sound';
+  let soundOn = true, actx = null, sfxCount = 0;
+  try { soundOn = localStorage.getItem(SOUND_KEY) !== '0'; } catch (e) { soundOn = true; }
+  function audio() {
+    if (!actx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { actx = new AC(); } catch (e) { return null; }
+    }
+    if (actx.state === 'suspended') { try { actx.resume(); } catch (e) { /* needs a tap first */ } }
+    return actx;
+  }
+  function env(a, g, t, dur, vol) {
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  }
+  function tone(a, t, f0, f1, dur, type, vol) {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    env(a, g, t, dur, vol); o.connect(g); g.connect(a.destination);
+    o.start(t); o.stop(t + dur + 0.03);
+  }
+  function hiss(a, t, dur, vol) {
+    const len = Math.max(1, Math.floor(a.sampleRate * dur)), buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = a.createBufferSource(), g = a.createGain();
+    src.buffer = buf; g.gain.value = vol; src.connect(g); g.connect(a.destination); src.start(t);
+  }
+  const SFX = {
+    kick(a, t) { tone(a, t, 150, 50, 0.14, 'sine', 0.6); hiss(a, t, 0.05, 0.2); },
+    star(a, t, i) { const f = 660 * Math.pow(1.26, i); tone(a, t + i * 0.14, f, f * 1.5, 0.12, 'triangle', 0.22); },
+    miss(a, t) { tone(a, t, 392, 0, 0.16, 'triangle', 0.16); tone(a, t + 0.18, 330, 0, 0.3, 'triangle', 0.16); },
+    fanfare(a, t) { [523, 659, 784, 1047].forEach((f, k) => tone(a, t + k * 0.12, f, 0, k === 3 ? 0.55 : 0.16, 'triangle', 0.22)); },
+    whistle(a, t) {
+      for (const [s0, d] of [[0, 0.16], [0.22, 0.38]]) {
+        const o = a.createOscillator(), l = a.createOscillator(), lg = a.createGain(), g = a.createGain();
+        o.frequency.value = 2800; l.frequency.value = 38; lg.gain.value = 120;
+        l.connect(lg); lg.connect(o.frequency); env(a, g, t + s0, d, 0.1); o.connect(g); g.connect(a.destination);
+        o.start(t + s0); l.start(t + s0); o.stop(t + s0 + d + 0.03); l.stop(t + s0 + d + 0.03);
+      }
+    },
+  };
+  function sfx(name, arg) {
+    if (!soundOn) return;
+    sfxCount++; document.documentElement.dataset.sfx = String(sfxCount);
+    const a = audio();
+    if (!a) return;
+    try { SFX[name](a, a.currentTime + 0.01, arg || 0); } catch (e) { /* sound is a nice-to-have */ }
+  }
+
   // Where a pass ends up: at the receiver's feet, at the defender who cuts it out, or short if it's too far.
   function passTarget(from, target, r) {
     if (r.blocker) {
@@ -1608,7 +1728,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (!to) { done(); return; }
     const start = ballHomeFrom(from);
     setBall(start);
-    bump(kicker, 'kick');
+    bump(kicker, 'kick'); sfx('kick');
     const trail = el('line', { x1: start.x, y1: start.y, x2: start.x, y2: start.y, class: 'trail' }, L.fx);
     wait(230, () => tween(450 + E.dist(start, to) * 38, (t) => {
       const p = lerp(start, to, 1 - (1 - t) * (1 - t));
@@ -1913,7 +2033,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
           if (pl.youTo) { youG.setAttribute('transform', tr(lerp(y0, pl.youTo, Math.min(1, e * 1.4)))); }
           setBall(lerp(ball0, pl.ball, e));
         };
-        if (pz.threat.kind === 'pass') { bump(gC, 'kick'); wait(230, () => tween(650 + E.dist(ball0, pl.ball) * 30, step, done)); }
+        if (pz.threat.kind === 'pass') { bump(gC, 'kick'); sfx('kick'); wait(230, () => tween(650 + E.dist(ball0, pl.ball) * 30, step, done)); }
         else tween(1000, step, done);
       },
       final() {
@@ -2019,7 +2139,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
           const g = recv === 'you' ? youG : recv ? mateEls.get(recv) : null;
           const kick = from === pz.you || (pl.pts && from === pl.you) ? youG : mateEls.get(pz.mates.find((q) => q === from)) || oppEls.get(pz.opps.find((q) => q === from));
           if (pl.o.kind === 'shoot' && !r.blocker) {
-            const b0 = ballHomeFrom(pz.you); bump(youG, 'kick');
+            const b0 = ballHomeFrom(pz.you); bump(youG, 'kick'); sfx('kick');
             wait(200, () => tween(520, (t) => setBall(lerp(b0, to, 1 - (1 - t) * (1 - t))), () => runSteps(i + 1)));
             return;
           }
@@ -2267,7 +2387,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
 
   // Levels across all 42 stars, and card tiers per skill: bronze for any stars, silver at half, gold when every puzzle has 3.
   const MAX_STARS = E.PUZZLES.length * 3;
-  const LEVELS = [['Academy', 0], ['Youth', Math.round(MAX_STARS * .25)], ['Pro', Math.round(MAX_STARS * .55)], ['Legend', Math.round(MAX_STARS * .85)]];
+  const LEVELS = [['Rookie', 0], ['Youth', Math.round(MAX_STARS * .25)], ['Pro', Math.round(MAX_STARS * .55)], ['Legend', Math.round(MAX_STARS * .85)]];
   function levelOf(total) {
     let i = 0;
     LEVELS.forEach((l, k) => { if (total >= l[1]) i = k; });
@@ -2275,6 +2395,29 @@ if (typeof module !== 'undefined') module.exports = Engine;
   }
   const tierOf = (got, mx) => (got >= mx ? 'gold' : got >= mx / 2 ? 'silver' : got > 0 ? 'bronze' : 'new');
   const TIER_LABEL = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze', new: 'New' };
+  const TIER_KEY = 'fts-tiers-v1', TIER_RANK = { new: 0, bronze: 1, silver: 2, gold: 3 };
+  let tiers = {};
+  function saveTiers() { try { localStorage.setItem(TIER_KEY, JSON.stringify(tiers)); } catch (e) { /* private mode */ } }
+  // The tier each card was last shown at. A save from before this starts at today's tiers, so nothing fake pops.
+  function initTiers(fresh) {
+    let d = null;
+    if (!fresh) { try { d = JSON.parse(localStorage.getItem(TIER_KEY) || 'null'); } catch (e) { d = null; } }
+    tiers = {};
+    for (const sc of E.SECTIONS) {
+      const l = listOf(sc.id);
+      tiers[sc.id] = d && TIER_RANK[d[sc.id]] !== undefined ? d[sc.id] : tierOf(starsIn(l), l.length * 3);
+    }
+    saveTiers();
+  }
+  function cardUpgrade(card, from, to) {
+    sfx('fanfare');
+    if (reduceMotion()) return;
+    const label = card.querySelector('.sk-tier');
+    card.classList.replace(`tier-${to}`, `tier-${from}`); label.textContent = TIER_LABEL[from];
+    card.classList.add('flip');
+    setTimeout(() => { card.classList.replace(`tier-${from}`, `tier-${to}`); label.textContent = TIER_LABEL[to]; }, 450);
+    setTimeout(() => { card.classList.remove('flip'); confetti(to === 'gold'); }, 900);
+  }
   const SKILL_ICON = {
     space: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="5" fill="currentColor"/><path d="M15 29Q24 10 36 14" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="37" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="37" cy="15" r="2.5" fill="currentColor"/></svg>',
     pass: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 30L36 16M28 15h9v9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -2330,7 +2473,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   const EXTRA_CHIP = { space: 'Open space', pass: 'All my passes' };
 
   function showSetup() {
-    show('game'); $('play').hidden = false; $('end').hidden = true;
+    show('game'); $('play').hidden = false; $('end').hidden = true; setCoach('neutral');
     $('setup').hidden = false; $('result').hidden = true;
     const t = T();
     $('title').textContent = pz.title;
@@ -2359,14 +2502,14 @@ if (typeof module !== 'undefined') module.exports = Engine;
     waiting = false;
     $('check').textContent = T().primary; updatePrimary();
     const dur = pz.countdown * 1000, t0 = performance.now();
-    say('Go!');
+    say('Go!'); sfx('whistle');
     clock = setInterval(() => {
       const left = Math.max(0, dur - (performance.now() - t0));
       $('clock-fill').style.width = `${(100 * left) / dur}%`;
       $('clock-n').textContent = `${Math.ceil(left / 1000)}`;
       $('clock').classList.toggle('hurry', left < 2500);
       if (left <= 0) {
-        stopClock();
+        stopClock(); sfx('whistle');
         if (state === 'setup' && !anim) { if (pz.type === 'scan' && !stance) stance = 'face'; check(true); }
       }
     }, 100);
@@ -2414,11 +2557,13 @@ if (typeof module !== 'undefined') module.exports = Engine;
     for (let i = 0; i < 3; i++) {
       const s = el('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, stars);
       el('path', { d: STAR }, s);
-      if (i < res.stars) { s.classList.add('on'); s.style.animationDelay = `${i * 0.14}s`; }
+      if (i < res.stars) { s.classList.add('on'); s.style.animationDelay = `${i * 0.14}s`; sfx('star', i); }
     }
     const of = document.createElement('span');
     of.className = 'of'; of.textContent = `${res.stars} of 3`;
     stars.appendChild(of);
+    if (!res.stars) sfx('miss');
+    setCoach(res.late ? 'oops' : res.stars === 3 ? 'happy' : res.stars === 2 ? 'think' : 'oops');
     const list = $('checks');
     list.replaceChildren();
     res.checks.forEach((c, i) => {
@@ -2451,7 +2596,13 @@ if (typeof module !== 'undefined') module.exports = Engine;
 
   const CHALLENGE_KEY = 'fts-challenge-v1';
   // The coach asks a question before he tells: three answers, then the lesson.
-  const cheerText = () => (res.late ? 'Too slow: the ball arrived! ' : res.stars === 3 ? `Brilliant, ${playerName()}! ` : res.stars === 2 ? 'So close! ' : 'Have another go. ');
+  // Each coach cheers in his own words; the football lesson is the same whoever he is.
+  let lineN = 0;
+  const pickLine = (arr) => arr[(lineN++) % arr.length].replace('{n}', playerName());
+  const cheerText = () => {
+    const c = coachOf(player && player.coach);
+    return `${res.late ? c.late : pickLine(res.stars === 3 ? c.great : res.stars === 2 ? c.close : c.miss)} `;
+  };
   const askOptions = () => {
     const opts = pz.ask.a.map((t, i) => ({ t, ok: i === 0 })), k = idx % opts.length;
     return opts.slice(k).concat(opts.slice(0, k));  // the right answer isn't always first
@@ -2470,11 +2621,12 @@ if (typeof module !== 'undefined') module.exports = Engine;
         if (b.disabled) return;
         box.querySelectorAll('.ask-opt').forEach((x) => { x.disabled = true; if (x.dataset.ok === '1') x.classList.add('right'); });
         if (!o.ok) b.classList.add('wrong');
-        const right = pz.ask.a[0];
-        $('coach').replaceChildren(strong(o.ok ? 'Yes, that’s it! ' : `Not quite. It’s “${right}”. `), pz.teach);
+        const right = pz.ask.a[0], c = coachOf(player && player.coach);
+        $('coach').replaceChildren(strong(o.ok ? `${c.yes} ` : `${c.no} It’s “${right}”. `), pz.teach);
+        setCoach(o.ok ? 'happy' : 'think');
         $('coach-talk').hidden = false;
         $('next').scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });  // bring the lesson and the buttons into view
-        say(`${o.ok ? 'Yes, that’s it!' : `Not quite. It’s ${right}.`} ${pz.teach}`);
+        say(`${o.ok ? c.yes : `${c.no} It’s ${right}.`} ${pz.teach}`);
       });
       box.appendChild(b);
     }
@@ -2503,7 +2655,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('home-sub').textContent = total
       ? `Welcome back, ${nm}! ${lv.next ? `${lv.next[1] - total} more stars and you’re ${lv.next[0]}.` : 'You’re a Legend. Can you get every card to gold?'}`
       : `Hi ${nm}! Pick a skill and let’s train.`;
-    syncMe();
+    syncMe(); setCoach('happy');
     // The challenge from the last skill he finished, to try in his next real match.
     let chId = null;
     try { chId = localStorage.getItem(CHALLENGE_KEY); } catch (e) { chId = null; }
@@ -2527,12 +2679,20 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function showSectionEnd() {
     state = 'end';
     show('game'); $('play').hidden = true; $('end').hidden = false;
-    $('replay').hidden = false;
+    $('replay').hidden = false; $('upgrade').hidden = true;
+    document.querySelector('.side').scrollTop = 0;  // start at the card, so its upgrade moment is seen
     if (sec === 'match') { showMatchEnd(); return; }
     const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), got = starsIn(list);
     const card = skillCard(sc, 'div');
     card.querySelector('.skill-go').remove();
     $('end-card').replaceChildren(card);
+    // A card that went up a tier flips to its new colour, with a fanfare.
+    const tierNow = tierOf(got, list.length * 3), was = tiers[sec] || 'new';
+    if (TIER_RANK[tierNow] > TIER_RANK[was]) {
+      tiers[sec] = tierNow; saveTiers();
+      $('upgrade').textContent = `${TIER_LABEL[tierNow]} card!`; $('upgrade').hidden = false;
+      cardUpgrade(card, was, tierNow);
+    }
     $('end-title').textContent = sc.title;
     $('end-sub').textContent = `You got ${got} of ${list.length * 3} stars. Here’s what you practised:`;
     const ul = $('lessons');
@@ -2582,30 +2742,119 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('to-home').hidden = false; $('replay').hidden = true;
     renderTop();
     $('next-skill').focus({ preventScroll: true });
-    say(`Full time! You got ${got} of ${mx} stars. Try it on Saturday: ${sc.challenge}`);
+    sfx('whistle');
+    say(`Full time! You got ${got} of ${mx} stars. Get ready for the game: ${sc.challenge}`);
   }
 
-  // ---------- his player: name, shirt number and team kit, kept on this iPad only ----------
+  // ---------- his player: name, shirt number, academy, coach and favourite team, kept on this iPad only ----------
+  // The academies and coaches are made up on purpose: no real clubs, crests or people.
   const PLAYER_KEY = 'fts-player-v1';
-  const KITS = [['blue', '#2F6BFF', 'Blue'], ['sky', '#1FA8E0', 'Sky blue'], ['purple', '#8E5BFF', 'Purple'],
-    ['pink', '#F0459A', 'Pink'], ['black', '#20242C', 'Black'], ['white', '#F2F4F7', 'White']];
+  const INK = '#1A2330';
+  const ACADEMIES = [
+    { id: 'lions', name: 'Redhill Lions', shirt: '#D7263D', trim: '#FFFFFF', ink: '#FFFFFF', them: '#1FA8E0', animal: 'lion' },
+    { id: 'wolves', name: 'Bluewater Wolves', shirt: '#2F6BFF', trim: '#0E1E4A', ink: '#FFFFFF', them: '#FF5A36', animal: 'wolf' },
+    { id: 'eagles', name: 'Goldcrest Eagles', shirt: '#20242C', trim: '#E3B341', ink: '#E3B341', them: '#FF5A36', animal: 'eagle' },
+    { id: 'foxes', name: 'Greenvale Foxes', shirt: '#F2F4F7', trim: '#1E9E5A', ink: '#1E9E5A', them: '#FF5A36', animal: 'fox', light: true },
+  ];
+  const COACHES = [
+    { id: 'theo', name: 'Coach Theo', kind: 'Calm thinker', skin: '#F2C79B',
+      top: '<path d="M13 33c0-13 8-20 19-20s19 7 19 20c-4-6-10-9-19-9s-15 3-19 9z" fill="#9AA0A8" stroke="#1A2330" stroke-width="2.2" stroke-linejoin="round"/>',
+      extra: '<g fill="none" stroke="#1A2330" stroke-width="2"><circle cx="25" cy="38" r="5.6"/><circle cx="39" cy="38" r="5.6"/><path d="M30.6 37.5h2.8M19.4 37l-6-2M44.6 37l6-2"/></g><path d="M18 53c5 6 23 6 28 0" fill="none" stroke="#2F6BFF" stroke-width="2.4"/>',
+      hello: 'Hello. Let’s think our way to better football.',
+      great: ['Excellent, {n}. That’s exactly it.', 'Very good, {n}. Clever football.', 'Perfect, {n}. You read that well.'],
+      close: ['Nearly, {n}. One small thing to fix.', 'Good thinking. Almost there.'],
+      miss: ['Let’s look at it again, calmly.', 'No problem. Let’s work it out together.'],
+      late: 'Too slow: the ball arrived. Decide a little earlier.', yes: 'Yes, exactly right.', no: 'Not quite.' },
+    { id: 'blaze', name: 'Coach Blaze', kind: 'Fiery and loud', skin: '#B97A4F',
+      top: '<path d="M13 31l3-13 6 7 4-12 6 9 6-10 4 11 6-7 3 13c-5-3-11-5-19-5s-14 2-19 7z" fill="#2A1A10" stroke="#1A2330" stroke-width="2" stroke-linejoin="round"/><rect x="12.5" y="27" width="39" height="5.5" rx="2.5" fill="#E5322D" stroke="#1A2330" stroke-width="1.8"/>',
+      extra: '<path d="M18 52c5 6 23 6 28 0" fill="none" stroke="#E5322D" stroke-width="2"/><rect x="40" y="52" width="9" height="5" rx="2" fill="#C9D3DD" stroke="#1A2330" stroke-width="1.8"/>',
+      hello: 'LET’S GO! Ready to train hard?',
+      great: ['YES, {n}! What a player!', 'BOOM! That’s it, {n}!', 'Get in! Brilliant, {n}!'],
+      close: ['So close! Go again!', 'Nearly! Come on, one more!'],
+      miss: ['Shake it off! Again!', 'Head up! Go again!'],
+      late: 'Too slow! The ball’s here! Quicker next time!', yes: 'Yes! Spot on!', no: 'Not quite!' },
+    { id: 'pip', name: 'Coach Pip', kind: 'The joker', skin: '#F7D2B0',
+      top: '<path d="M12 31c0-12 9-19 20-19s20 7 20 19z" fill="#8E5BFF" stroke="#1A2330" stroke-width="2.5"/><path d="M12.5 30H4c0 3 3 5.5 6.5 5.5h3z" fill="#8E5BFF" stroke="#1A2330" stroke-width="2.2" stroke-linejoin="round"/><circle cx="32" cy="13" r="2.2" fill="#FFD23F" stroke="#1A2330" stroke-width="1.4"/>',
+      extra: '<g fill="#C77B54"><circle cx="20" cy="44" r="1.2"/><circle cx="23.5" cy="46" r="1.2"/><circle cx="40.5" cy="46" r="1.2"/><circle cx="44" cy="44" r="1.2"/></g>',
+      hello: 'Hi! I’m Pip. I tell jokes, and I know my football.',
+      great: ['Nice one, {n}! Even the corner flag is clapping.', 'Wow, {n}! Did you bring a secret map?', 'Brilliant, {n}! I’m doing a happy dance.'],
+      close: ['Soooo close! About one sock away.', 'Almost! One more go and it’s yours.'],
+      miss: ['Oops! Even I got lost there. Try again!', 'Uh-oh! The ball went on holiday. Another go?'],
+      late: 'Too slow! The ball got there before you did!', yes: 'Yes! Nailed it.', no: 'Not quite, but nice try.' },
+    { id: 'gus', name: 'Coach Gus', kind: 'Old-school legend', skin: '#E8B98F',
+      beard: '<path d="M13 40c0 12 8 18 19 18s19-6 19-18c-3 5-7 7-10 6-3-1-5-2-9-2s-6 1-9 2c-3 1-7-1-10-6z" fill="#EEF1F4" stroke="#1A2330" stroke-width="2" stroke-linejoin="round"/>',
+      top: '<path d="M12 30c1-10 9-16 20-16 10 0 17 4 21 11l5 3c-1 2-3 3-6 3H12z" fill="#6B6F76" stroke="#1A2330" stroke-width="2.2" stroke-linejoin="round"/>',
+      extra: '<path d="M20 32h9M35 32h9" stroke="#EEF1F4" stroke-width="3.2" stroke-linecap="round"/>',
+      hello: 'Hello there. I’ve seen a lot of football. Let’s get to work.',
+      great: ['Lovely, {n}. That’s proper football.', 'Top drawer, {n}. Well played.', 'Smashing, {n}. Just like the old days.'],
+      close: ['Close, {n}. Nearly there.', 'Good effort. One more go.'],
+      miss: ['Back to it. Every great player misses.', 'Go again. That’s how you learn.'],
+      late: 'Too slow: the ball arrived. Be ready before it comes.', yes: 'Yes, that’s the one.', no: 'Not quite.' },
+  ];
+  window.FTS = { ACADEMIES, COACHES };  // the browser tests read these
+  const academyOf = (id) => ACADEMIES.find((a) => a.id === id) || null;
+  const coachOf = (id) => COACHES.find((c) => c.id === id) || COACHES[0];
+
+  // A crest: a shield in the academy's colours with a simple animal on it.
+  function crestArt(a) {
+    const sh = 'M50 7L88 18V50C88 72 72 87 50 95C28 87 12 72 12 50V18Z';
+    let animal;
+    if (a.animal === 'lion') {
+      const pts = [];
+      for (let k = 0; k < 18; k++) { const ang = (k / 18) * Math.PI * 2, r = k % 2 ? 19 : 26; pts.push(`${(50 + Math.cos(ang) * r).toFixed(1)},${(53 + Math.sin(ang) * r).toFixed(1)}`); }
+      animal = `<polygon points="${pts.join(' ')}" fill="${a.ink}"/><circle cx="50" cy="53" r="14" fill="${a.shirt}"/><circle cx="45" cy="50" r="2.2" fill="${a.ink}"/><circle cx="55" cy="50" r="2.2" fill="${a.ink}"/><path d="M46 57h8l-4 5z" fill="${a.ink}"/>`;
+    } else if (a.animal === 'wolf') {
+      animal = `<path d="M30 26L42 41H58L70 26L68 50L50 78L32 50Z" fill="${a.ink}" stroke="${a.ink}" stroke-linejoin="round"/><circle cx="42" cy="52" r="2.6" fill="${a.shirt}"/><circle cx="58" cy="52" r="2.6" fill="${a.shirt}"/><circle cx="50" cy="69" r="3.2" fill="${a.shirt}"/>`;
+    } else if (a.animal === 'eagle') {
+      animal = `<path d="M14 46C26 34 40 38 50 48C60 38 74 34 86 46C76 46 66 52 59 62L50 79L41 62C34 52 24 46 14 46Z" fill="${a.ink}"/><circle cx="50" cy="39" r="9" fill="${a.ink}"/><circle cx="53" cy="37" r="2" fill="${a.shirt}"/><path d="M57.5 38L65 41.5L57.5 44Z" fill="#FFFFFF"/>`;
+    } else {
+      animal = `<path d="M28 30L37 20L44 38H56L63 20L72 30L68 52L50 77L32 52Z" fill="${a.ink}" stroke="${a.ink}" stroke-linejoin="round"/><path d="M36 51L50 71L64 51L50 46Z" fill="${a.shirt}"/><circle cx="42" cy="45" r="2.6" fill="${INK}"/><circle cx="58" cy="45" r="2.6" fill="${INK}"/><circle cx="50" cy="73" r="3" fill="${INK}"/>`;
+    }
+    return `<path d="${sh}" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="9" stroke-linejoin="round"/><path d="${sh}" fill="${a.shirt}" stroke="${a.trim}" stroke-width="5" stroke-linejoin="round"/>${animal}`;
+  }
+  // A coach's face, with a mood: neutral, happy, think or oops.
+  function coachArt(c, mood) {
+    const eyes = mood === 'happy' ? `<path d="M21.5 39q3.5-4.5 7 0M35.5 39q3.5-4.5 7 0" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`
+      : mood === 'oops' ? `<g stroke="${INK}" stroke-width="1.6" fill="#fff"><circle cx="25" cy="38" r="3.2"/><circle cx="39" cy="38" r="3.2"/></g><circle cx="25" cy="38.5" r="1.4" fill="${INK}"/><circle cx="39" cy="38.5" r="1.4" fill="${INK}"/>`
+      : `<circle cx="25" cy="38" r="2.4" fill="${INK}"/><circle cx="39" cy="38" r="2.4" fill="${INK}"/>`;
+    const mouth = mood === 'happy' ? `<path d="M24 45.5q8 8.5 16 0z" fill="#6A1E1E" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>`
+      : mood === 'think' ? `<path d="M27 48.5q5-2.5 10 0" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/><path d="M35 29.5q4-3 8-1" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>`
+      : mood === 'oops' ? `<ellipse cx="32" cy="48.5" rx="3" ry="3.8" fill="#6A1E1E" stroke="${INK}" stroke-width="2"/>`
+      : `<path d="M25 46c4 4 10 4 14 0" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round"/>`;
+    return `<circle cx="32" cy="36" r="20" fill="${c.skin}" stroke="${INK}" stroke-width="2.5"/>${c.beard || ''}${c.top}${eyes}${c.extra || ''}${mouth}`;
+  }
+
   let player = null, draft = null;
   try {
     const d = JSON.parse(localStorage.getItem(PLAYER_KEY) || 'null');
-    if (d && typeof d.name === 'string' && Number.isInteger(d.num) && KITS.some((k) => k[0] === d.kit)) {
-      player = { name: d.name.slice(0, 12), num: Math.max(1, Math.min(99, d.num)), kit: d.kit };
+    if (d && typeof d.name === 'string' && Number.isInteger(d.num)) {
+      player = { name: d.name.slice(0, 12), num: Math.max(1, Math.min(99, d.num)),
+        academy: academyOf(d.academy) ? d.academy : null,
+        coach: COACHES.some((c) => c.id === d.coach) ? d.coach : null,
+        fav: typeof d.fav === 'string' ? d.fav.slice(0, 20) : '' };
     }
   } catch (e) { player = null; }
+  // A save from before academies keeps his name and number, and asks once for the rest.
+  const needsSetup = () => !player || !player.academy || !player.coach;
   const playerName = () => (player && player.name.trim()) || 'Player';
   const playerNum = () => (player ? player.num : pz.youN);
-  function applyKit(kitId) {
-    const k = KITS.find((x) => x[0] === kitId) || KITS[0];
-    document.documentElement.style.setProperty('--us', k[1]);
-    document.documentElement.classList.toggle('kit-light', k[0] === 'white');
+  function applyAcademy(id) {
+    const a = academyOf(id) || ACADEMIES[1], r = document.documentElement;
+    r.style.setProperty('--us', a.shirt);
+    r.style.setProperty('--them', a.them);
+    r.classList.toggle('kit-light', !!a.light);
+  }
+  function setCoach(mood) {
+    const c = coachOf(player && player.coach), art = coachArt(c, mood);
+    document.querySelectorAll('.coach-face').forEach((s) => { s.innerHTML = art; s.dataset.coach = c.id; s.dataset.mood = mood; });
+    $('coach-tag').textContent = c.name;
   }
   function syncMe() {
     $('me-name').textContent = playerName();
     $('me-num').textContent = player ? player.num : 8;
+    const a = player && academyOf(player.academy);
+    $('me-crest').innerHTML = a ? crestArt(a) : '';
+    $('me-crest').toggleAttribute('hidden', !a);
     const total = starsIn(E.PUZZLES.map((_, i) => i));
     $('me-lv').textContent = `${levelOf(total).name} · ★ ${total}`;
   }
@@ -2613,38 +2862,58 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('pc-num').textContent = draft.num; $('pc-shirt-num').textContent = draft.num; $('p-num').textContent = draft.num;
     $('pc-name').textContent = draft.name.trim() || 'Your name';
     $('pc-lv').textContent = levelOf(starsIn(E.PUZZLES.map((_, i) => i))).name;
-    applyKit(draft.kit);
-    $('kits').querySelectorAll('.kit').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.kit === draft.kit)));
+    const a = academyOf(draft.academy), c = draft.coach ? coachOf(draft.coach) : null, fav = draft.fav.trim();
+    $('pc-crest').innerHTML = a ? crestArt(a) : '';
+    $('pc-ac').textContent = a ? a.name : 'Pick your academy';
+    $('pc-fav').hidden = !fav; $('pc-fav').textContent = `♥ ${fav}`;
+    applyAcademy(draft.academy);
+    $('academies').querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.academy === draft.academy)));
+    $('coaches').querySelectorAll('.pick').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.coach === draft.coach)));
+    $('co-hello').hidden = !c;
+    if (c) $('co-hello').textContent = `${c.name}: “${c.hello}”`;
+    const ready = !!(a && c);
+    $('make-go').disabled = !ready; $('make-need').hidden = ready;
   }
   function openMake() {
     if (anim) return;
     state = 'make';
-    draft = player ? { ...player } : { name: '', num: 8, kit: 'blue' };
-    $('p-name').value = draft.name;
-    $('make-cancel').hidden = !player;
+    draft = player ? { ...player } : { name: '', num: 8, academy: null, coach: null, fav: '' };
+    $('p-name').value = draft.name; $('p-fav').value = draft.fav;
+    $('make-cancel').hidden = needsSetup();
     show('make'); syncCard();
   }
-  const kits = $('kits');
-  for (const [id, c, label] of KITS) {
+  for (const a of ACADEMIES) {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'kit'; b.dataset.kit = id; b.style.setProperty('--k', c);
-    b.setAttribute('role', 'radio'); b.setAttribute('aria-label', label);
-    b.addEventListener('click', () => { draft.kit = id; syncCard(); });
-    kits.appendChild(b);
+    b.type = 'button'; b.className = 'pick'; b.dataset.academy = a.id; b.setAttribute('role', 'radio');
+    b.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${crestArt(a)}</svg><span class="pick-name"></span>`;
+    b.querySelector('.pick-name').textContent = a.name;
+    b.addEventListener('click', () => { draft.academy = a.id; syncCard(); });
+    $('academies').appendChild(b);
+  }
+  for (const c of COACHES) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pick'; b.dataset.coach = c.id; b.setAttribute('role', 'radio');
+    b.innerHTML = `<svg viewBox="3 8 58 52" aria-hidden="true">${coachArt(c, 'happy')}</svg><span class="pick-name"></span><span class="pick-sub"></span>`;
+    b.querySelector('.pick-name').textContent = c.name;
+    b.querySelector('.pick-sub').textContent = c.kind;
+    b.addEventListener('click', () => { draft.coach = c.id; syncCard(); unlockSpeech(); say(`${c.name}. ${c.hello}`); });
+    $('coaches').appendChild(b);
   }
   $('p-name').addEventListener('input', () => { draft.name = $('p-name').value.slice(0, 12); syncCard(); });
+  $('p-fav').addEventListener('input', () => { draft.fav = $('p-fav').value.slice(0, 20); syncCard(); });
   $('num-down').addEventListener('click', () => { draft.num = draft.num <= 1 ? 99 : draft.num - 1; syncCard(); });
   $('num-up').addEventListener('click', () => { draft.num = draft.num >= 99 ? 1 : draft.num + 1; syncCard(); });
   $('make-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    player = { name: draft.name.trim().slice(0, 12), num: draft.num, kit: draft.kit };
+    if (!draft.academy || !draft.coach) return;
+    player = { name: draft.name.trim().slice(0, 12), num: draft.num, academy: draft.academy, coach: draft.coach, fav: draft.fav.trim().slice(0, 20) };
     try { localStorage.setItem(PLAYER_KEY, JSON.stringify(player)); } catch (err) { /* private mode: keep it for this visit */ }
-    $('p-name').blur();
+    $('p-name').blur(); $('p-fav').blur();
     showHome(); say(homeSpeech());
   });
-  $('make-cancel').addEventListener('click', () => { applyKit(player.kit); showHome(); });
+  $('make-cancel').addEventListener('click', () => { applyAcademy(player.academy); showHome(); });
   $('me').addEventListener('click', openMake);
-  if (player) applyKit(player.kit);
+  applyAcademy(player && player.academy);
 
   // ---------- flow ----------
   function prep(i) {
@@ -2679,7 +2948,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       state = 'result';
       render();
       T().final();
-      if (res.stars === 3) svg.classList.add('cheer');
+      if (res.stars === 3) { svg.classList.add('cheer'); confetti(false); }
       showResult();
       say(resultSpeech());
     });
@@ -2767,7 +3036,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       resetTimer = setTimeout(() => { resetArmed = false; $('reset').textContent = 'Clear my stars'; }, 4000);
       return;
     }
-    best.fill(0); tried.fill(false); saveProgress();
+    best.fill(0); tried.fill(false); saveProgress(); initTiers(true);
     try { localStorage.removeItem(CHALLENGE_KEY); } catch (e) { /* nothing saved */ }
     showHome();
   });
@@ -2813,10 +3082,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
   }
   function endSpeech() {
     const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), t = starsIn(list), max = list.length * 3;
-    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Try it on Saturday: ${sc.challenge}`;
+    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Get ready for the game: ${sc.challenge}`;
   }
   const homeSpeech = () => `${$('home-sub').textContent} ${E.SECTIONS.map((x) => x.title).join('. ')}.`;
-  const makeSpeech = () => 'Make your player. Type your name, pick your shirt number and your team kit.';
+  const makeSpeech = () => 'Make your player. Type your name, pick your shirt number, your academy and your coach.';
   const currentSpeech = () => (state === 'make' ? makeSpeech() : state === 'home' ? homeSpeech() : state === 'end' && sec !== 'match' ? endSpeech() : state === 'end' ? 'Full time!' : state === 'result' ? resultSpeech() : setupSpeech());
   const nb = $('narrate');
   if (canSpeak) {
@@ -2836,9 +3105,22 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (narrate && !unlocked && e.target !== nb && !nb.contains(e.target)) { unlocked = true; say(currentSpeech()); }
   }, { capture: true });
 
+  const sb = $('sound');
+  const syncSound = () => sb.setAttribute('aria-pressed', String(soundOn));
+  syncSound();
+  sb.addEventListener('click', () => {
+    soundOn = !soundOn;
+    try { localStorage.setItem(SOUND_KEY, soundOn ? '1' : '0'); } catch (e) { /* private mode */ }
+    syncSound();
+    if (soundOn) sfx('star', 0);
+  });
+  // iPad only lets a page make sound after a tap, so every tap wakes the audio up.
+  document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
+
   loadProgress();
+  initTiers();
   showHome();
-  if (!player) openMake();  // first visit: make his player before anything else
+  if (needsSetup()) openMake();  // first visit, or a save from before academies: make his player first
 })();
 
 </script>
