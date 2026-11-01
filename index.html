@@ -102,7 +102,7 @@ button { cursor: pointer; }
 .lv-labels span { flex: 1; font-family: var(--label); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); opacity: .7; }
 .lv-labels span.on { color: var(--gold-hi); opacity: 1; }
 .coach-row { display: flex; align-items: center; gap: 12px; }
-.skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.skills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .reset { appearance: none; align-self: center; background: none; border: 0; color: var(--muted); font-family: var(--label); font-weight: 600; font-size: 16px; padding: 10px; }
 .reset[hidden] { display: none; }
 
@@ -206,10 +206,12 @@ button { cursor: pointer; }
 .row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
 .row .cta, .row .ghost-btn { min-height: 64px; font-size: 26px; white-space: nowrap; padding-inline: 10px; }
 .tip { font-size: 15px; color: var(--muted); margin: 0; }
+.also { font-size: 16px; color: var(--text); }
+.also strong { color: var(--gold-hi); }
 
 /* end of a skill */
-.end-card { width: 170px; align-self: center; pointer-events: none; }
-.end-card .face { min-height: 220px; padding: 22px 12px 36px; gap: 2px; }
+.end-card { width: 150px; align-self: center; pointer-events: none; }
+.end-card .face { min-height: 190px; padding: 20px 10px 32px; gap: 2px; }
 .end-card .sk-rate { font-size: 40px; }
 .end-card .sk-icon { width: 56px; height: 56px; }
 .end-card .sk-title { font-size: 24px; }
@@ -222,6 +224,32 @@ button { cursor: pointer; }
 .lessons .mini { white-space: nowrap; letter-spacing: 1px; color: var(--gold); font-size: 18px; }
 .lessons .mini .off { color: rgba(255, 255, 255, .2); }
 .prompt-end { margin: 0; font-size: 17px; color: var(--muted); }
+/* the coach asks before he tells */
+.ask-opts { display: flex; flex-direction: column; gap: 8px; }
+.ask-opt { appearance: none; text-align: left; min-height: 48px; padding: 8px 14px; border-radius: 12px; border: 2px solid var(--edge);
+  background: rgba(0, 0, 0, .3); font-size: 17px; font-weight: 600; line-height: 1.3; }
+.ask-opt:disabled { cursor: default; opacity: .55; }
+.ask-opt.right { opacity: 1; background: var(--ok); border-color: var(--ok); color: #08140D; }
+.ask-opt.wrong { opacity: 1; border-color: var(--bad); }
+#coach-talk .bubble::before { left: 22px; }
+/* countdown: the pass is on its way */
+.clock { display: flex; flex-direction: column; gap: 6px; }
+.clock-k { font-family: var(--label); font-weight: 700; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-hi); }
+.clock-k b { font-family: var(--display); font-weight: 400; font-size: 26px; color: var(--text); }
+.clock-bar { height: 14px; border-radius: 999px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+.clock-bar i { display: block; height: 100%; width: 100%; background: var(--gold-grad); border-radius: 999px; }
+.clock.hurry .clock-bar i { background: var(--bad); }
+/* match mode */
+.match { appearance: none; display: flex; flex-direction: column; gap: 4px; text-align: left; padding: 14px 18px; border-radius: 16px;
+  border: 2px solid var(--gold); background: linear-gradient(120deg, rgba(227, 179, 65, .22), rgba(0, 0, 0, .3)); min-height: 72px; }
+.match-k { font-family: var(--display); font-size: 32px; letter-spacing: 1.5px; line-height: 1; color: var(--gold-hi); }
+.match-sub { font-size: 16px; color: var(--muted); }
+.end-match { display: flex; align-items: baseline; justify-content: center; white-space: nowrap; font-family: var(--display); font-size: 34px; letter-spacing: 1px; line-height: 1; color: var(--gold-hi); }
+/* "Try it on Saturday": the bridge from the app to his real match */
+.sat { border: 2px dashed var(--gold); border-radius: 14px; padding: 10px 14px; background: rgba(227, 179, 65, .1); }
+.sat-k { display: block; font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); }
+.sat p { margin: 4px 0 0; font-size: 17px; line-height: 1.4; }
+.home-sat p { font-size: 18px; }
 .link { appearance: none; background: none; border: 0; color: var(--gold-hi); font-family: var(--label); font-weight: 700; font-size: 18px; padding: 8px 2px; align-self: flex-start; }
 
 /* the shirt badge used on the home chip and the player card */
@@ -338,6 +366,22 @@ button { cursor: pointer; }
 .shadow.hot { stroke: #FF2D55; stroke-width: .22; }
 .zone { fill: rgba(255, 201, 60, .16); stroke: var(--you); stroke-width: .18; stroke-dasharray: .8 .5; }
 .dot { fill: var(--you); opacity: .8; }
+.opt-line { fill: none; stroke: rgba(255,255,255,.75); stroke-width: .24; stroke-dasharray: .7 .5; stroke-linecap: round; stroke-linejoin: round; }
+.opt-line.on { stroke: var(--you); stroke-width: .4; }
+.opt-line.then { stroke-dasharray: .3 .45; }
+.opt-head { fill: rgba(255,255,255,.75); } .opt-head.on { fill: var(--you); }
+.opt-ring { fill: none; stroke: rgba(255,255,255,.75); stroke-width: .24; stroke-dasharray: .5 .4; } .opt-ring.on { stroke: var(--you); stroke-width: .4; }
+.opt-label { font-family: var(--body); font-weight: 700; font-size: 1.25px; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .85); stroke-width: .36px; stroke-linejoin: round; }
+.opt-label.on { fill: var(--you); }
+.opt-btn { appearance: none; text-align: left; min-height: 52px; padding: 8px 16px; border-radius: 14px; border: 2px solid var(--edge);
+  background: rgba(0, 0, 0, .3); font-family: var(--label); font-weight: 700; font-size: 20px; letter-spacing: .3px; }
+.opt-btn[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--card-ink); }
+.threat { stroke: #FF2D55; stroke-width: .3; stroke-dasharray: .7 .5; stroke-linecap: round; }
+.threat-head { fill: #FF2D55; }
+.dangerring { fill: none; stroke: #FF2D55; stroke-width: .28; stroke-dasharray: .5 .4; }
+.danger-name { fill: #FFD0D8; }
+#pitch:not(.setup) .setup-only { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .drag .tok.you .halo, .cheer .tok.you .halo { animation: none; opacity: .5; transform: none; }
   .tok, #pitch g.gone { transition: none; }
@@ -413,14 +457,16 @@ button { cursor: pointer; }
       <div class="lv-labels" id="lv-labels"></div>
     </section>
     <div class="coach-row"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="home-sub"></p></div>
+    <div class="sat home-sat" id="home-sat" hidden><span class="sat-k">This week’s challenge · <span id="home-sat-skill"></span></span><p id="home-sat-text"></p></div>
     <div class="skills" id="skills"></div>
+    <button class="match" id="match"><span class="match-k">Match mode</span><span class="match-sub">5 puzzles mixed from every skill. The ones you missed come back first.</span></button>
     <button class="reset" id="reset" hidden>Clear my stars</button>
   </section>
 
   <section class="screen game" id="game" hidden>
     <header class="hud">
       <button class="round" id="back" aria-label="All skills"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="hud-title"><span class="sec-name" id="sec-name"></span><h1 id="title"></h1></div>
+      <div class="hud-title"><span class="sec-name"><span id="sec-name"></span> · <span id="age"></span></span><h1 id="title"></h1></div>
       <ol class="nums" id="progress" aria-label="Puzzles in this skill"></ol>
       <div class="total" aria-label="Stars in this skill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><span id="total">0</span></div>
     </header>
@@ -435,12 +481,16 @@ button { cursor: pointer; }
             <p class="how"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L4.6 14a1.5 1.5 0 0 1 2.3-1.9L9 14"/></svg><span id="how"></span></p>
             <div class="controls" id="controls" hidden></div>
             <div class="chips"><button class="chip" id="hint" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span id="hint-label">Shadows</span></button></div>
+            <div class="clock" id="clock" hidden><span class="clock-k">The pass is coming in <b id="clock-n"></b></span><div class="clock-bar"><i id="clock-fill"></i></div></div>
             <div class="push"><button class="cta" id="check">Check my spot</button></div>
           </section>
           <section class="stack" id="result" hidden aria-live="polite">
             <div class="stars" id="stars"></div>
             <ul class="checks" id="checks"></ul>
-            <div class="coach-talk"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="coach"></p></div>
+            <p class="tip also" id="also" hidden></p>
+            <div class="coach-talk" id="ask"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="ask-q"></p>
+              <div class="ask-opts" id="ask-opts" role="group" aria-label="Your answer"></div></div>
+            <div class="coach-talk" id="coach-talk" hidden><p class="bubble" id="coach"></p></div>
             <div class="chips">
               <button class="chip" id="replay-pass"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Watch again</button>
               <button class="chip" id="extra" aria-pressed="false"></button>
@@ -454,9 +504,10 @@ button { cursor: pointer; }
         </div>
         <section class="stack" id="end" hidden>
           <div class="end-card" id="end-card"></div>
-          <h2 id="end-title"></h2>
+          <h2 class="sr" id="end-title"></h2>
           <p class="prompt-end" id="end-sub"></p>
           <ul class="lessons" id="lessons"></ul>
+          <div class="sat" id="sat"><span class="sat-k">Try it on Saturday</span><p id="sat-text"></p></div>
           <div class="push">
             <button class="cta" id="next-skill"></button>
             <button class="ghost-btn" id="to-home">All skills</button>
@@ -478,6 +529,7 @@ const Engine = (() => {
   const EDGE = 0.8;                   // stay this far inside the lines
   const TACKLE = 2.5;                 // a defender this close to the ball can tackle
   const VISION = 80;                  // degrees either side of where you face that you can see
+  const BEST_SLACK = 4;               // a safe pass this close to the most forward one is just as good
 
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -595,8 +647,9 @@ const Engine = (() => {
     const topX = Math.max(...safe.map((q) => q.x));
     const gain = Math.round(m.x - from.x);
     let c3;
-    if (c1.ok && c2.ok && m.x >= topX - 1) {
-      c3 = { ok: true, why: gain > 2 ? `It’s the most forward safe pass: ${gain} metres up the pitch.` : 'Nothing forward was on, so keeping the ball was the smart choice.' };
+    if (c1.ok && c2.ok && m.x >= topX - BEST_SLACK) {
+      c3 = { ok: true, why: gain <= 2 ? 'Nothing forward was on, so keeping the ball was the smart choice.'
+        : m.x >= topX - 1 ? `It’s the most forward safe pass: ${gain} metres up the pitch.` : `One of the best passes: ${gain} metres up the pitch.` };
     } else if (c1.ok && c2.ok) c3 = { ok: false, why: 'Safe, but there was a pass further forward.' };
     else c3 = { ok: false, why: 'A pass is only good if it gets there safely.' };
     c3.label = 'You picked the best option';
@@ -705,20 +758,192 @@ const Engine = (() => {
     return { checks, stars: checks.filter((c) => c.ok).length, tackle, end, pts };
   }
 
+  // ---------- defend: they have the ball, you pick your spot ----------
+  // Our goal is on the left (x = 0). Each defend puzzle picks three of these rules.
+  const OUR_GOAL = { x: 0, y: 20 };
+  const carrier = (pz) => pz.opps.find((o) => o.n === pz.ball);
+  const dangerMan = (pz) => pz.opps.find((o) => o.n === pz.danger);
+  const presser = (pz) => pz.mates.find((m) => m.n === pz.presser);
+  const angleAt = (at, a, b) => {
+    const u = unit({ x: a.x - at.x, y: a.y - at.y }), v = unit({ x: b.x - at.x, y: b.y - at.y });
+    return Math.acos(Math.max(-1, Math.min(1, u.x * v.x + u.y * v.y))) * 180 / Math.PI;
+  };
+  const DEFEND_RULES = {
+    lane(pz, you) {
+      const d = dangerMan(pz), ok = !!blockerOn(carrier(pz), d, [you]);
+      return { ok, label: `You cut out the pass to their #${d.n}`,
+        why: ok ? 'You’re standing in the line between the ball and him, so the pass can’t get through.' : `Their #${d.n} is still free for a pass. Stand in the line between the ball and him.` };
+    },
+    goalside(pz, you) {
+      const d = dangerMan(pz), s = segInfo(you, d, OUR_GOAL), ok = s.t > 0 && s.dist <= 3;
+      return { ok, label: `You’re goal-side of their #${d.n}`,
+        why: ok ? 'You’re between him and our goal, so he can’t run in behind you.' : 'Get between him and our goal. If he’s closer to our goal than you, he’s free.' };
+    },
+    tight(pz, you) {
+      const d = dangerMan(pz), dd = dist(you, d), ok = dd >= 1.5 && dd <= 5;
+      return { ok, label: 'You’re close enough to challenge',
+        why: ok ? 'If the ball goes to him, you can get there first.' : dd < 1.5 ? 'Too close: one touch and he’s past you. Leave a little gap.' : 'Too far away. Get close enough to win it if it goes to him.' };
+    },
+    see(pz, you) {
+      const ok = angleAt(you, carrier(pz), dangerMan(pz)) <= 90;
+      return { ok, label: 'You can see the ball and your man',
+        why: ok ? 'You can watch both without turning your head.' : 'Stand so you can see the ball and your man at the same time.' };
+    },
+    goalsideBall(pz, you) {
+      const ok = you.x < carrier(pz).x - 1;
+      return { ok, label: 'You’re between the ball and our goal',
+        why: ok ? 'The ball is in front of you, where you can deal with it.' : 'The ball is behind you. Get back between it and our goal.' };
+    },
+    cover(pz, you) {
+      const p = presser(pz), dd = dist(you, p), ok = you.x < p.x - 1.5 && dd >= 3 && dd <= 9;
+      return { ok, label: `You’re covering ${p.name}`,
+        why: ok ? `If he gets past ${p.name}, you’re right there.` : you.x >= p.x - 1.5 ? `Get behind ${p.name}, closer to our goal, so you can help if he’s beaten.` : dd < 3 ? `Too close to ${p.name}: one move beats you both.` : `Too far from ${p.name} to help in time.` };
+    },
+    inside(pz, you) {
+      const ref = pz.presser ? presser(pz) : carrier(pz), ok = Math.abs(you.y - 20) < Math.abs(ref.y - 20) - 0.5;
+      const who = pz.presser ? ref.name : 'him';
+      return { ok, label: 'You’re on the inside',
+        why: ok ? (pz.presser ? `You’re nearer the middle than ${who}, guarding the way to goal.` : 'The middle is closed, so he can only go down the line, away from our goal.') : `Stand nearer the middle of the pitch than ${who}, so the way to goal is shut.` };
+    },
+    zone(pz, you) {
+      const z = pz.zone, ok = you.x >= z.x0 && you.x <= z.x1 && you.y >= z.y0 && you.y <= z.y1;
+      return { ok, label: z.label, why: ok ? z.ok : z.fail };
+    },
+    press(pz, you) {
+      const dd = dist(you, carrier(pz)), ok = dd >= 1.5 && dd <= 4.5;
+      return { ok, label: 'You pressed the ball',
+        why: ok ? 'Close enough to stop him, not so close he can go past you.' : dd < 1.5 ? 'Too close: he’ll knock it past you. Stay an arm’s length away.' : 'Too far away. Close him down!' };
+    },
+  };
+  function evaluateDefend(pz, you) {
+    const checks = pz.rules.map((r) => DEFEND_RULES[r](pz, you));
+    const stopped = pz.stopIf.every((r) => DEFEND_RULES[r](pz, you).ok);
+    return { checks, stars: checks.filter((c) => c.ok).length, stopped, threat: pz.threat };
+  }
+  // Where the attack goes, and where you win the ball if you stopped it.
+  function defendOutcome(pz, you) {
+    const c = carrier(pz), to = pz.threat.to, stopped = evaluateDefend(pz, you).stopped;
+    if (!stopped) return { stopped, ball: to, carrierTo: pz.threat.kind !== 'pass' ? to : null, dangerTo: pz.threat.kind === 'pass' ? to : null };
+    if (pz.threat.kind === 'show') return { stopped, ball: pz.threat.out, carrierTo: pz.threat.out, youTo: { x: pz.threat.out.x - 1.6, y: pz.threat.out.y + 1.6 } };
+    const s = segInfo(you, c, to);
+    return { stopped, ball: s.point, youTo: s.point };
+  }
+
+  // ---------- choose: a decision between a few moves ----------
+  // Whether a move is physically safe comes from the picture, not from the puzzle text, so the data can't lie.
+  // A "risky" move is a 50/50 (a trick, a take-on): fine near their goal, not near ours.
+  const ballHolder = (pz) => (pz.oppBall ? pz.opps.find((o) => o.n === pz.oppBall) : pz.ball ? passer(pz) : pz.you);
+  const optEnd = (pz, o) => (o.kind === 'pass' ? pz.mates.find((m) => m.n === o.n) : o.kind === 'shoot' ? o.to : o.path && o.path.length ? o.path[o.path.length - 1] : pz.you);
+  function optSafe(pz, o) {
+    const end = optEnd(pz, o), mate = (n) => pz.mates.find((m) => m.n === n);
+    if (o.kind === 'shoot') return !blockerOn(pz.you, o.to, pz.opps) && dist(pz.you, o.to) <= 22;
+    if (o.kind === 'pass') return passSafe(pz, end);
+    if (o.kind === 'dribble') {
+      const clear = samplePath([pz.you, ...o.path]).every((q) => dist(nearestOpp(pz, q), q) >= TACKLE);
+      if (!clear || !o.then) return clear;
+      const m = mate(o.then);
+      return !blockerOn(end, m, pz.opps) && dist(nearestOpp(pz, m), m) >= SPACE_OPP;
+    }
+    if (o.after) return o.safe !== false;  // pressing or dropping: no ball to lose
+    const free = dist(nearestOpp(pz, end), end) >= SPACE_OPP;
+    if (!o.receive) return free;
+    const from = o.via ? mate(o.via) : ballHolder(pz);
+    return free && !blockerOn(from, end, pz.opps) && (!o.via || !blockerOn(ballHolder(pz), from, pz.opps));
+  }
+  function evaluateChoice(pz, key) {
+    const o = pz.options.find((q) => q.key === key), b = pz.options.find((q) => q.key === pz.best);
+    const safe = optSafe(pz, o), riskOk = !o.risky || !!pz.riskOk;
+    const L3 = pz.labels || ['The right risk', 'It helped the team', 'The best choice'];
+    const c1 = { ok: safe && riskOk, label: L3[0],
+      why: !safe || !riskOk ? o.why : o.risky ? 'Risky, but up here losing it costs little. Worth a go!' : (pz.safeWhy || 'Nobody could stop it.') };
+    const c2 = { ok: !!o.helps, label: L3[1], why: o.helps ? (o.helpsWhy || 'It moved your team on.') : (o.key === b.key ? o.why : 'It didn’t help your team go forward.') };
+    const c3 = { ok: o.key === b.key, label: L3[2], why: o.key === b.key ? o.why : `Best was: ${b.label}. ${b.why}` };
+    if (!c1.ok && !c2.ok && c1.why === c2.why) c2.why = 'It didn’t help your team go forward.';
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, option: o, safe };
+  }
+
+  // ---------- defenders that react: your marker follows you ----------
+  // He watches you and chases a spot just goal-side of you (towards their goal), a bit quicker than you,
+  // so he can stay with a straight run. But he needs a moment to react: when you start, and every time
+  // you change direction sharply, he keeps going the way he was going for a few steps.
+  // That's how you lose a marker: go one way, then sprint the other.
+  const THEIR_GOAL = { x: 60, y: 20 };
+  const REACT_START = 0.8, REACT_TURN = 2.6, MARKER_SPEED = 1.15, GOALSIDE = 1.3, TURN_DEG = 60;
+  function follow(pz, path) {
+    const pts = samplePath(path.length ? path : [pz.you]), m0 = pz.opps.find((o) => o.n === pz.marker);
+    let m = { x: m0.x, y: m0.y }, vel = { x: 0, y: 0 }, committed = null, frozen = REACT_START, turns = 0;
+    const track = [{ ...m }];
+    for (let i = 1; i < pts.length; i++) {
+      const v = { x: pts[i].x - pts[i - 1].x, y: pts[i].y - pts[i - 1].y }, l = Math.hypot(v.x, v.y);
+      if (l < 1e-9) { track.push({ ...m }); continue; }
+      const h = { x: v.x / l, y: v.y / l };
+      if (committed && Math.acos(Math.max(-1, Math.min(1, h.x * committed.x + h.y * committed.y))) * 180 / Math.PI > TURN_DEG) { frozen = REACT_TURN; turns++; }
+      committed = h;
+      if (frozen > 0) {
+        m = { x: m.x + vel.x * l, y: m.y + vel.y * l };  // still going the old way
+        frozen -= l;
+      } else {
+        const g = unit({ x: THEIR_GOAL.x - pts[i].x, y: THEIR_GOAL.y - pts[i].y });
+        const target = { x: pts[i].x + g.x * GOALSIDE, y: pts[i].y + g.y * GOALSIDE };
+        const d = dist(m, target), k = d > 1e-9 ? Math.min(1, (l * MARKER_SPEED) / d) : 0;
+        const nm = { x: m.x + (target.x - m.x) * k, y: m.y + (target.y - m.y) * k };
+        vel = { x: (nm.x - m.x) / l, y: (nm.y - m.y) / l };
+        m = nm;
+      }
+      m = { x: Math.max(EDGE, Math.min(L - EDGE, m.x)), y: Math.max(EDGE, Math.min(W - EDGE, m.y)) };
+      track.push({ ...m });
+    }
+    return { pts, track, end: pts[pts.length - 1], marker: m, turns };
+  }
+  function evaluateMove(pz, path) {
+    const f = follow(pz, path), end = f.end, b = passer(pz);
+    const opps = pz.opps.map((o) => (o.n === pz.marker ? { ...o, x: f.marker.x, y: f.marker.y } : o));
+    const near = (p) => Math.min(...opps.map((o) => dist(o, p)));
+    let checks;
+    if (pz.goal.type === 'decoy') {
+      const t = pz.mates.find((m) => m.n === pz.target), moved = dist(f.marker, pz.opps.find((o) => o.n === pz.marker));
+      const c1 = { ok: moved >= 4, label: 'Your defender followed you', why: moved >= 4 ? 'He went with you, out of the way.' : 'He didn’t need to move. Make a run he has to follow.' };
+      const free = !blockerOn(b, t, opps) && near(t) >= SPACE_OPP;
+      const c2 = { ok: free, label: `${t.name} is free`, why: free ? `The pass to ${t.name} is wide open.` : `${t.name} still isn’t free for a pass.` };
+      const inWay = !!blockerOn(b, t, [end]) || dist(end, t) < SPACE_MATE;
+      const c3 = { ok: !inWay, label: `You stayed out of ${t.name}’s way`, why: inWay ? `You ended up in ${t.name}’s space, or in the way of the pass.` : `You took him away from ${t.name}, not towards him.` };
+      checks = [c1, c2, c3];
+    } else {
+      const len = dist(b, end), blk = blockerOn(b, end, opps);
+      const c1 = { ok: !blk && len >= PASS_MIN && len <= PASS_MAX, label: `${b.name} can pass to you`, why: blk ? 'A defender is still in the way of the pass.' : len < PASS_MIN ? `Too close to ${b.name}.` : len > PASS_MAX ? 'Too far for a pass.' : 'Clear line from the ball to you.' };
+      const sp = near(end) >= SPACE_OPP;
+      const c2 = { ok: sp, label: 'You lost your marker', why: sp ? 'He couldn’t keep up when you changed direction.' : 'He’s still right with you. Go one way, then sprint the other.' };
+      const z = pz.goal, inZ = end.x >= z.x0 && end.x <= z.x1 && end.y >= z.y0 && end.y <= z.y1;
+      const c3 = { ok: inZ, label: z.label, why: inZ ? z.ok : z.fail };
+      checks = [c1, c2, c3];
+    }
+    return { checks, stars: checks.filter((c) => c.ok).length, follow: f, end };
+  }
+
   // Skills, in the order they appear on the home screen. Each puzzle names its section.
   const SECTIONS = [
-    { id: 'space', title: 'Get open', blurb: 'Move into space so a teammate can pass to you.' },
-    { id: 'pass', title: 'Pick the pass', blurb: 'You have the ball. Choose the pass that helps most.' },
-    { id: 'scan', title: 'Check your shoulder', blurb: 'Look before the ball comes, then stand the right way.' },
-    { id: 'dribble', title: 'Drive into space', blurb: 'Run with the ball into open grass.' },
+    { id: 'space', title: 'Get open', blurb: 'Move into space so a teammate can pass to you.',
+      challenge: 'Every time a teammate gets the ball, ask yourself: can he see me? If a defender is in the way, take three steps to the side.' },
+    { id: 'pass', title: 'Pick the pass', blurb: 'You have the ball. Choose the pass that helps most.',
+      challenge: 'Before every pass, look forward first. If forward is shut, keep the ball and go again.' },
+    { id: 'scan', title: 'Check your shoulder', blurb: 'Look before the ball comes, then stand the right way.',
+      challenge: 'Look over your shoulder before every pass you receive. Try to look twice!' },
+    { id: 'dribble', title: 'Drive into space', blurb: 'Run with the ball into open grass.',
+      challenge: 'When there’s grass in front of you, run with the ball. Go around defenders, not through them.' },
+    { id: 'team', title: 'Play together', blurb: 'Pass, move and make runs with your teammates.',
+      challenge: 'After every pass, move! Never pass and stand still.' },
+    { id: 'defend', title: 'Defend', blurb: 'They have the ball. Get in the way and win it back.',
+      challenge: 'When they have the ball, ask: am I between my man and our goal? Can I see the ball and him?' },
   ];
 
   const PUZZLES = [
     {
-      type: 'space', section: 'space', id: 'shadow', title: 'Step out of the shadow',
+      type: 'space', section: 'space', id: 'shadow', title: 'Step out of the shadow', age: '6-8',
       prompt: 'Mia has the ball. A defender is standing right between you and her. Move so she can pass to you.',
       teach: 'If a defender is between you and the ball, the passer can’t see you. A few steps to the side gets you out of his shadow.',
       lesson: 'Get out of the defender’s shadow.',
+      ask: { q: 'Why couldn’t Mia pass to you at the start?', a: ['A defender was in the way', 'You were too far away', 'You were standing still'] },
       ball: 2, youN: 8, you: { x: 24, y: 17 }, run: 10,
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 14, y: 30 },
         { n: 7, name: 'Ava', x: 27, y: 5 }, { n: 11, name: 'Sam', x: 27, y: 34 }, { n: 9, name: 'Kai', x: 38, y: 20 }],
@@ -728,10 +953,11 @@ const Engine = (() => {
         ok: 'You kept your place in the middle of the pitch.', fail: 'You drifted out of the middle. Your team needs you there.' },
     },
     {
-      type: 'space', section: 'space', id: 'crowd', title: 'Don’t crowd the ball',
+      type: 'space', section: 'space', id: 'crowd', title: 'Don’t crowd the ball', age: '6-8',
       prompt: 'Ava has the ball on the left. You’ve run right up next to her. Give her a pass she can actually make.',
       teach: 'Standing next to the ball brings your defender with you. Give your teammate some room and a clear pass.',
       lesson: 'Don’t crowd the ball. Give your teammate room.',
+      ask: { q: 'Why is standing right next to Ava a problem?', a: ['Your defender comes with you, so there’s no room', 'Ava can’t see you', 'You’re too far forward'] },
       ball: 7, youN: 8, you: { x: 31, y: 10.5 }, run: 12,
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 10 }, { n: 3, name: 'Leo', x: 16, y: 30 },
         { n: 7, name: 'Ava', x: 30, y: 8 }, { n: 11, name: 'Sam', x: 30, y: 33 }, { n: 9, name: 'Kai', x: 41, y: 20 }],
@@ -741,10 +967,11 @@ const Engine = (() => {
         ok: 'Good distance: close enough to help, far enough to have space.', fail: 'Find the right distance from Ava: not on top of her, not miles away.' },
     },
     {
-      type: 'space', section: 'space', id: 'wide', title: 'Make the pitch big',
+      type: 'space', section: 'space', id: 'wide', title: 'Make the pitch big', age: '8-10',
       prompt: 'Noah has the ball. Everyone is bunched up in the middle, including you. Find a better spot.',
       teach: 'When your team has the ball, spread out. A wide player pulls defenders apart and makes space for everyone.',
       lesson: 'When we have the ball, make the pitch big.',
+      ask: { q: 'Why get out wide when your team has the ball?', a: ['It pulls their defenders apart', 'So you’re far away from the ball', 'So you don’t have to run'] },
       ball: 6, youN: 11, you: { x: 28, y: 26 }, run: 12,
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 12, y: 10 }, { n: 3, name: 'Leo', x: 12, y: 30 },
         { n: 6, name: 'Noah', x: 26, y: 20 }, { n: 7, name: 'Ava', x: 27, y: 12 }, { n: 9, name: 'Kai', x: 38, y: 19 }],
@@ -754,10 +981,11 @@ const Engine = (() => {
         ok: 'You’re out wide. Now their defenders have to spread out too.', fail: 'Still too narrow. Get out near the sideline.' },
     },
     {
-      type: 'space', section: 'space', id: 'support', title: 'Help a teammate in trouble',
+      type: 'space', section: 'space', id: 'support', title: 'Help a teammate in trouble', age: '8-10',
       prompt: 'Sam is stuck on the right with a defender in his face. He can’t go forward. Help him out.',
       teach: 'When a teammate is under pressure, get beside or just behind them, at an angle. A safe pass keeps the ball for your team.',
       lesson: 'Under pressure? Give a safe pass beside or behind.',
+      ask: { q: 'Sam is in trouble. Where should you go?', a: ['Beside him or just behind him', 'Far up the pitch', 'Right next to him'] },
       ball: 11, youN: 8, you: { x: 36, y: 22 }, run: 10,
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 12 }, { n: 3, name: 'Leo', x: 21, y: 31 },
         { n: 7, name: 'Ava', x: 34, y: 8 }, { n: 11, name: 'Sam', x: 40, y: 34 }, { n: 9, name: 'Kai', x: 46, y: 24 }],
@@ -767,10 +995,11 @@ const Engine = (() => {
         ok: 'You’re beside or behind the ball, so the pass is safe.', fail: 'You’re ahead of the ball. Under pressure, Sam needs a safe pass back or sideways.' },
     },
     {
-      type: 'space', section: 'space', id: 'gap', title: 'Find the gap',
+      type: 'space', section: 'space', id: 'gap', title: 'Find the gap', age: '10-12',
       prompt: 'Mia has the ball at the back. Their midfield is lined up across the pitch. Find a spot that helps us go forward.',
       teach: 'The gap between their midfield and their defence is gold. Get the ball there and you can turn and face their goal.',
       lesson: 'Find the gap between their lines.',
+      ask: { q: 'What’s so good about the gap between their lines?', a: ['You can turn and face their goal', 'Nobody can pass to you there', 'It’s close to our goal'] },
       ball: 2, youN: 8, you: { x: 24, y: 20 }, run: 14,
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 14 }, { n: 3, name: 'Leo', x: 15, y: 30 },
         { n: 7, name: 'Ava', x: 31, y: 4 }, { n: 11, name: 'Sam', x: 32, y: 36 }, { n: 9, name: 'Kai', x: 45, y: 20 }],
@@ -781,10 +1010,11 @@ const Engine = (() => {
     },
     // ---------- pick the pass ----------
     {
-      type: 'pass', section: 'pass', id: 'pass-forward', title: 'Look forward first', best: 9,
+      type: 'pass', section: 'pass', id: 'pass-forward', title: 'Look forward first', best: 9, age: '6-8',
       prompt: 'You’ve got the ball in the middle. Who’s your best pass?',
       teach: 'Look forward first. If a teammate up the pitch is free and the lane is clear, that pass hurts them most.',
       lesson: 'Look forward first.',
+      ask: { q: 'When you get the ball, where do you look first?', a: ['Forward', 'Backwards', 'At your feet'] },
       youN: 8, you: { x: 24, y: 20 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 14, y: 30 },
         { n: 7, name: 'Ava', x: 30, y: 5 }, { n: 11, name: 'Sam', x: 30, y: 35 }, { n: 9, name: 'Kai', x: 40, y: 18 }],
@@ -792,10 +1022,11 @@ const Engine = (() => {
         { n: 8, x: 37, y: 25 }, { n: 11, x: 31, y: 29.5 }, { n: 9, x: 19, y: 23 }],
     },
     {
-      type: 'pass', section: 'pass', id: 'pass-keep', title: 'When forward is shut', best: 2,
+      type: 'pass', section: 'pass', id: 'pass-keep', title: 'When forward is shut', best: 2, age: '8-10',
       prompt: 'You’re in midfield and they’ve closed everything in front of you. What now?',
       teach: 'If every forward pass is blocked, don’t force it. Keep the ball, pass back and go again.',
       lesson: 'Forward shut? Keep the ball and go again.',
+      ask: { q: 'Every forward pass is blocked. What’s smart?', a: ['Keep the ball and go again', 'Kick it forward anyway', 'Dribble into them'] },
       youN: 8, you: { x: 34, y: 20 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 24, y: 9 }, { n: 3, name: 'Leo', x: 24, y: 31 },
         { n: 7, name: 'Ava', x: 38, y: 5 }, { n: 11, name: 'Sam', x: 40, y: 34 }, { n: 9, name: 'Kai', x: 46, y: 20 }],
@@ -803,22 +1034,36 @@ const Engine = (() => {
         { n: 11, x: 37, y: 27 }, { n: 8, x: 41, y: 17 }, { n: 9, x: 29, y: 24 }],
     },
     {
-      type: 'pass', section: 'pass', id: 'pass-switch', title: 'Switch the play', best: 11,
+      type: 'pass', section: 'pass', id: 'pass-switch', title: 'Switch the play', best: 11, age: '10-12',
       prompt: 'You’re on the left and they’ve all rushed over to your side. Find the pass.',
       teach: 'When one side is crowded, the other side is open. Switch it and your teammate has all the time in the world.',
       lesson: 'Crowded on one side? Switch it.',
+      ask: { q: 'One side is crowded. Where’s the space?', a: ['On the other side', 'In the crowd', 'Behind our goal'] },
       youN: 7, you: { x: 30, y: 7 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 10 }, { n: 3, name: 'Leo', x: 18, y: 30 },
         { n: 6, name: 'Noah', x: 34, y: 16 }, { n: 11, name: 'Sam', x: 34, y: 29 }, { n: 9, name: 'Kai', x: 44, y: 15 }],
       opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 46.5, y: 13 }, { n: 4, x: 46, y: 26 }, { n: 7, x: 33.5, y: 4.5 },
         { n: 8, x: 36.5, y: 18.5 }, { n: 11, x: 37, y: 11 }, { n: 9, x: 24, y: 16 }],
     },
+    {
+      type: 'pass', section: 'pass', id: 'pass-two', title: 'Two good choices', best: 9, alsoGood: [7], age: '8-10',
+      prompt: 'You’ve got the ball in midfield. There’s more than one good pass. Find one!',
+      teach: 'Often there’s more than one good pass. Pick one quickly: a good pass now beats a perfect pass too late.',
+      lesson: 'More than one good pass? Pick one, quickly.',
+      ask: { q: 'There are two great passes. What matters most?', a: ['Picking one quickly', 'Waiting until you’re sure', 'Always passing to the striker'] },
+      youN: 8, you: { x: 26, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 10 }, { n: 3, name: 'Leo', x: 15, y: 30 },
+        { n: 7, name: 'Ava', x: 38, y: 8 }, { n: 11, name: 'Sam', x: 33, y: 34 }, { n: 9, name: 'Kai', x: 40, y: 22 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 48, y: 14 }, { n: 4, x: 48, y: 28 }, { n: 7, x: 29.5, y: 27.5 },
+        { n: 8, x: 30, y: 10 }, { n: 9, x: 20, y: 24 }, { n: 11, x: 36, y: 30 }],
+    },
     // ---------- check your shoulder ----------
     {
-      type: 'scan', section: 'scan', id: 'scan-open', title: 'Look before it arrives', best: 'half',
+      type: 'scan', section: 'scan', id: 'scan-open', title: 'Look before it arrives', best: 'half', age: '8-10',
       prompt: 'Mia is about to pass to you. Get ready to receive it.',
       teach: 'Check your shoulder before the ball comes. If there’s space behind you, a half-turn lets you go forward with your first touch.',
       lesson: 'Check your shoulder before the ball comes.',
+      ask: { q: 'When should you check your shoulder?', a: ['Before the ball arrives', 'After you get the ball', 'Only when you shoot'] },
       ball: 2, youN: 8, you: { x: 26, y: 21 }, open: { x: 38, y: 22 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 8 }, { n: 3, name: 'Leo', x: 16, y: 32 },
         { n: 7, name: 'Ava', x: 30, y: 5 }, { n: 11, name: 'Sam', x: 33, y: 34 }, { n: 9, name: 'Kai', x: 44, y: 20 }],
@@ -831,10 +1076,11 @@ const Engine = (() => {
       },
     },
     {
-      type: 'scan', section: 'scan', id: 'scan-tight', title: 'Man on!', best: 'back',
+      type: 'scan', section: 'scan', id: 'scan-tight', title: 'Man on!', best: 'back', age: '8-10',
       prompt: 'Leo is passing to you. Something might be behind you. Find out before you choose how to stand.',
       teach: 'When a defender is tight on your back, don’t try to turn. Keep your body between him and the ball and play it back.',
       lesson: 'Defender on your back? Protect it, don’t turn.',
+      ask: { q: 'A defender is right on your back. What do you do?', a: ['Protect it and play it back', 'Turn as fast as you can', 'Stop and wait for help'] },
       ball: 3, youN: 8, you: { x: 27, y: 24 }, open: { x: 38, y: 22 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 34 },
         { n: 7, name: 'Ava', x: 32, y: 6 }, { n: 11, name: 'Sam', x: 36, y: 35 }, { n: 9, name: 'Kai', x: 42, y: 20 }],
@@ -847,10 +1093,11 @@ const Engine = (() => {
       },
     },
     {
-      type: 'scan', section: 'scan', id: 'scan-side', title: 'Which way is free?', best: 'half',
+      type: 'scan', section: 'scan', id: 'scan-side', title: 'Which way is free?', best: 'half', countdown: 8, age: '10-12',
       prompt: 'Leo is passing to you. Check what’s behind you, then choose how to stand.',
       teach: 'When a defender is closing in, open your body away from him. Your first touch takes you into the space he left.',
       lesson: 'Open up away from the defender.',
+      ask: { q: 'A defender is coming from one side. Which way do you open up?', a: ['Away from him', 'Towards him', 'Don’t move at all'] },
       ball: 3, youN: 8, you: { x: 26, y: 22 }, open: { x: 35, y: 26 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 10 }, { n: 3, name: 'Leo', x: 18, y: 33 },
         { n: 7, name: 'Ava', x: 30, y: 4 }, { n: 11, name: 'Sam', x: 40, y: 36 }, { n: 9, name: 'Kai', x: 45, y: 18 }],
@@ -864,11 +1111,12 @@ const Engine = (() => {
     },
     // ---------- drive into space ----------
     {
-      type: 'dribble', section: 'dribble', id: 'drive-open', title: 'Run with it', maxRun: 16,
+      type: 'dribble', section: 'dribble', id: 'drive-open', title: 'Run with it', maxRun: 16, age: '6-8',
       solution: [{ x: 24, y: 20 }, { x: 38, y: 20 }],
       prompt: 'You’ve got the ball and there’s loads of space in front of you. Draw your run.',
       teach: 'When there’s space in front of you, run with the ball. Big touches into open grass, eyes up.',
       lesson: 'Space in front? Run with the ball.',
+      ask: { q: 'There’s lots of grass in front of you. What do you do?', a: ['Run with the ball', 'Pass it backwards', 'Stand still and wait'] },
       youN: 8, you: { x: 24, y: 20 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 13, y: 10 }, { n: 3, name: 'Leo', x: 13, y: 30 },
         { n: 7, name: 'Ava', x: 30, y: 3 }, { n: 11, name: 'Sam', x: 30, y: 37 }, { n: 9, name: 'Kai', x: 45, y: 24 }],
@@ -877,11 +1125,12 @@ const Engine = (() => {
       goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward. When there’s space in front, use it.' },
     },
     {
-      type: 'dribble', section: 'dribble', id: 'drive-around', title: 'Go around him', maxRun: 16,
+      type: 'dribble', section: 'dribble', id: 'drive-around', title: 'Go around him', maxRun: 16, age: '6-8',
       solution: [{ x: 24, y: 20 }, { x: 27, y: 25.5 }, { x: 35, y: 25.5 }],
       prompt: 'A defender is standing right in front of you. Get past him with the ball.',
       teach: 'Don’t run straight at a defender. Take the ball into the space beside him, then go forward.',
       lesson: 'Go around a defender, not through him.',
+      ask: { q: 'A defender is right in front of you. How do you get past?', a: ['Go into the space beside him', 'Run straight at him', 'Stop and turn back'] },
       youN: 8, you: { x: 24, y: 20 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 13, y: 10 }, { n: 3, name: 'Leo', x: 13, y: 30 },
         { n: 7, name: 'Ava', x: 31, y: 3 }, { n: 11, name: 'Sam', x: 29, y: 37 }, { n: 9, name: 'Kai', x: 44, y: 14 }],
@@ -890,11 +1139,12 @@ const Engine = (() => {
       goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward, past the defender.' },
     },
     {
-      type: 'dribble', section: 'dribble', id: 'drive-gap', title: 'Attack the gap', maxRun: 14,
+      type: 'dribble', section: 'dribble', id: 'drive-gap', title: 'Attack the gap', maxRun: 14, age: '10-12',
       solution: [{ x: 34, y: 20 }, { x: 46, y: 20 }],
       prompt: 'You’ve beaten their midfield. Only two defenders are left. Draw your run.',
       teach: 'Drive at the gap between two defenders. Neither knows who should come to you, and that’s when chances happen.',
       lesson: 'Drive at the gap between defenders.',
+      ask: { q: 'Why drive at the gap between two defenders?', a: ['Neither knows who should go to you', 'It’s the longest run', 'They both run away'] },
       youN: 8, you: { x: 34, y: 20 },
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 20, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 30 },
         { n: 7, name: 'Ava', x: 36, y: 4 }, { n: 11, name: 'Sam', x: 38, y: 36 }, { n: 9, name: 'Kai', x: 50, y: 7 }],
@@ -902,9 +1152,323 @@ const Engine = (() => {
         { n: 11, x: 30, y: 29 }, { n: 8, x: 39, y: 25.5 }, { n: 9, x: 20, y: 21 }],
       goal: { type: 'zone', x0: 44, x1: 60, y0: 15, y1: 25, label: 'You attacked the gap', ok: 'You drove right between their two defenders.', fail: 'Aim for the gap between their two defenders.' },
     },
+    // ---------- defend ----------
+    {
+      type: 'defend', section: 'defend', id: 'def-block', title: 'Block the pass', age: '8-10',
+      prompt: 'They have the ball. Their #10 is free in the middle. Move so their #6 can’t pass to him.',
+      teach: 'You don’t always need to tackle. Stand in the line between the ball and the danger man, and the pass is gone.',
+      lesson: 'Block the pass to the danger man.',
+      ask: { q: 'How can you stop a pass without a tackle?', a: ['Stand in the line between the ball and the man', 'Shout at the passer', 'Run to their goal'] },
+      ball: 6, danger: 10, youN: 8, you: { x: 33, y: 12 }, run: 10,
+      zone: { x0: 27, x1: 40, y0: 0, y1: 40, label: 'You held your place in midfield', ok: 'You stayed in midfield, so our shape is still good.', fail: 'You dropped too deep. Stay in midfield and let the defenders behind you deal with the rest.' },
+      rules: ['lane', 'goalsideBall', 'zone'], stopIf: ['lane'], threat: { kind: 'pass', to: { x: 26, y: 16 } },
+      solution: { x: 31.5, y: 21.3 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 12 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 7, name: 'Ava', x: 24, y: 6 }, { n: 11, name: 'Sam', x: 34, y: 33 }, { n: 9, name: 'Kai', x: 42, y: 18 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 47, y: 30 }, { n: 5, x: 47, y: 10 }, { n: 6, x: 38, y: 26 },
+        { n: 10, x: 26, y: 16 }, { n: 9, x: 19, y: 22 }, { n: 11, x: 28, y: 36 }],
+    },
+    {
+      type: 'defend', section: 'defend', id: 'def-goalside', title: 'Get goal-side', age: '8-10',
+      prompt: 'Their #8 wants to play the ball in behind for their striker. You’re on the wrong side of him. Fix it!',
+      teach: 'Always stay between your man and our goal. Then any ball in behind comes to you, not him.',
+      lesson: 'Stay goal-side of your man.',
+      ask: { q: 'Where should a defender stand?', a: ['Between his man and our goal', 'Next to the ball', 'In front of his man, near their goal'] },
+      ball: 8, danger: 9, youN: 3, you: { x: 24, y: 25 }, run: 11,
+      rules: ['goalside', 'tight', 'see'], stopIf: ['goalside', 'tight'], threat: { kind: 'pass', to: { x: 13, y: 16.5 } },
+      solution: { x: 17, y: 18 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 9 }, { n: 7, name: 'Ava', x: 30, y: 8 },
+        { n: 6, name: 'Noah', x: 34, y: 13 }, { n: 11, name: 'Sam', x: 33, y: 32 }, { n: 9, name: 'Kai', x: 44, y: 22 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 48, y: 28 }, { n: 5, x: 48, y: 13 }, { n: 8, x: 37, y: 22 },
+        { n: 9, x: 20, y: 18 }, { n: 7, x: 27, y: 6 }, { n: 11, x: 28, y: 33 }],
+    },
+    {
+      type: 'defend', section: 'defend', id: 'def-cover', title: 'Cover your teammate', age: '10-12',
+      prompt: 'Leo is pressing their #7 on the wing. If he gets past Leo, who stops him? Get into a spot to help.',
+      teach: 'When a teammate presses, the next defender covers: behind him and nearer the middle. If the attacker beats the first one, the second one is waiting.',
+      lesson: 'Teammate pressing? Cover behind him, on the inside.',
+      ask: { q: 'Leo is pressing. Where does the covering player go?', a: ['Behind Leo, nearer the middle', 'Right next to Leo', 'Up the pitch, ready for a pass'] },
+      ball: 7, presser: 3, youN: 4, you: { x: 30, y: 21 }, run: 11,
+      rules: ['cover', 'inside', 'goalsideBall'], stopIf: ['cover', 'inside'], threat: { kind: 'dribble', to: { x: 16, y: 13 } },
+      solution: { x: 22, y: 15 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 3, name: 'Leo', x: 27, y: 9 }, { n: 2, name: 'Mia', x: 14, y: 26 },
+        { n: 6, name: 'Noah', x: 36, y: 16 }, { n: 11, name: 'Sam', x: 36, y: 31 }, { n: 9, name: 'Kai', x: 46, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 49, y: 27 }, { n: 5, x: 49, y: 13 }, { n: 7, x: 30, y: 7 },
+        { n: 8, x: 40, y: 22 }, { n: 9, x: 19, y: 24 }, { n: 10, x: 33, y: 28 }],
+    },
+    {
+      type: 'defend', section: 'defend', id: 'def-show', title: 'Show him outside', age: '10-12',
+      prompt: 'Their #11 is dribbling at you near the sideline. Close him down so he can’t cut inside towards our goal.',
+      teach: 'Press on the inside. With the middle shut, he can only go down the line, far from our goal, where your teammates can help.',
+      lesson: 'Press from the inside: show him the sideline.',
+      ask: { q: 'Which side do you press from?', a: ['The inside, so he goes down the line', 'The outside, so he goes to the middle', 'Straight on, from in front'] },
+      ball: 11, youN: 2, you: { x: 24, y: 19 }, run: 9,
+      rules: ['press', 'inside', 'goalsideBall'], stopIf: ['press', 'inside'],
+      threat: { kind: 'show', to: { x: 20, y: 16 }, out: { x: 20, y: 4 } },
+      solution: { x: 27.5, y: 12.5 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 3, name: 'Leo', x: 14, y: 26 }, { n: 4, name: 'Noah', x: 13, y: 14 },
+        { n: 7, name: 'Ava', x: 36, y: 14 }, { n: 11, name: 'Sam', x: 35, y: 30 }, { n: 9, name: 'Kai', x: 45, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 48, y: 28 }, { n: 5, x: 48, y: 13 }, { n: 11, x: 30, y: 10 },
+        { n: 8, x: 40, y: 22 }, { n: 9, x: 18, y: 21 }, { n: 10, x: 30, y: 30 }],
+    },
+    // ---------- more for the first skills ----------
+    {
+      type: 'space', section: 'space', id: 'throw', title: 'Get free for a throw-in', age: '6-8',
+      prompt: 'Ava is taking a throw-in. Your defender is standing right next to you. Get free so she can throw it to you.',
+      teach: 'At a throw-in, don’t stand still. Move away from your defender, into space, close enough for a throw.',
+      lesson: 'Throw-in? Move away from your defender.',
+      ask: { q: 'What do you do at a throw-in?', a: ['Move into space, close enough for a throw', 'Stand still and wait', 'Run far away down the pitch'] },
+      ball: 7, youN: 8, you: { x: 31, y: 35 }, run: 9,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 12 }, { n: 3, name: 'Leo', x: 16, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 39.4 }, { n: 11, name: 'Sam', x: 40, y: 33 }, { n: 9, name: 'Kai', x: 42, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 6, x: 32, y: 32.5 }, { n: 2, x: 42, y: 30.5 }, { n: 9, x: 22, y: 36 },
+        { n: 8, x: 33, y: 24 }, { n: 4, x: 47, y: 26 }, { n: 5, x: 48, y: 14 }],
+      goal: { type: 'spacing', min: 5, max: 12, label: 'Close enough for a throw',
+        ok: 'Not too close, not too far: Ava can throw it right to your feet.', fail: 'A throw can’t go far. Stay between 5 and 12 steps from Ava.' },
+    },
+    {
+      type: 'space', section: 'space', id: 'goalkick', title: 'Play out from the back', age: '10-12',
+      prompt: 'Max has a goal kick. Their strikers are waiting in the middle. Get into a spot where Max can pass to you safely.',
+      teach: 'At a goal kick, defenders split wide, near the sidelines. The middle is where they press, so get out to the side and give Max an easy pass.',
+      lesson: 'Goal kick: split wide.',
+      ask: { q: 'At a goal kick, where do our defenders go?', a: ['Wide, near the sidelines', 'Into the middle, next to Max', 'Up to the halfway line'] },
+      ball: 1, youN: 3, you: { x: 12, y: 24 }, run: 12,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 10, y: 6 }, { n: 6, name: 'Noah', x: 22, y: 18 },
+        { n: 7, name: 'Ava', x: 30, y: 6 }, { n: 11, name: 'Sam', x: 30, y: 34 }, { n: 9, name: 'Kai', x: 40, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 11, y: 21 }, { n: 10, x: 14, y: 14 }, { n: 7, x: 17, y: 27 },
+        { n: 8, x: 25, y: 22 }, { n: 4, x: 36, y: 28 }, { n: 5, x: 36, y: 12 }],
+      goal: { type: 'zone', x0: 4, x1: 20, y0: 31, y1: 40, label: 'You split wide',
+        ok: 'You’re wide near the sideline, away from their strikers.', fail: 'Get wider, near the sideline. The middle is where they’re waiting.' },
+    },
+    {
+      type: 'scan', section: 'scan', id: 'scan-easy', title: 'Look, then turn', age: '6-8', best: 'half',
+      prompt: 'Leo is passing to you. Is anyone behind you? Have a look before you choose how to stand.',
+      teach: 'Look over your shoulder first. If nobody is behind you, open your body and you can turn with your first touch.',
+      lesson: 'Nobody behind? Open up and turn.',
+      ask: { q: 'Why look over your shoulder?', a: ['To see if you can turn', 'To find the referee', 'To check on your parents'] },
+      ball: 3, youN: 8, you: { x: 27, y: 25 }, open: { x: 38, y: 25 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 35 },
+        { n: 7, name: 'Ava', x: 30, y: 6 }, { n: 11, name: 'Sam', x: 36, y: 36 }, { n: 9, name: 'Kai', x: 45, y: 16 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 49, y: 12 }, { n: 4, x: 49, y: 29 }, { n: 7, x: 35, y: 9 },
+        { n: 8, x: 41, y: 33 }, { n: 9, x: 19, y: 19 }, { n: 10, x: 13, y: 26 }],
+      stances: {
+        half: { grade: 'best', why: 'Nobody was near you. Half-turned, your first touch takes you forward.' },
+        face: { grade: 'ok', why: 'Safe, but nobody was there. You could have turned straight away.' },
+        back: { grade: 'ok', why: 'Safe, but there was no one to protect it from. Turn!' },
+      },
+    },
+    {
+      type: 'dribble', section: 'dribble', id: 'drive-side', title: 'Find the open side', age: '6-8', maxRun: 14,
+      solution: [{ x: 22, y: 22 }, { x: 26, y: 27 }, { x: 33, y: 27.5 }],
+      prompt: 'A defender is in front of you, a little to one side. Which way is open? Draw your run.',
+      teach: 'Look where the defender is, and go the other way. Dribble into the side where there’s grass.',
+      lesson: 'Dribble away from the defender, into the open side.',
+      ask: { q: 'A defender is on your left. Which way do you go?', a: ['Right, away from him', 'Left, at him', 'Backwards'] },
+      youN: 8, you: { x: 22, y: 22 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 12, y: 10 }, { n: 3, name: 'Leo', x: 12, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 4 }, { n: 11, name: 'Sam', x: 32, y: 37 }, { n: 9, name: 'Kai', x: 44, y: 14 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 47, y: 12 }, { n: 4, x: 47, y: 27 }, { n: 8, x: 28, y: 19 },
+        { n: 7, x: 33, y: 9 }, { n: 9, x: 15, y: 16 }, { n: 11, x: 38, y: 33 }],
+      goal: { type: 'gain', min: 8, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward, into the open side.' },
+    },
+    // ---------- defenders that react ----------
+    {
+      type: 'move', section: 'space', id: 'move-lose', title: 'Lose your marker', age: '10-12', maxRun: 14, marker: 4,
+      solution: [{ x: 36, y: 25 }, { x: 38.5, y: 28.5 }, { x: 33, y: 21.5 }],
+      naive: [{ x: 36, y: 25 }, { x: 31, y: 21 }],
+      prompt: 'Mia has the ball and their #4 is stuck to you. This time he moves when you move! Draw your run to get free.',
+      teach: 'Go one way, then sprint the other. A defender can follow a straight run, but a sharp change of direction leaves him behind.',
+      lesson: 'Go one way, then sprint the other.',
+      ask: { q: 'How do you lose a defender who follows you?', a: ['Go one way, then sprint the other', 'Run in a straight line', 'Stand still and hide'] },
+      ball: 2, youN: 8, you: { x: 36, y: 25 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 22, y: 15 }, { n: 3, name: 'Leo', x: 14, y: 30 },
+        { n: 7, name: 'Ava', x: 32, y: 5 }, { n: 11, name: 'Sam', x: 33, y: 36 }, { n: 9, name: 'Kai', x: 46, y: 14 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 38.6, y: 25.3 }, { n: 5, x: 50, y: 12 }, { n: 7, x: 27, y: 9 },
+        { n: 8, x: 27, y: 29 }, { n: 9, x: 17, y: 21 }, { n: 11, x: 42, y: 34 }],
+      goal: { type: 'zone', x0: 28, x1: 40, y0: 12, y1: 28, label: 'You came to the ball',
+        ok: 'You showed in the middle, where Mia can find you.', fail: 'End your run in the middle, where Mia can pass to you.' },
+    },
+    {
+      type: 'move', section: 'team', id: 'move-decoy', title: 'The decoy run', age: '10-12', maxRun: 14, marker: 5, target: 9,
+      solution: [{ x: 32, y: 19 }, { x: 37, y: 26 }, { x: 39, y: 30 }],
+      naive: [{ x: 32, y: 19 }, { x: 27, y: 15 }],
+      prompt: 'Mia wants to pass to Kai, but your defender is in the way. Make a run that drags him with you.',
+      teach: 'You don’t need the ball to help. A run that drags your defender away opens space for a teammate: that’s a decoy run.',
+      lesson: 'No ball? Your run can still make space.',
+      ask: { q: 'Why make a run if you won’t get the ball?', a: ['To drag a defender away from a teammate', 'To get some exercise', 'To fool the referee'] },
+      ball: 2, youN: 8, you: { x: 32, y: 19 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 22, y: 12 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 7, name: 'Ava', x: 30, y: 4 }, { n: 11, name: 'Sam', x: 26, y: 35 }, { n: 9, name: 'Kai', x: 36, y: 15 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 30.5, y: 14.5 }, { n: 4, x: 48, y: 26 }, { n: 7, x: 26, y: 5 },
+        { n: 8, x: 42, y: 9 }, { n: 9, x: 17, y: 20 }, { n: 10, x: 24, y: 27 }],
+      goal: { type: 'decoy' },
+    },
+    // ---------- decisions ----------
+    {
+      type: 'choice', section: 'pass', id: 'ch-shoot', title: 'Shoot or pass?', age: '6-8', best: 'pass',
+      prompt: 'You’re near their goal with the ball. What’s your best move?',
+      teach: 'Before you shoot, check: is a defender in the way? If a teammate has a clear chance, the pass is the better shot.',
+      lesson: 'Shot blocked? Find the free teammate.',
+      ask: { q: 'When is a pass better than a shot?', a: ['When a teammate has a clearer chance', 'Never: always shoot', 'When you’re tired'] },
+      youN: 10, you: { x: 45, y: 13 },
+      options: [
+        { key: 'shoot', kind: 'shoot', label: 'Shoot', to: { x: 60.6, y: 17 }, helps: true, why: 'Their defender is right in the way of your shot. It hits him.' },
+        { key: 'pass', kind: 'pass', n: 9, label: 'Pass to Kai', helps: true, why: 'Kai is free with only the keeper to beat. Easy goal!' },
+        { key: 'dribble', kind: 'dribble', path: [{ x: 50.5, y: 13 }], label: 'Dribble', helps: true, why: 'You ran straight into the defender.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 10 }, { n: 3, name: 'Leo', x: 18, y: 30 },
+        { n: 7, name: 'Ava', x: 33, y: 4 }, { n: 11, name: 'Sam', x: 36, y: 35 }, { n: 9, name: 'Kai', x: 51, y: 25 }],
+      opps: [{ n: 1, x: 56, y: 18 }, { n: 4, x: 50, y: 15 }, { n: 5, x: 47, y: 31 }, { n: 7, x: 38, y: 8 },
+        { n: 8, x: 36, y: 22 }, { n: 9, x: 24, y: 20 }, { n: 11, x: 40, y: 31 }],
+    },
+    {
+      type: 'choice', section: 'dribble', id: 'ch-2v1', title: '2 against 1', age: '6-8', best: 'drive',
+      prompt: 'It’s you and Kai against one defender. What do you do?',
+      teach: 'In a 2 against 1, run at the defender first. When he comes to you, pass to your free teammate. He can’t stop both of you.',
+      lesson: '2 against 1: drive at him, then pass.',
+      ask: { q: 'In a 2 against 1, when do you pass?', a: ['When the defender comes to you', 'Straight away', 'Never: dribble past him'] },
+      youN: 8, you: { x: 34, y: 16 },
+      options: [
+        { key: 'early', kind: 'pass', n: 9, label: 'Pass now', helps: true, why: 'Good, but too early: the defender just slides over to Kai.' },
+        { key: 'drive', kind: 'dribble', path: [{ x: 39.5, y: 17 }], then: 9, label: 'Drive at him, then pass', helps: true, why: 'You made him come to you. Then Kai was wide open.' },
+        { key: 'alone', kind: 'dribble', path: [{ x: 48, y: 18 }], label: 'Take him on', helps: true, why: 'He was waiting for you. With Kai free, why go alone?' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 7, name: 'Ava', x: 25, y: 5 }, { n: 11, name: 'Sam', x: 27, y: 36 }, { n: 9, name: 'Kai', x: 41, y: 26 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 44, y: 18 }, { n: 5, x: 30, y: 3 }, { n: 7, x: 24, y: 10 },
+        { n: 8, x: 22, y: 22 }, { n: 9, x: 28, y: 30 }, { n: 11, x: 17, y: 32 }],
+    },
+    {
+      type: 'choice', section: 'pass', id: 'ch-own', title: 'Near our goal', age: '8-10', best: 'back',
+      prompt: 'You’ve got the ball in our corner and their #9 is closing you down. What now?',
+      teach: 'Near our own goal, keep it simple. A trick that goes wrong here gives them a goal.',
+      lesson: 'Near our goal: no risks.',
+      ask: { q: 'Why not try a trick near our goal?', a: ['If you lose it, they can score', 'Tricks never work', 'The coach can’t see it'] },
+      youN: 3, you: { x: 12, y: 33 },
+      options: [
+        { key: 'skill', kind: 'dribble', path: [{ x: 16, y: 36 }, { x: 22, y: 35 }], risky: true, label: 'Trick past him', helps: true, why: 'A trick here is a 50/50. Lose it this close to our goal and they score.' },
+        { key: 'back', kind: 'pass', n: 1, label: 'Pass to Max', helps: true, helpsWhy: 'We keep the ball, and Max has time to start again.', why: 'Safe and simple. Max has time, and we keep the ball.' },
+        { key: 'long', kind: 'pass', n: 9, label: 'Long pass to Kai', helps: true, why: 'Their #8 is right in the way.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 12, y: 10 }, { n: 6, name: 'Noah', x: 22, y: 20 },
+        { n: 7, name: 'Ava', x: 30, y: 8 }, { n: 11, name: 'Sam', x: 30, y: 36 }, { n: 9, name: 'Kai', x: 36, y: 26 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 15, y: 30 }, { n: 8, x: 24, y: 30.5 }, { n: 10, x: 18, y: 16 },
+        { n: 7, x: 27, y: 14 }, { n: 4, x: 45, y: 24 }, { n: 5, x: 44, y: 12 }],
+    },
+    {
+      type: 'choice', section: 'pass', id: 'ch-final', title: 'Near their goal', age: '10-12', best: 'skill', riskOk: true,
+      prompt: 'You’ve got the ball near their corner, with a defender in front of you. What now?',
+      teach: 'Near their goal, be brave. If a trick goes wrong up here, they’re still far from scoring. If it works, you’re in on goal.',
+      lesson: 'Near their goal: be brave.',
+      ask: { q: 'Why is a trick fine near their goal?', a: ['Losing it there isn’t dangerous', 'Their defenders are slower', 'Tricks always work there'] },
+      youN: 7, you: { x: 47, y: 7 },
+      options: [
+        { key: 'skill', kind: 'dribble', path: [{ x: 51, y: 3.5 }, { x: 55.5, y: 6.5 }], risky: true, label: 'Trick past him', helps: true, why: 'Up here it’s worth the risk. Beat him and you’re through on goal.' },
+        { key: 'back', kind: 'pass', n: 6, label: 'Pass back to Noah', helps: false, why: 'Safe, but too safe up here. Passing back lets their whole team get back.' },
+        { key: 'cross', kind: 'pass', n: 9, label: 'Pass to Kai', helps: true, why: 'Their #5 is right in the way.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 12 }, { n: 3, name: 'Leo', x: 18, y: 28 },
+        { n: 6, name: 'Noah', x: 37, y: 14 }, { n: 11, name: 'Sam', x: 40, y: 32 }, { n: 9, name: 'Kai', x: 54, y: 21 }],
+      opps: [{ n: 1, x: 57.5, y: 18 }, { n: 2, x: 51, y: 9 }, { n: 5, x: 51, y: 15 }, { n: 4, x: 50, y: 27 },
+        { n: 8, x: 33, y: 20 }, { n: 7, x: 30, y: 6 }, { n: 9, x: 25, y: 24 }],
+    },
+    {
+      type: 'choice', section: 'pass', id: 'ch-won', title: 'Just won it!', age: '8-10', best: 'forward',
+      prompt: 'You’ve just won the ball. Most of their team is still up the pitch, attacking. Quick: what’s your first move?',
+      teach: 'When you win the ball, look forward first. Their players are out of position for a few seconds: that’s your chance.',
+      lesson: 'Just won it? Look forward first.',
+      ask: { q: 'Why look forward straight after winning the ball?', a: ['Their players are out of position', 'To show the coach', 'So you can shoot from anywhere'] },
+      youN: 6, you: { x: 25, y: 22 },
+      options: [
+        { key: 'forward', kind: 'pass', n: 9, label: 'Forward to Kai', helps: true, why: 'They were all pushed up. One forward pass and Kai is away.' },
+        { key: 'back', kind: 'pass', n: 1, label: 'Back to Max', helps: false, why: 'Safe, but it gives them time to get back.' },
+        { key: 'hold', kind: 'dribble', path: [{ x: 20.5, y: 24.5 }], label: 'Dribble', helps: false, why: 'You dribbled back into their players and lost it.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 12, y: 10 }, { n: 3, name: 'Leo', x: 12, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 6 }, { n: 11, name: 'Sam', x: 32, y: 35 }, { n: 9, name: 'Kai', x: 42, y: 17 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 50, y: 26 }, { n: 9, x: 19, y: 26 }, { n: 10, x: 21, y: 18 },
+        { n: 7, x: 17, y: 9 }, { n: 11, x: 18, y: 33 }, { n: 8, x: 26, y: 29 }],
+    },
+    {
+      type: 'choice', section: 'defend', id: 'ch-lost', title: 'Just lost it', age: '10-12', best: 'press', oppBall: 8,
+      prompt: 'Their #8 has just taken the ball off you. What do you do, right now?',
+      teach: 'The best moment to win it back is the first few seconds, before he looks up. Press straight away!',
+      lesson: 'Just lost it? Press straight away.',
+      ask: { q: 'When is the best time to win the ball back?', a: ['In the first few seconds', 'When he reaches our goal', 'After a rest'] },
+      labels: ['Smart choice', 'Won it back', 'The best choice'],
+      safeWhy: 'Getting straight back at him was the smart call.',
+      youN: 8, you: { x: 35, y: 21 },
+      options: [
+        { key: 'press', kind: 'run', path: [{ x: 36.8, y: 20.5 }], after: 'win', label: 'Press now', helps: true, helpsWhy: 'You nicked it straight back.', why: 'Straight away, before he looked up. You won it back!' },
+        { key: 'drop', kind: 'run', path: [{ x: 27, y: 21 }], after: 'lose', passTo: { x: 26, y: 10 }, label: 'Jog back', helps: false, why: 'Dropping gave him time to look up and pick a pass.' },
+        { key: 'stop', kind: 'run', path: [], after: 'lose', passTo: { x: 26, y: 10 }, label: 'Stop and shout', helps: false, safe: false, why: 'Don’t stop! Shouting for a foul gives them a free run.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 12 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 7, name: 'Ava', x: 36, y: 8 }, { n: 11, name: 'Sam', x: 36, y: 33 }, { n: 9, name: 'Kai', x: 46, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 50, y: 28 }, { n: 5, x: 50, y: 12 }, { n: 8, x: 38, y: 20 },
+        { n: 9, x: 24, y: 9 }, { n: 7, x: 28, y: 30 }, { n: 10, x: 44, y: 26 }],
+    },
+    // ---------- play together ----------
+    {
+      type: 'choice', section: 'team', id: 'tm-giveandgo', title: 'Pass and move', age: '8-10', best: 'go', ball: 9,
+      prompt: 'You’ve just passed to Kai. Your defender is right next to you. Where do you go now?',
+      teach: 'Pass and move! The moment you pass, run past your defender. Now your teammate can give it straight back: a one-two.',
+      lesson: 'Pass, then move: the one-two.',
+      ask: { q: 'What do you do straight after you pass?', a: ['Move into space', 'Watch where it goes', 'Ask for it back without moving'] },
+      labels: ['You got free', 'It helped the team', 'The best choice'],
+      safeWhy: 'Nobody near you: Kai can pass to you.',
+      youN: 8, you: { x: 31, y: 23 },
+      options: [
+        { key: 'go', kind: 'run', path: [{ x: 37, y: 28 }, { x: 42, y: 27 }], receive: true, label: 'Run past him', helps: true, why: 'You ran past your defender, so Kai gave it straight back. One-two!' },
+        { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, why: 'You stood still, so your defender is still right next to you.' },
+        { key: 'short', kind: 'run', path: [{ x: 34, y: 21.5 }], label: 'Run to Kai', helps: false, why: 'You ran towards Kai and took your defender with you.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 12 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 7, name: 'Ava', x: 30, y: 6 }, { n: 11, name: 'Sam', x: 30, y: 36 }, { n: 9, name: 'Kai', x: 36, y: 17 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 49, y: 30 }, { n: 5, x: 48, y: 13 }, { n: 6, x: 32.5, y: 25.5 },
+        { n: 8, x: 35, y: 24.5 }, { n: 10, x: 39, y: 13 }, { n: 9, x: 22, y: 20 }],
+    },
+    {
+      type: 'choice', section: 'team', id: 'tm-overlap', title: 'The overlap', age: '10-12', best: 'overlap', ball: 11,
+      prompt: 'Sam has the ball on the wing but a defender is in his way. How can you help him?',
+      teach: 'Run around the outside of your teammate: the overlap. Now the defender has two players to stop, and Sam can slip you in.',
+      lesson: 'Teammate stuck on the wing? Overlap him.',
+      ask: { q: 'Why does the overlap work?', a: ['The defender has two players to stop', 'It’s faster to run around', 'The defender can’t see the ball'] },
+      labels: ['You got free', 'It helped the team', 'The best choice'],
+      safeWhy: 'Nobody near you: Sam can pass to you.',
+      youN: 2, you: { x: 34, y: 30 },
+      options: [
+        { key: 'overlap', kind: 'run', path: [{ x: 38, y: 37.5 }, { x: 47, y: 37.5 }], receive: true, label: 'Run around him', helps: true, why: 'You went round the outside. The defender couldn’t stop both of you.' },
+        { key: 'short', kind: 'run', path: [{ x: 37, y: 30.5 }], label: 'Come close', helps: false, why: 'Too close to Sam: you bring another defender into his space.' },
+        { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, why: 'You stayed where you were, next to their #7.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 4, name: 'Noah', x: 16, y: 16 }, { n: 3, name: 'Leo', x: 20, y: 30 },
+        { n: 7, name: 'Ava', x: 36, y: 8 }, { n: 11, name: 'Sam', x: 40, y: 33 }, { n: 9, name: 'Kai', x: 47, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 2, x: 44, y: 32.5 }, { n: 4, x: 51, y: 26 }, { n: 5, x: 51, y: 14 },
+        { n: 7, x: 36, y: 27.5 }, { n: 8, x: 33, y: 16 }, { n: 9, x: 24, y: 22 }],
+    },
+    {
+      type: 'choice', section: 'team', id: 'tm-thirdman', title: 'The third-man run', age: '10-12', best: 'run', ball: 2,
+      prompt: 'Mia is about to pass to Kai, who will play it first time. Where should you run?',
+      teach: 'When the ball goes from one teammate to another, the third player runs into space. Defenders watch the ball, so the third runner is often free.',
+      lesson: 'Ball going from A to B? Be C: run into space.',
+      ask: { q: 'Why is the third runner often free?', a: ['Defenders are watching the ball', 'He’s the fastest player', 'He’s offside'] },
+      labels: ['You got free', 'It helped the team', 'The best choice'],
+      safeWhy: 'Nobody near you, and Kai can play it straight to you.',
+      youN: 8, you: { x: 28, y: 9 },
+      options: [
+        { key: 'run', kind: 'run', path: [{ x: 40, y: 6 }], receive: true, via: 9, label: 'Run in behind', helps: true, why: 'Mia to Kai, Kai to you. Their defenders were watching the ball, not you.' },
+        { key: 'ask', kind: 'run', path: [{ x: 24, y: 9 }], label: 'Go to Mia', helps: false, why: 'Mia already has a pass on. Coming to her just crowds her.' },
+        { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, why: 'Standing still, you’re no help to Kai.' },
+      ],
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 21, y: 13 }, { n: 3, name: 'Leo', x: 14, y: 28 },
+        { n: 6, name: 'Noah', x: 24, y: 24 }, { n: 11, name: 'Sam', x: 36, y: 34 }, { n: 9, name: 'Kai', x: 32, y: 16 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 35.5, y: 17 }, { n: 4, x: 46, y: 24 }, { n: 7, x: 27, y: 4 },
+        { n: 8, x: 30, y: 22 }, { n: 9, x: 25, y: 30 }, { n: 10, x: 42, y: 14 }],
+    },
   ];
 
-  return { L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
+  return { follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
     evaluate, clamp, openSpace, shadows, passSafe, evaluatePass, fogged, stanceDir, canSee, STANCES, nearestStance, scanOutcome, evaluateScan, pathLength, samplePath, evaluateDribble, SECTIONS, PUZZLES };
 })();
 if (typeof module !== 'undefined') module.exports = Engine;
@@ -968,7 +1532,11 @@ if (typeof module !== 'undefined') module.exports = Engine;
   let you, shownYou = null, pick = null, scanned = false, stance = null, path = [];
   const best = E.PUZZLES.map(() => 0), tried = E.PUZZLES.map(() => false);
   let sec = null;  // the skill section being played
-  const listOf = (sid) => E.PUZZLES.map((p, i) => (p.section === sid ? i : -1)).filter((i) => i >= 0);
+  // Each skill runs from the youngest age group up; ties keep the order they're written in.
+  const AGE_RANK = { '6-8': 0, '8-10': 1, '10-12': 2 };
+  let matchQ = [];  // Match mode: a mixed list of puzzles
+  const listOf = (sid) => sid === 'match' ? matchQ : E.PUZZLES.map((p, i) => (p.section === sid ? i : -1)).filter((i) => i >= 0)
+    .sort((a, b) => (AGE_RANK[E.PUZZLES[a].age] - AGE_RANK[E.PUZZLES[b].age]) || a - b);
   const starsIn = (list) => list.reduce((a, i) => a + best[i], 0);
   // Where to pick a skill back up: the first puzzle without 3 stars, else the start.
   const continueIndex = (sid) => { const l = listOf(sid); const k = l.find((i) => best[i] < 3); return k === undefined ? l[0] : k; };
@@ -997,10 +1565,11 @@ if (typeof module !== 'undefined') module.exports = Engine;
 
   // ---------- small helpers ----------
   function ballHomeFrom(from) {
+    if (pz.type === 'defend' && from === E.carrier(pz)) return add(from, dir(from, pz.threat.to), 1.3);  // at his feet, going our way
     const n = E.nearestOpp(pz, from), d = E.dist(n, from) || 1;
     return { x: from.x + ((from.x - n.x) / d) * 1.75, y: from.y + ((from.y - n.y) / d) * 1.75 };
   }
-  const holder = () => (pz.type === 'space' || pz.type === 'scan' ? E.passer(pz) : pz.you);
+  const holder = () => (pz.type === 'space' || pz.type === 'scan' || pz.type === 'move' ? E.passer(pz) : pz.type === 'defend' ? E.carrier(pz) : pz.type === 'choice' ? E.ballHolder(pz) : pz.you);
   const feetOf = (target, from) => add(target, dir(target, from), 1.7);
   const setBall = (p) => { ballEl.setAttribute('cx', p.x.toFixed(2)); ballEl.setAttribute('cy', p.y.toFixed(2)); };
   function bump(g, cls) { if (!g) return; g.classList.remove(cls); void g.getBBox(); g.classList.add(cls); }
@@ -1080,6 +1649,13 @@ if (typeof module !== 'undefined') module.exports = Engine;
     const at = shownYou || you;
     if (pz.type === 'scan' && stance) { const d = E.stanceDir(pz, stance); return Math.atan2(d.y, d.x); }
     if (pz.type === 'space' || pz.type === 'scan') return angTo(at, E.passer(pz));
+    if (pz.type === 'defend') return angTo(at, E.carrier(pz));
+    if (pz.type === 'move') return state === 'setup' && path.length > 1 ? angTo(path[0], path[Math.min(3, path.length - 1)]) : angTo(at, E.passer(pz));
+    if (pz.type === 'choice') {
+      const o = pick && pz.options.find((q) => q.key === pick), h = E.ballHolder(pz);
+      if (o && state === 'setup') return angTo(at, E.optEnd(pz, o) === pz.you ? h : E.optEnd(pz, o));
+      return h === pz.you ? 0 : angTo(at, h);
+    }
     if (pz.type === 'pass') { const m = pz.mates.find((q) => q.n === pick); return m ? angTo(at, m) : 0; }
     if (pz.type === 'dribble' && state === 'setup' && path.length > 1) return angTo(path[0], path[Math.min(3, path.length - 1)]);
     return 0;
@@ -1087,7 +1663,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   // Everyone else watches the ball. Whoever has it looks at you.
   function facePlayers() {
     const h = holder(), ball = h === pz.you ? (shownYou || you) : h;
-    oppEls.forEach((g, o) => setFace(g, angTo(o, ball)));
+    oppEls.forEach((g, o) => setFace(g, pz.type === 'defend' && o === h ? angTo(o, pz.threat.to) : angTo(o, ball)));
     mateEls.forEach((g, m) => setFace(g, angTo(m, m === h ? (shownYou || you) : ball)));
   }
 
@@ -1096,7 +1672,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
     oppEls = new Map(); mateEls = new Map();
     for (const o of pz.opps) {
       const g = el('g', { class: 'tok them', transform: tr(o) }, L.players);
+      if (pz.danger === o.n || pz.marker === o.n) { el('circle', { class: 'dangerring', r: 2.15 }, g); }
       figure(g, o.n);
+      if (pz.danger === o.n) el('text', { class: 'name danger-name setup-only', y: -2.6 }, g).textContent = 'Danger';
+      if (pz.marker === o.n) el('text', { class: 'name danger-name setup-only', y: -2.6 }, g).textContent = 'Your marker';
       oppEls.set(o, g);
     }
     for (const m of pz.mates) {
@@ -1290,6 +1869,244 @@ if (typeof module !== 'undefined') module.exports = Engine;
       hasReplay: () => true,
     },
 
+    defend: {
+      how: 'You’re defending. Drag yourself (gold) or tap a spot inside the dashed circle.',
+      primary: 'Defend!',
+      hint: ['Show their attack', 'Hide their attack'],
+      extra: null,
+      drag: true,
+      ready: () => true,
+      down(p) { dragging = true; moveYou(p); },
+      move(p) { moveYou(p); },
+      draw() {
+        const c = E.carrier(pz), to = pz.threat.to;
+        if (state === 'setup') {
+          el('circle', { cx: pz.you.x, cy: pz.you.y, r: pz.run, class: 'run' }, L.run);
+          el('circle', { cx: pz.you.x, cy: pz.you.y, r: 1.25, class: 'ghost' }, L.run);
+        }
+        if (hint || state === 'result') {
+          el('line', { x1: c.x, y1: c.y, x2: to.x, y2: to.y, class: 'threat' }, L.lane);
+          const d = dir(c, to), n = { x: -d.y, y: d.x };
+          el('polygon', { points: ptsAttr([add(to, d, .6), add(to, n, .55), add(to, n, -.55)]), class: 'threat-head' }, L.lane);
+        }
+        if (state === 'result' && pz.zone) drawRect(pz.zone.x0, pz.zone.y0, pz.zone.x1, pz.zone.y1);
+      },
+      submit() { res = E.evaluateDefend(pz, you); },
+      // Final positions: where the ball, the attacker(s) and you end up.
+      plan() {
+        const c = E.carrier(pz), out = E.defendOutcome(pz, you), d = pz.danger ? E.dangerMan(pz) : null;
+        const pl = { c, d, ball: out.ball, carrierTo: out.carrierTo || null, dangerTo: out.dangerTo || null, youTo: null };
+        if (out.stopped && pz.threat.kind === 'pass') { pl.youTo = out.youTo; pl.ball = add(out.youTo, dir(out.youTo, c), 1.0); }
+        if (out.stopped && pz.threat.kind === 'dribble') {
+          pl.carrierTo = out.ball; pl.youTo = add(out.ball, dir(out.ball, you), 1.6); pl.ball = lerp(pl.carrierTo, pl.youTo, .5);
+        }
+        if (out.stopped && pz.threat.kind === 'show') { pl.carrierTo = pz.threat.out; pl.youTo = add(pz.threat.out, dir(pz.threat.out, you), 2.2); pl.ball = add(pz.threat.out, dir(c, pz.threat.out), 1.1); }
+        if (!out.stopped && pz.threat.kind !== 'pass') pl.ball = add(out.ball, dir(c, out.ball), 1.1);
+        return pl;
+      },
+      play(done) {
+        const pl = this.plan(), gC = oppEls.get(pl.c), gD = pl.d && oppEls.get(pl.d), ball0 = ballHomeFrom(pl.c), y0 = { ...you };
+        const step = (t) => {
+          const e = 1 - (1 - t) * (1 - t);
+          if (pl.carrierTo) { const p = lerp(pl.c, pl.carrierTo, e); gC.setAttribute('transform', tr(p)); setFace(gC, angTo(pl.c, pl.carrierTo)); }
+          if (pl.dangerTo && gD) gD.setAttribute('transform', tr(lerp(pl.d, pl.dangerTo, e)));
+          if (pl.youTo) { youG.setAttribute('transform', tr(lerp(y0, pl.youTo, Math.min(1, e * 1.4)))); }
+          setBall(lerp(ball0, pl.ball, e));
+        };
+        if (pz.threat.kind === 'pass') { bump(gC, 'kick'); wait(230, () => tween(650 + E.dist(ball0, pl.ball) * 30, step, done)); }
+        else tween(1000, step, done);
+      },
+      final() {
+        const pl = this.plan();
+        if (pl.carrierTo) { const g = oppEls.get(pl.c); g.setAttribute('transform', tr(pl.carrierTo)); setFace(g, angTo(pl.c, pl.carrierTo)); }
+        if (pl.dangerTo && pl.d) oppEls.get(pl.d).setAttribute('transform', tr(pl.dangerTo));
+        if (pl.youTo) { shownYou = pl.youTo; placeYou(); }
+        setBall(pl.ball);
+        oppEls.forEach((g) => g.classList.remove('caught'));
+        if (!res.stopped) (oppEls.get(pl.d) || oppEls.get(pl.c)).classList.add('caught');
+      },
+      hasReplay: () => true,
+    },
+
+    choice: {
+      how: 'Tap the move you’d make, then tap Do it!',
+      primary: 'Do it!',
+      hint: null, extra: null,
+      ready: () => pick !== null,
+      controls(box) {
+        for (const o of pz.options) {
+          const b = document.createElement('button');
+          b.className = 'opt-btn'; b.dataset.key = o.key; b.textContent = o.label;
+          b.setAttribute('aria-pressed', String(pick === o.key));
+          b.addEventListener('click', () => {
+            if (state !== 'setup' || anim) return;
+            unlockSpeech();
+            pick = o.key; render(); updatePrimary();
+            box.querySelectorAll('.opt-btn').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.key === pick)));
+          });
+          box.appendChild(b);
+        }
+      },
+      draw() {
+        const h = E.ballHolder(pz);
+        for (const o of pz.options) {
+          const on = pick === o.key;
+          if (state !== 'setup' && !on) continue;
+          const cls = on ? ' on' : '', end = E.optEnd(pz, o);
+          if (o.kind === 'pass' || o.kind === 'shoot') el('line', { x1: pz.you.x, y1: pz.you.y, x2: end.x, y2: end.y, class: 'opt-line' + cls }, L.lane);
+          else if (o.path.length) {
+            const pts = [pz.you, ...o.path], a = pts[pts.length - 2], d = dir(a, end), n = { x: -d.y, y: d.x };
+            el('polyline', { points: ptsAttr(pts), class: 'opt-line' + (o.kind === 'run' ? ' run-opt' : '') + cls }, L.path);
+            el('polygon', { points: ptsAttr([add(end, d, .7), add(end, n, .55), add(end, n, -.55)]), class: 'opt-head' + cls }, L.path);
+          } else el('circle', { cx: pz.you.x, cy: pz.you.y, r: 2.6, class: 'opt-ring' + cls }, L.path);
+          if (o.then) { const m = pz.mates.find((q) => q.n === o.then); el('line', { x1: end.x, y1: end.y, x2: m.x, y2: m.y, class: 'opt-line then' + cls }, L.lane); }
+          if (o.receive && on) {
+            const via = o.via && pz.mates.find((q) => q.n === o.via);
+            if (via) el('line', { x1: h.x, y1: h.y, x2: via.x, y2: via.y, class: 'opt-line then on' }, L.lane);
+            const from = via || h;
+            el('line', { x1: from.x, y1: from.y, x2: end.x, y2: end.y, class: 'opt-line then on' }, L.lane);
+          }
+          if (state === 'setup') {
+            const lab = o.path && !o.path.length ? { x: pz.you.x, y: pz.you.y + 4.4 } : { x: end.x, y: Math.max(1.6, end.y - 2.4) };
+            el('text', { x: lab.x.toFixed(2), y: lab.y.toFixed(2), class: 'opt-label' + cls }, L.fx).textContent = o.label;
+          }
+        }
+      },
+      submit() { res = E.evaluateChoice(pz, pick); },
+      // Where everything ends up for the chosen move.
+      plan() {
+        const o = res.option, h = E.ballHolder(pz), mate = (n) => pz.mates.find((q) => q.n === n);
+        const pl = { o, you: { ...pz.you }, ball: ballHomeFrom(h), lunger: null, steps: [] };
+        if (o.kind === 'pass' || o.kind === 'shoot') {
+          const to = o.kind === 'pass' ? mate(o.n) : o.to, blk = E.blockerOn(pz.you, to, pz.opps);
+          const r = { blocker: blk, checks: [{ ok: !blk }] };
+          pl.ball = blk ? passTarget(pz.you, to, r) : o.kind === 'shoot' ? to : feetOf(to, pz.you);
+          pl.steps.push({ pass: [pz.you, to, r, o.kind === 'pass' ? mate(o.n) : null] });
+        } else if (o.kind === 'dribble') {
+          const pts = E.samplePath([pz.you, ...o.path]);
+          let k = pts.findIndex((q) => E.dist(E.nearestOpp(pz, q), q) < E.TACKLE);
+          const lost = k >= 0 || (o.risky && !pz.riskOk);
+          if (k < 0) k = lost ? Math.floor(pts.length * .6) : pts.length - 1;
+          pl.pts = pts.slice(0, k + 1); pl.you = pts[k];
+          if (lost) {
+            const op = E.nearestOpp(pz, pl.you), pos = add(pl.you, dir(pl.you, op), 1.5);
+            pl.lunger = { opp: op, pos }; pl.ball = add(pos, dir(pl.you, pos), 1.1);
+          } else if (o.then) { pl.ball = feetOf(mate(o.then), pl.you); pl.steps.push({ pass: [pl.you, mate(o.then), { checks: [{ ok: true }] }, mate(o.then)] }); }
+          else pl.ball = add(pl.you, dir(pts[Math.max(0, k - 3)], pl.you), 1.2);
+        } else {
+          const end = E.optEnd(pz, o);
+          pl.you = { ...end }; pl.pts = E.samplePath([pz.you, ...o.path]);
+          if (o.receive) {
+            const via = o.via && mate(o.via), from = via || h;
+            if (res.safe) {
+              if (via) pl.steps.push({ pass: [h, via, { checks: [{ ok: true }] }, via] });
+              pl.steps.push({ pass: [from, end, { checks: [{ ok: true }] }, 'you'] });
+              pl.ball = feetOf(end, from);
+            }
+          }
+          if (o.after === 'win') { pl.ball = add(end, dir(end, h), 1.0); pl.steps.push({ win: true }); }
+          if (o.after === 'lose') { pl.ball = o.passTo; pl.steps.push({ pass: [h, o.passTo, { checks: [{ ok: true }] }, null], quiet: true }); }
+        }
+        return pl;
+      },
+      play(done) {
+        const pl = this.plan(), h = E.ballHolder(pz);
+        const runSteps = (i) => {
+          if (i >= pl.steps.length) { done(); return; }
+          const st = pl.steps[i];
+          if (st.win) { const b0 = ballHomeFrom(h); tween(260, (t) => setBall(lerp(b0, pl.ball, t)), () => runSteps(i + 1)); return; }
+          const [from, to, r, recv] = st.pass;
+          const g = recv === 'you' ? youG : recv ? mateEls.get(recv) : null;
+          const kick = from === pz.you || (pl.pts && from === pl.you) ? youG : mateEls.get(pz.mates.find((q) => q === from)) || oppEls.get(pz.opps.find((q) => q === from));
+          if (pl.o.kind === 'shoot' && !r.blocker) {
+            const b0 = ballHomeFrom(pz.you); bump(youG, 'kick');
+            wait(200, () => tween(520, (t) => setBall(lerp(b0, to, 1 - (1 - t) * (1 - t))), () => runSteps(i + 1)));
+            return;
+          }
+          playPass(from, to, r, () => { if (g && !r.blocker) bump(g, 'receive'); if (r.blocker) oppEls.get(r.blocker.opp).classList.add('caught'); runSteps(i + 1); }, kick);
+        };
+        if (pl.pts && pl.pts.length > 1) {
+          const n = pl.pts.length - 1, withBall = pl.o.kind === 'dribble';
+          tween(260 + n * 22, (t) => {
+            const q = pl.pts[Math.round(t * n)];
+            youG.setAttribute('transform', tr(q)); setFace(youG, angTo(pz.you, pl.you));
+            if (withBall) setBall(add(q, dir(pz.you, pl.you), 1.2));
+          }, () => {
+            if (pl.lunger) {
+              const g = oppEls.get(pl.lunger.opp), from = { x: pl.lunger.opp.x, y: pl.lunger.opp.y }, b0 = add(pl.you, dir(pz.you, pl.you), 1.2);
+              tween(320, (t) => { g.setAttribute('transform', tr(lerp(from, pl.lunger.pos, t))); setBall(lerp(b0, pl.ball, t)); }, done);
+            } else runSteps(0);
+          });
+        } else runSteps(0);
+      },
+      final() {
+        const pl = this.plan();
+        shownYou = pl.you; placeYou();
+        oppEls.forEach((g) => g.classList.remove('caught'));
+        if (pl.lunger) { const g = oppEls.get(pl.lunger.opp); g.setAttribute('transform', tr(pl.lunger.pos)); g.classList.add('caught'); }
+        for (const st of pl.steps) if (st.pass && st.pass[2].blocker) oppEls.get(st.pass[2].blocker.opp).classList.add('caught');
+        if (pl.o.after === 'win') oppEls.get(E.ballHolder(pz)).classList.add('caught');  // he lost it to you
+        setBall(pl.ball);
+      },
+      hasReplay: () => true,
+    },
+
+    move: {
+      how: () => `Draw your run with your finger, starting from you. Up to ${pz.maxRun} metres. Careful: your marker follows you!`,
+      primary: 'Go!',
+      hint: null, extra: null,
+      drag: true,
+      ready: () => E.pathLength(path) >= 2,
+      down(p) { dragging = true; path = [{ ...pz.you }]; extendPath(p); render(); updatePrimary(); },
+      move(p) { extendPath(p); render(); updatePrimary(); },
+      draw() {
+        if (state === 'result' && pz.goal.type === 'zone') drawRect(pz.goal.x0, pz.goal.y0, pz.goal.x1, pz.goal.y1);
+        if (state === 'result' && res) {
+          el('polyline', { points: ptsAttr(res.follow.pts), class: 'run-path done' }, L.path);
+          el('polyline', { points: ptsAttr(res.follow.track), class: 'run-path rest' }, L.path);
+          if (pz.target) { const t = pz.mates.find((m) => m.n === pz.target), b = E.passer(pz); el('line', { x1: b.x, y1: b.y, x2: t.x, y2: t.y, class: res.checks[1].ok ? 'lane-open' : 'lane-cut' }, L.lane); }
+        } else if (path.length > 1) {
+          el('polyline', { points: ptsAttr(path), class: 'run-path plan' }, L.path);
+          const a = path[Math.max(0, path.length - 3)], z = path[path.length - 1], d = dir(a, z), n = { x: -d.y, y: d.x };
+          el('polygon', { points: ptsAttr([add(z, d, .9), add(z, n, .65), add(z, n, -.65)]), class: 'arrowhead' }, L.path);
+        }
+      },
+      submit() { res = E.evaluateMove(pz, path.length > 1 ? path : [pz.you]); },
+      // After the run, the ball goes to whoever is free, or gets cut out.
+      pass() {
+        const b = E.passer(pz), mk = pz.opps.find((o) => o.n === pz.marker);
+        const moved = pz.opps.map((o) => (o === mk ? { ...o, x: res.follow.marker.x, y: res.follow.marker.y } : o));
+        const to = pz.target ? pz.mates.find((m) => m.n === pz.target) : res.end;
+        const ok = pz.target ? res.checks[1].ok : res.checks[0].ok && res.checks[1].ok;
+        let blk = ok ? null : E.blockerOn(b, to, moved);
+        if (blk) blk = { point: blk.point, opp: blk.opp.n === pz.marker ? mk : blk.opp };
+        else if (!ok) { const near = E.nearestOpp({ opps: moved }, to); blk = { point: near, opp: near.n === pz.marker ? mk : near }; }
+        return { b, to, r: { blocker: blk, checks: [{ ok }] }, recv: pz.target ? mateEls.get(to) : youG };
+      },
+      play(done) {
+        const f = res.follow, n = f.pts.length - 1, gm = oppEls.get(pz.opps.find((o) => o.n === pz.marker));
+        tween(300 + n * 22, (t) => {
+          const k = Math.round(t * n);
+          youG.setAttribute('transform', tr(f.pts[k])); gm.setAttribute('transform', tr(f.track[k]));
+          setFace(youG, angTo(f.pts[Math.max(0, k - 2)], f.pts[k])); setFace(gm, angTo(f.track[k], f.pts[k]));
+        }, () => {
+          shownYou = f.end;
+          const ps = this.pass();
+          playPass(ps.b, ps.to, ps.r, () => { if (ps.r.blocker) oppEls.get(ps.r.blocker.opp).classList.add('caught'); else bump(ps.recv, 'receive'); done(); }, mateEls.get(ps.b));
+        });
+      },
+      final() {
+        const f = res.follow, gm = oppEls.get(pz.opps.find((o) => o.n === pz.marker));
+        shownYou = f.end; placeYou();
+        gm.setAttribute('transform', tr(f.marker)); setFace(gm, angTo(f.marker, f.end));
+        const ps = this.pass();
+        oppEls.forEach((g) => g.classList.remove('caught'));
+        if (ps.r.blocker) oppEls.get(ps.r.blocker.opp).classList.add('caught');
+        setBall(passTarget(ps.b, ps.to, ps.r) || ballHomeFrom(ps.b));
+      },
+      hasReplay: () => true,
+    },
+
     dribble: {
       how: () => `Draw your run with your finger, starting from you. Up to ${pz.maxRun} metres, then tap Go.`,
       primary: 'Go!',
@@ -1449,7 +2266,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
   const show = (screen) => { for (const id of ['home', 'game', 'make']) $(id).hidden = id !== screen; };
 
   // Levels across all 42 stars, and card tiers per skill: bronze for any stars, silver at half, gold when every puzzle has 3.
-  const LEVELS = [['Academy', 0], ['Youth', 12], ['Pro', 24], ['Legend', 36]];
+  const MAX_STARS = E.PUZZLES.length * 3;
+  const LEVELS = [['Academy', 0], ['Youth', Math.round(MAX_STARS * .25)], ['Pro', Math.round(MAX_STARS * .55)], ['Legend', Math.round(MAX_STARS * .85)]];
   function levelOf(total) {
     let i = 0;
     LEVELS.forEach((l, k) => { if (total >= l[1]) i = k; });
@@ -1461,6 +2279,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
     space: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="5" fill="currentColor"/><path d="M15 29Q24 10 36 14" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="37" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="37" cy="15" r="2.5" fill="currentColor"/></svg>',
     pass: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 30L36 16M28 15h9v9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     scan: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 26s7-11 18-11 18 11 18 11-7 11-18 11S6 26 6 26z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="26" r="5" fill="currentColor"/><path d="M14 9q10-6 21 1m0 0l-1-6m1 6l-6 1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+    team: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="10" cy="34" r="5" fill="currentColor"/><circle cx="38" cy="34" r="5" fill="currentColor"/><circle cx="24" cy="12" r="5" fill="currentColor"/><path d="M14 30L21 17M27 17l7 13M15 34h18" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3.5" stroke-linecap="round"/></svg>',
+    defend: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5l15 6v11c0 10-6.5 17-15 21-8.5-4-15-11-15-21V11z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="M17 24l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     dribble: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="30" cy="26" r="9" fill="none" stroke="currentColor" stroke-width="3"/><path d="M4 18h12M2 26h11M4 34h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M30 17l4 5-4 5-4-5z" fill="currentColor"/></svg>',
   };
   function skillCard(sc, tag) {
@@ -1484,7 +2304,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function renderTop() {
     if (state === 'home' || state === 'make') return;
     const list = listOf(sec), nums = $('progress');
-    $('sec-name').textContent = E.SECTIONS.find((x) => x.id === sec).title;
+    $('sec-name').textContent = sec === 'match' ? 'Match mode' : E.SECTIONS.find((x) => x.id === sec).title;
     nums.replaceChildren();
     list.forEach((pi, k) => {
       const li = document.createElement('li'), b = document.createElement('button');
@@ -1493,7 +2313,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       b.textContent = k + 1;
       b.setAttribute('aria-label', `Puzzle ${k + 1}: ${E.PUZZLES[pi].title}${tried[pi] ? `, ${best[pi]} of 3 stars` : ''}`);
       if (here) b.setAttribute('aria-current', 'step');
-      b.addEventListener('click', () => { if (!anim && !here) load(pi); });
+      b.addEventListener('click', () => { if (!anim && !here) load(pi, sec === 'match' ? 'match' : undefined); });
       li.appendChild(b); nums.appendChild(li);
     });
     $('total').textContent = starsIn(list);
@@ -1506,7 +2326,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (T().controls) T().controls(box);
   }
   const updatePrimary = () => { $('check').disabled = !T().ready(); };
-  const HINT_CHIP = { space: 'Shadows', pass: 'Shadows', dribble: 'Tackle zones' };
+  const HINT_CHIP = { space: 'Shadows', pass: 'Shadows', dribble: 'Tackle zones', defend: 'Their attack' };
   const EXTRA_CHIP = { space: 'Open space', pass: 'All my passes' };
 
   function showSetup() {
@@ -1514,6 +2334,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('setup').hidden = false; $('result').hidden = true;
     const t = T();
     $('title').textContent = pz.title;
+    $('age').textContent = `Ages ${pz.age.replace('-', '–')}`;
     $('prompt').textContent = pz.prompt;
     $('how').textContent = typeof t.how === 'function' ? t.how() : t.how;
     $('check').textContent = t.primary;
@@ -1521,7 +2342,61 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('hint').hidden = !t.hint;
     if (t.hint) { $('hint-label').textContent = HINT_CHIP[pz.type]; $('hint').setAttribute('aria-pressed', String(hint)); }
     updatePrimary();
+    waiting = !!pz.countdown;
+    $('clock').hidden = !pz.countdown; $('clock').classList.remove('hurry');
+    if (pz.countdown) {
+      $('check').textContent = 'Start the clock'; $('check').disabled = false;
+      $('clock-fill').style.width = '100%'; $('clock-n').textContent = `${pz.countdown}`;
+    }
     renderTop();
+  }
+
+  // ---------- countdown: you only have a few seconds before the pass arrives ----------
+  let clock = null, waiting = false;
+  function stopClock() { if (clock) { clearInterval(clock); clock = null; } }
+  function startClock() {
+    unlockSpeech();
+    waiting = false;
+    $('check').textContent = T().primary; updatePrimary();
+    const dur = pz.countdown * 1000, t0 = performance.now();
+    say('Go!');
+    clock = setInterval(() => {
+      const left = Math.max(0, dur - (performance.now() - t0));
+      $('clock-fill').style.width = `${(100 * left) / dur}%`;
+      $('clock-n').textContent = `${Math.ceil(left / 1000)}`;
+      $('clock').classList.toggle('hurry', left < 2500);
+      if (left <= 0) {
+        stopClock();
+        if (state === 'setup' && !anim) { if (pz.type === 'scan' && !stance) stance = 'face'; check(true); }
+      }
+    }, 100);
+  }
+
+  // ---------- Match mode: a mix from every skill, missed and not-seen-lately puzzles first ----------
+  const SEEN_KEY = 'fts-seen-v1';
+  let seen = {};
+  try { seen = JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; } catch (e) { seen = {}; }
+  function markSeen(id) { seen[id] = Date.now(); try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) { /* private mode */ } }
+  const matchStars = {};
+  function buildMatch(n = 5) {
+    const rank = (i) => (tried[i] && best[i] < 3 ? 0 : !tried[i] ? 1 : 2);
+    const order = E.PUZZLES.map((_, i) => i).map((i) => ({ i, r: rank(i), t: seen[E.PUZZLES[i].id] || 0, z: Math.random() }))
+      .sort((a, b) => a.r - b.r || a.t - b.t || a.z - b.z).map((x) => x.i);
+    const out = [], per = {};
+    for (const i of order) {  // no more than 2 from one skill, and not the same skill twice in a row
+      const s2 = E.PUZZLES[i].section;
+      if (out.length >= n) break;
+      if ((per[s2] || 0) >= 2 || (out.length && E.PUZZLES[out[out.length - 1]].section === s2)) continue;
+      out.push(i); per[s2] = (per[s2] || 0) + 1;
+    }
+    for (const i of order) if (out.length < n && !out.includes(i)) out.push(i);
+    return out;
+  }
+  function startMatch() {
+    if (anim) return;
+    matchQ = buildMatch();
+    for (const k in matchStars) delete matchStars[k];
+    load(matchQ[0], 'match');
   }
 
   function syncExtra() {
@@ -1554,9 +2429,16 @@ if (typeof module !== 'undefined') module.exports = Engine;
       li.querySelector('.why').textContent = c.why;
       list.appendChild(li);
     });
-    const cheer = document.createElement('strong');
-    cheer.textContent = res.stars === 3 ? `Brilliant, ${playerName()}! ` : res.stars === 2 ? 'So close! ' : 'Have another go. ';
-    $('coach').replaceChildren(cheer, pz.teach);
+    // Real football often has more than one good answer: name the others.
+    const others = pz.type === 'pass' ? pz.mates.filter((m) => m.n !== pick && E.evaluatePass(pz, m.n).stars === 3) : [];
+    $('also').hidden = !others.length;
+    if (others.length) {
+      const names = others.map((m) => m.name).join(' and ');
+      $('also').innerHTML = '<strong></strong> ';
+      $('also').querySelector('strong').textContent = res.stars === 3 ? 'Also great:' : 'Great passes here:';
+      $('also').append(res.stars === 3 ? `${names} ${others.length > 1 ? 'were good choices' : 'was a good choice'} too.` : `${names}.`);
+    }
+    showAsk();
     const inSec = listOf(sec), last = inSec.indexOf(idx) === inSec.length - 1, perfect = res.stars === 3;
     $('next').textContent = last ? 'Finish skill' : 'Next puzzle';
     $('again').className = perfect ? 'ghost-btn' : 'cta';
@@ -1567,9 +2449,41 @@ if (typeof module !== 'undefined') module.exports = Engine;
     (perfect ? $('next') : $('again')).focus({ preventScroll: true });
   }
 
+  const CHALLENGE_KEY = 'fts-challenge-v1';
+  // The coach asks a question before he tells: three answers, then the lesson.
+  const cheerText = () => (res.late ? 'Too slow: the ball arrived! ' : res.stars === 3 ? `Brilliant, ${playerName()}! ` : res.stars === 2 ? 'So close! ' : 'Have another go. ');
+  const askOptions = () => {
+    const opts = pz.ask.a.map((t, i) => ({ t, ok: i === 0 })), k = idx % opts.length;
+    return opts.slice(k).concat(opts.slice(0, k));  // the right answer isn't always first
+  };
+  function showAsk() {
+    const strong = (t) => { const s = document.createElement('strong'); s.textContent = t; return s; };
+    if (!pz.ask) { $('ask').hidden = true; $('coach-talk').hidden = false; $('coach').replaceChildren(strong(cheerText()), pz.teach); return; }
+    $('ask').hidden = false; $('coach-talk').hidden = true;
+    $('ask-q').replaceChildren(strong(cheerText()), `Coach asks: ${pz.ask.q}`);
+    const box = $('ask-opts');
+    box.replaceChildren();
+    for (const o of askOptions()) {
+      const b = document.createElement('button');
+      b.className = 'ask-opt'; b.textContent = o.t; b.dataset.ok = o.ok ? '1' : '0';
+      b.addEventListener('click', () => {
+        if (b.disabled) return;
+        box.querySelectorAll('.ask-opt').forEach((x) => { x.disabled = true; if (x.dataset.ok === '1') x.classList.add('right'); });
+        if (!o.ok) b.classList.add('wrong');
+        const right = pz.ask.a[0];
+        $('coach').replaceChildren(strong(o.ok ? 'Yes, that’s it! ' : `Not quite. It’s “${right}”. `), pz.teach);
+        $('coach-talk').hidden = false;
+        $('next').scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });  // bring the lesson and the buttons into view
+        say(`${o.ok ? 'Yes, that’s it!' : `Not quite. It’s ${right}.`} ${pz.teach}`);
+      });
+      box.appendChild(b);
+    }
+  }
+
   let resetArmed = false, resetTimer = null;
   function showHome() {
     if (anim) return;
+    stopClock();
     state = 'home';
     show('home');
     const all = E.PUZZLES.map((_, i) => i), total = starsIn(all);
@@ -1590,6 +2504,12 @@ if (typeof module !== 'undefined') module.exports = Engine;
       ? `Welcome back, ${nm}! ${lv.next ? `${lv.next[1] - total} more stars and you’re ${lv.next[0]}.` : 'You’re a Legend. Can you get every card to gold?'}`
       : `Hi ${nm}! Pick a skill and let’s train.`;
     syncMe();
+    // The challenge from the last skill he finished, to try in his next real match.
+    let chId = null;
+    try { chId = localStorage.getItem(CHALLENGE_KEY); } catch (e) { chId = null; }
+    const ch = E.SECTIONS.find((x) => x.id === chId);
+    $('home-sat').hidden = !ch;
+    if (ch) { $('home-sat-skill').textContent = ch.title; $('home-sat-text').textContent = ch.challenge; }
     const box = $('skills');
     box.replaceChildren();
     E.SECTIONS.forEach((sc) => {
@@ -1607,6 +2527,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function showSectionEnd() {
     state = 'end';
     show('game'); $('play').hidden = true; $('end').hidden = false;
+    $('replay').hidden = false;
+    if (sec === 'match') { showMatchEnd(); return; }
     const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), got = starsIn(list);
     const card = skillCard(sc, 'div');
     card.querySelector('.skill-go').remove();
@@ -1623,6 +2545,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
       m.innerHTML = '★'.repeat(best[i]) + `<span class="off">${'★'.repeat(3 - best[i])}</span>`;
       li.append(t, m); ul.appendChild(li);
     }
+    $('sat-text').textContent = sc.challenge;
+    try { localStorage.setItem(CHALLENGE_KEY, sc.id); } catch (e) { /* private mode: the card still shows here */ }
     const nx = E.SECTIONS[E.SECTIONS.indexOf(sc) + 1];
     $('next-skill').textContent = nx ? `Next: ${nx.title}` : 'All skills';
     $('next-skill').dataset.go = nx ? nx.id : '';
@@ -1630,6 +2554,35 @@ if (typeof module !== 'undefined') module.exports = Engine;
     renderTop();
     $('next-skill').focus({ preventScroll: true });
     say(endSpeech());
+  }
+
+  function showMatchEnd() {
+    const got = matchQ.reduce((a, i) => a + (matchStars[i] || 0), 0), mx = matchQ.length * 3;
+    const big = document.createElement('div'); big.className = 'end-match'; big.textContent = `★ ${got} of ${mx}`;
+    $('end-card').replaceChildren(big);
+    $('end-title').textContent = 'Match mode';
+    $('end-sub').textContent = got === mx ? 'A perfect match! Here’s what you played:' : 'Full time! Here’s what you played:';
+    const ul = $('lessons');
+    ul.replaceChildren();
+    for (const i of matchQ) {
+      const li = document.createElement('li'), st = matchStars[i] || 0;
+      const t = document.createElement('span'); t.textContent = E.PUZZLES[i].lesson;
+      const m = document.createElement('span'); m.className = 'mini';
+      m.setAttribute('aria-label', `${st} of 3 stars`);
+      m.innerHTML = '★'.repeat(st) + `<span class="off">${'★'.repeat(3 - st)}</span>`;
+      li.append(t, m); ul.appendChild(li);
+    }
+    // The challenge comes from the skill he found hardest in this match.
+    const worst = matchQ.slice().sort((a, b) => (matchStars[a] || 0) - (matchStars[b] || 0))[0];
+    const sc = E.SECTIONS.find((x) => x.id === E.PUZZLES[worst].section);
+    $('sat-text').textContent = sc.challenge;
+    try { localStorage.setItem(CHALLENGE_KEY, sc.id); } catch (e) { /* private mode */ }
+    $('next-skill').textContent = 'Play another match';
+    $('next-skill').dataset.go = 'match';
+    $('to-home').hidden = false; $('replay').hidden = true;
+    renderTop();
+    $('next-skill').focus({ preventScroll: true });
+    say(`Full time! You got ${got} of ${mx} stars. Try it on Saturday: ${sc.challenge}`);
   }
 
   // ---------- his player: name, shirt number and team kit, kept on this iPad only ----------
@@ -1700,21 +2653,27 @@ if (typeof module !== 'undefined') module.exports = Engine;
     pick = null; scanned = false; stance = null; path = [];
     svg.classList.remove('cheer');
   }
-  function load(i) {
+  function load(i, mode) {
     if (anim) return;
+    stopClock();
     prep(i);
-    sec = pz.section; state = 'setup';
+    sec = mode || pz.section; state = 'setup';
     drawPlayers(); render(); showSetup();
     say(setupSpeech());
   }
 
-  function check() {
-    if (state !== 'setup' || anim || !T().ready()) return;
+  function check(force) {
+    if (waiting && state === 'setup' && !anim) { startClock(); return; }
+    if (state !== 'setup' || anim || (force !== true && !T().ready())) return;
     unlockSpeech();
+    const late = force === true;
+    stopClock();
     T().submit();
+    if (late) res.late = true;
     state = 'playing'; tried[idx] = true;
     best[idx] = Math.max(best[idx], res.stars);
-    saveProgress();
+    if (sec === 'match') matchStars[idx] = res.stars;
+    saveProgress(); markSeen(pz.id);
     render();
     T().play(() => {
       state = 'result';
@@ -1728,9 +2687,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
 
   function tryAgain() {
     if (anim) return;
+    stopClock();
     state = 'setup'; res = null; extra = false; shownYou = null;
     if (pz.type === 'scan') { scanned = false; stance = null; }
-    if (pz.type === 'pass') pick = null;
+    if (pz.type === 'pass' || pz.type === 'choice') pick = null;
     svg.classList.remove('cheer');
     drawPlayers(); render(); showSetup();
     svg.focus({ preventScroll: true });
@@ -1750,7 +2710,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     return pt.matrixTransform(svg.getScreenCTM().inverse());
   }
   svg.addEventListener('pointerdown', (e) => {
-    if (anim) return;
+    if (anim || waiting) return;
     const p = toModel(e);
     if (state === 'result' && extra && T().extraTap) { T().extraTap(p); return; }
     if (state !== 'setup' || !T().down) return;
@@ -1763,7 +2723,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   svg.addEventListener('pointerup', stop);
   svg.addEventListener('pointercancel', stop);
   svg.addEventListener('keydown', (e) => {
-    if (state !== 'setup') return;
+    if (state !== 'setup' || waiting) return;
     const k = { ArrowLeft: [-.5, 0], ArrowRight: [.5, 0], ArrowUp: [0, -.5], ArrowDown: [0, .5] }[e.key];
     if (k && pz.type === 'space') { moveYou({ x: you.x + k[0], y: you.y + k[1] }); e.preventDefault(); }
     else if (pz.type === 'scan' && (e.key === 's' || e.key === 'S')) { doScan(); e.preventDefault(); }
@@ -1781,7 +2741,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   $('next').addEventListener('click', () => {
     if (anim) return;
     const list = listOf(sec), k = list.indexOf(idx);
-    if (k < list.length - 1) load(list[k + 1]); else showSectionEnd();
+    if (k < list.length - 1) load(list[k + 1], sec === 'match' ? 'match' : undefined); else showSectionEnd();
   });
   $('extra').addEventListener('click', () => {
     if (anim) return;
@@ -1790,12 +2750,14 @@ if (typeof module !== 'undefined') module.exports = Engine;
     syncExtra();
   });
   $('replay-pass').addEventListener('click', replayResult);
-  $('replay').addEventListener('click', () => load(listOf(sec)[0]));
+  $('replay').addEventListener('click', () => (sec === 'match' ? startMatch() : load(listOf(sec)[0])));
+  $('match').addEventListener('click', startMatch);
   $('back').addEventListener('click', () => { showHome(); say(homeSpeech()); });
   $('to-home').addEventListener('click', () => { showHome(); say(homeSpeech()); });
   $('next-skill').addEventListener('click', () => {
     const go = $('next-skill').dataset.go;
-    if (go) load(continueIndex(go)); else { showHome(); say(homeSpeech()); }
+    if (go === 'match') startMatch();
+    else if (go) load(continueIndex(go)); else { showHome(); say(homeSpeech()); }
   });
   // Two taps to clear, so a stray tap can't wipe his stars.
   $('reset').addEventListener('click', () => {
@@ -1805,7 +2767,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
       resetTimer = setTimeout(() => { resetArmed = false; $('reset').textContent = 'Clear my stars'; }, 4000);
       return;
     }
-    best.fill(0); tried.fill(false); saveProgress(); showHome();
+    best.fill(0); tried.fill(false); saveProgress();
+    try { localStorage.removeItem(CHALLENGE_KEY); } catch (e) { /* nothing saved */ }
+    showHome();
   });
 
   // ---------- read aloud (the device's own voice; nothing leaves the iPad) ----------
@@ -1836,19 +2800,24 @@ if (typeof module !== 'undefined') module.exports = Engine;
     unlocked = true;
     try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } catch (e) { /* ignore */ }
   }
-  const setupSpeech = () => `${pz.title}. ${pz.prompt}`;
+  const setupSpeech = () => {
+    const opts = pz.type === 'choice' ? pz.options.map((o) => o.label) : null;
+    return `${pz.title}. ${pz.prompt}${opts ? ` Your choices: ${opts.slice(0, -1).join(', ')}, or ${opts[opts.length - 1]}.` : ''}${pz.countdown ? ` You have ${pz.countdown} seconds. Tap Start the clock when you’re ready.` : ''}`;
+  };
   function resultSpeech() {
     const head = ['No stars this time.', 'One star.', 'Two stars.', 'Three stars! Brilliant.'][res.stars];
     const fixes = res.checks.filter((c) => !c.ok).map((c) => c.why).join(' ');
-    return `${head} ${fixes} Coach says: ${pz.teach}`;
+    if (!pz.ask) return `${head} ${fixes} Coach says: ${pz.teach}`;
+    const opts = askOptions().map((o) => o.t);
+    return `${head} ${fixes} Coach asks: ${pz.ask.q} Is it: ${opts.slice(0, -1).join(', ')}, or ${opts[opts.length - 1]}?`;
   }
   function endSpeech() {
     const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), t = starsIn(list), max = list.length * 3;
-    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work.`;
+    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Try it on Saturday: ${sc.challenge}`;
   }
   const homeSpeech = () => `${$('home-sub').textContent} ${E.SECTIONS.map((x) => x.title).join('. ')}.`;
   const makeSpeech = () => 'Make your player. Type your name, pick your shirt number and your team kit.';
-  const currentSpeech = () => (state === 'make' ? makeSpeech() : state === 'home' ? homeSpeech() : state === 'end' ? endSpeech() : state === 'result' ? resultSpeech() : setupSpeech());
+  const currentSpeech = () => (state === 'make' ? makeSpeech() : state === 'home' ? homeSpeech() : state === 'end' && sec !== 'match' ? endSpeech() : state === 'end' ? 'Full time!' : state === 'result' ? resultSpeech() : setupSpeech());
   const nb = $('narrate');
   if (canSpeak) {
     nb.hidden = false;
