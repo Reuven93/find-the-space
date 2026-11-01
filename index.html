@@ -1,0 +1,1877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Find the space</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Collector-card look: a floodlit training ground at night; every skill is a player card that
+   upgrades bronze → silver → gold as stars come in. One dark look on purpose. */
+:root {
+  --display: "Bebas Neue", Impact, "Arial Narrow", sans-serif;
+  --body: Barlow, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --label: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ground: #0B2416; --felt-1: #0E2C1B; --felt-2: #0C2717;
+  --panel: rgba(2, 12, 6, .5); --edge: rgba(227, 179, 65, .55);
+  --text: #F6F2E4; --muted: #C5D6C2; --cream: #FFF8E3; --cream-ink: #2A1C00;
+  --gold: #E3B341; --gold-hi: #FFE38A; --gold-deep: #6E4A06;
+  --gold-grad: linear-gradient(150deg, #FFF1B0, #E3B341 35%, #B07A12 66%, #FFE38A);
+  --silver-grad: linear-gradient(150deg, #FFFFFF, #C9D1DB 35%, #8A96A6 66%, #E9EEF3);
+  --bronze-grad: linear-gradient(150deg, #FFD9B8, #C9773A 40%, #8A4A1C 70%, #E8A877);
+  --new-grad: linear-gradient(150deg, #44586D, #1D2733 70%, #2D3B4A);
+  --card-ink: #2A1C00; --new-ink: #F6F2E4;
+  --ok: #3DD68C; --bad: #FF6B81; --focus: #FFE38A;
+  --us: #2F6BFF; --them: #FF5A36; --you: #FFD23F; --you-ink: #1A2330; --you-edge: #D9A21F;
+  --shirt-edge: #FFFFFF;
+  --grass-1: #2E8A41; --grass-2: #287D3A; --runoff: #123D22; --chalk: #F3F7EE;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { height: 100%; }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0; height: 100%; color: var(--text); font-family: var(--body); font-weight: 500;
+  background: radial-gradient(1100px 620px at 50% -18%, #1E5A34, transparent 70%),
+              repeating-linear-gradient(90deg, var(--felt-1) 0 90px, var(--felt-2) 90px 180px), var(--ground);
+  -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app { height: 100%; }
+.screen { height: 100%; display: flex; flex-direction: column; min-height: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- shared pieces ---------- */
+.coach-face { width: 60px; height: 60px; flex: none; }
+.bubble { margin: 0; background: var(--cream); color: var(--cream-ink); border-radius: 18px; padding: 12px 16px;
+  font-size: 18px; line-height: 1.4; position: relative; text-wrap: pretty; }
+.bubble strong { font-weight: 700; }
+.cta { appearance: none; border: 0; width: 100%; min-height: 72px; border-radius: 16px; padding: 8px 16px;
+  background: var(--gold-grad); color: var(--card-ink); font-family: var(--display); font-size: 36px; letter-spacing: 1.5px; line-height: 1;
+  box-shadow: 0 6px 0 var(--gold-deep), 0 10px 24px rgba(0, 0, 0, .35); transition: transform .08s, box-shadow .08s, filter .15s; }
+.cta:hover { filter: brightness(1.06); }
+.cta:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--gold-deep); }
+.cta:disabled { filter: grayscale(.85) brightness(.75); box-shadow: 0 6px 0 #2B2B2B; cursor: default; transform: none; }
+.ghost-btn { appearance: none; min-height: 60px; border-radius: 16px; border: 2px solid var(--edge); background: rgba(0, 0, 0, .3);
+  font-family: var(--display); font-size: 28px; letter-spacing: 1px; padding: 6px 14px; transition: transform .08s; }
+.ghost-btn:active { transform: translateY(2px); }
+.chip { appearance: none; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 6px 16px; border-radius: 999px;
+  border: 2px solid var(--edge); background: rgba(0, 0, 0, .3); font-family: var(--label); font-weight: 700; font-size: 18px; letter-spacing: .3px; }
+.chip svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--card-ink); }
+.chip[hidden] { display: none; }
+.round { appearance: none; width: 56px; height: 56px; flex: none; border-radius: 50%; border: 2px solid var(--edge); background: rgba(0, 0, 0, .35);
+  display: grid; place-items: center; padding: 0; }
+.round svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* read aloud lives in the top-right corner on every screen */
+.narrate { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); right: max(16px, env(safe-area-inset-right, 0px)); }
+.narrate .waves { opacity: .35; }
+.narrate[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--card-ink); }
+.narrate[aria-pressed="true"] .waves { opacity: 1; }
+.narrate[hidden] { display: none; }
+
+/* ---------- home ---------- */
+.home { padding-block: 16px 20px; gap: 16px; overflow-y: auto; }
+.top { display: flex; align-items: center; gap: 14px; padding-right: 70px; min-height: 56px; }
+.logo { flex: 1; margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4.4vw, 50px); letter-spacing: 2px; line-height: 1; }
+.logo span { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.me { appearance: none; display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 14px;
+  border: 2px solid var(--gold); background: rgba(0, 0, 0, .35); text-align: left; min-height: 56px; }
+.me .shirt { width: 44px; height: 44px; }
+.me-name { display: block; font-family: var(--display); font-size: 24px; letter-spacing: 1px; line-height: 1; }
+.me-lv { display: block; font-family: var(--label); font-weight: 600; font-size: 15px; color: var(--muted); }
+.level { background: var(--panel); border: 2px solid var(--edge); border-radius: 14px; padding: 12px 18px 14px; }
+.lv-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.lv-name { font-family: var(--display); font-size: 30px; letter-spacing: 1.5px; line-height: 1; }
+.lv-next { font-family: var(--label); font-weight: 600; font-size: 19px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lv-steps { display: flex; gap: 6px; margin-top: 10px; }
+.lv-step { flex: 1; height: 14px; border-radius: 999px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+.lv-step i { display: block; height: 100%; background: var(--gold-grad); border-radius: 999px; }
+.lv-labels { display: flex; gap: 6px; margin-top: 6px; }
+.lv-labels span { flex: 1; font-family: var(--label); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); opacity: .7; }
+.lv-labels span.on { color: var(--gold-hi); opacity: 1; }
+.coach-row { display: flex; align-items: center; gap: 12px; }
+.skills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.reset { appearance: none; align-self: center; background: none; border: 0; color: var(--muted); font-family: var(--label); font-weight: 600; font-size: 16px; padding: 10px; }
+.reset[hidden] { display: none; }
+
+/* a skill card: the shield face is clipped, the button around it keeps a visible focus ring */
+.skill { appearance: none; border: 0; padding: 0; background: none; text-align: center; display: flex; border-radius: 10px;
+  transition: transform .15s cubic-bezier(.3, 1.5, .5, 1); filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .45)); }
+.skill:hover { transform: translateY(-4px); }
+.skill:active { transform: translateY(2px) scale(.98); }
+.face { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; overflow: hidden;
+  padding: 34px 18px 54px; min-height: 360px; color: var(--card-ink);
+  clip-path: polygon(50% 0, 100% 7%, 100% 88%, 50% 100%, 0 88%, 0 7%); }
+.tier-gold .face { background: var(--gold-grad); }
+.tier-silver .face { background: var(--silver-grad); }
+.tier-bronze .face { background: var(--bronze-grad); }
+.tier-new .face { background: var(--new-grad); color: var(--new-ink); }
+.face::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .45) 48%, transparent 60%); transform: translateX(-120%); }
+.tier-gold .face::after { animation: shine 4.5s ease-in-out infinite 1s; }
+@keyframes shine { 0%, 70% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+.sk-head { align-self: stretch; display: flex; justify-content: space-between; align-items: flex-start; padding: 0 4px; }
+.sk-rate { font-family: var(--display); font-size: 52px; line-height: .9; font-variant-numeric: tabular-nums; }
+.sk-tier { font-family: var(--label); font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; opacity: .8; margin-top: 8px; }
+.sk-icon { width: clamp(70px, 8vw, 100px); height: clamp(70px, 8vw, 100px); margin: 2px 0 6px; }
+.sk-icon svg { width: 100%; height: 100%; }
+.sk-title { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 2.6vw, 32px); letter-spacing: 1px; line-height: 1; text-wrap: balance; }
+.sk-blurb { font-size: 15px; line-height: 1.35; opacity: .85; flex: 1; text-wrap: pretty; }
+.sk-foot { align-self: stretch; display: flex; align-items: center; gap: 8px; }
+.skill-stars { font-family: var(--label); font-weight: 700; font-size: 16px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.skill-bar { flex: 1; height: 8px; border-radius: 999px; background: rgba(0, 0, 0, .2); overflow: hidden; }
+.tier-new .skill-bar { background: rgba(255, 255, 255, .15); }
+.skill-bar i { display: block; height: 100%; background: currentColor; border-radius: 999px; }
+.skill-go { margin-top: 6px; font-family: var(--display); font-size: 24px; letter-spacing: 1.5px; padding: 6px 22px; border-radius: 12px;
+  background: #1B1405; color: var(--gold-hi); }
+.tier-new .skill-go { background: var(--gold); color: #1B1405; }
+
+/* ---------- make your player ---------- */
+.make { overflow-y: auto; padding-block: 20px; }
+.make-in { margin: auto; display: flex; align-items: center; gap: 40px; width: 100%; max-width: 920px; }
+.pcard { width: 260px; flex: none; filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .5)); }
+.pcard .face { min-height: 370px; background: var(--gold-grad); padding-top: 40px; }
+.pc-num { font-family: var(--display); font-size: 64px; line-height: .9; align-self: flex-start; padding-left: 8px; }
+.pcard .shirt { width: 130px; height: 130px; margin-top: -24px; }
+.pc-name { font-family: var(--display); font-size: 40px; letter-spacing: 1.5px; line-height: 1; text-align: center; overflow-wrap: anywhere; }
+.pc-lv { font-family: var(--label); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 15px; opacity: .8; }
+.make-form { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.make-form h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 52px; letter-spacing: 2px; line-height: 1; }
+.make-form .lbl { font-family: var(--label); font-weight: 700; font-size: 17px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); }
+#p-name { width: 100%; min-height: 60px; border-radius: 14px; border: 2px solid var(--edge); background: rgba(0, 0, 0, .35);
+  padding: 8px 16px; font-family: var(--display); font-size: 32px; letter-spacing: 1px; }
+#p-name::placeholder { color: rgba(246, 242, 228, .4); }
+.numpick { display: flex; align-items: center; gap: 14px; }
+.numpick output { min-width: 80px; text-align: center; font-family: var(--display); font-size: 48px; line-height: 1; font-variant-numeric: tabular-nums; }
+.numpick .round { font-family: var(--display); font-size: 34px; }
+.kits { display: flex; flex-wrap: wrap; gap: 12px; }
+.kit { appearance: none; width: 58px; height: 58px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .25); padding: 0; background: var(--k); }
+.kit[aria-checked="true"] { border-color: var(--gold-hi); box-shadow: 0 0 0 4px rgba(255, 227, 138, .35); transform: scale(1.08); }
+.make-row { display: flex; gap: 12px; align-items: center; margin-top: 6px; }
+.make-row .cta { flex: 1; }
+.make-cancel[hidden] { display: none; }
+
+/* ---------- playing ---------- */
+.hud { display: flex; align-items: center; gap: 14px; padding-block: 12px; padding-right: 70px; flex-wrap: wrap; border-bottom: 2px solid rgba(227, 179, 65, .35); }
+.hud-title { flex: 1; min-width: 180px; display: flex; flex-direction: column; }
+.sec-name { font-family: var(--label); font-weight: 700; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+#title { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: 1px; line-height: 1; text-wrap: balance; }
+.nums { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.pnum { appearance: none; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: 2px solid var(--edge); background: rgba(0, 0, 0, .3);
+  font-family: var(--display); font-size: 24px; line-height: 1; }
+.pnum.done { background: var(--gold-grad); border-color: transparent; color: var(--card-ink); }
+.pnum.current { background: var(--text); border-color: var(--text); color: var(--ground); box-shadow: 0 0 16px rgba(255, 255, 255, .5); }
+.total { display: flex; align-items: center; gap: 6px; font-family: var(--display); font-size: 30px; font-variant-numeric: tabular-nums; }
+.total svg { width: 26px; height: 26px; fill: var(--gold); }
+.main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 30vw, 370px); gap: 18px; padding-block: 16px 18px; }
+.field { min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; }
+#pitch { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; outline: none; }
+#pitch:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 12px; }
+.side { min-height: 0; overflow-y: auto; background: var(--panel); border: 2px solid var(--edge); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; }
+.stack { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.stack[hidden] { display: none; }
+.coach-talk { display: flex; flex-direction: column; gap: 10px; }
+.coach-talk .bubble::before { content: ""; position: absolute; top: -9px; left: 22px; border: 10px solid transparent; border-top: 0; border-bottom-color: var(--cream); }
+.how { margin: 0; display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.how svg { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--gold-hi); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.controls { display: flex; flex-direction: column; gap: 10px; }
+.controls[hidden] { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.push { margin-top: auto; display: flex; flex-direction: column; gap: 12px; }
+.stars { display: flex; align-items: center; gap: 6px; }
+.stars svg { width: 56px; height: 56px; fill: rgba(255, 255, 255, .14); }
+.stars svg.on { fill: var(--gold); filter: drop-shadow(0 0 10px rgba(255, 210, 63, .55)); animation: pop .42s cubic-bezier(.3, 1.6, .5, 1) both; }
+.stars .of { margin-left: 8px; font-family: var(--display); font-size: 30px; letter-spacing: 1px; color: var(--muted); }
+@keyframes pop { from { transform: scale(.2) rotate(-30deg); } to { transform: scale(1) rotate(0); } }
+.checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.checks li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+.mark { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #08140D; font-weight: 700; font-size: 16px; }
+.mark.ok { background: var(--ok); }
+.mark.bad { background: var(--bad); }
+.checks strong { display: block; font-weight: 700; font-size: 17px; }
+.checks span.why { display: block; font-size: 15px; line-height: 1.4; color: var(--muted); }
+.swatch { display: inline-block; width: 14px; height: 14px; border: 2px dashed var(--you-edge); background: rgba(255, 201, 60, .25); border-radius: 3px; vertical-align: -1px; margin-left: 4px; }
+.row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+.row .cta, .row .ghost-btn { min-height: 64px; font-size: 26px; white-space: nowrap; padding-inline: 10px; }
+.tip { font-size: 15px; color: var(--muted); margin: 0; }
+
+/* end of a skill */
+.end-card { width: 170px; align-self: center; pointer-events: none; }
+.end-card .face { min-height: 220px; padding: 22px 12px 36px; gap: 2px; }
+.end-card .sk-rate { font-size: 40px; }
+.end-card .sk-icon { width: 56px; height: 56px; }
+.end-card .sk-title { font-size: 24px; }
+#next-skill { font-size: 28px; }
+#end { gap: 10px; }
+.end-card .sk-blurb { display: none; }
+#end-title { margin: 0; font-family: var(--display); font-weight: 400; font-size: 38px; letter-spacing: 1px; line-height: 1; }
+.lessons { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.lessons li { display: flex; justify-content: space-between; gap: 12px; font-size: 16px; line-height: 1.35; }
+.lessons .mini { white-space: nowrap; letter-spacing: 1px; color: var(--gold); font-size: 18px; }
+.lessons .mini .off { color: rgba(255, 255, 255, .2); }
+.prompt-end { margin: 0; font-size: 17px; color: var(--muted); }
+.link { appearance: none; background: none; border: 0; color: var(--gold-hi); font-family: var(--label); font-weight: 700; font-size: 18px; padding: 8px 2px; align-self: flex-start; }
+
+/* the shirt badge used on the home chip and the player card */
+.shirt text { font-family: var(--display); font-size: 40px; fill: #fff; text-anchor: middle; dominant-baseline: central;
+  paint-order: stroke; stroke: rgba(0, 0, 0, .35); stroke-width: 4px; }
+.kit-light { --shirt-edge: #1A2330; }
+.kit-light .shirt text { fill: #1A2330; stroke: rgba(255, 255, 255, .5); }
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 1000px) {
+  .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .face { min-height: 300px; }
+}
+@media (orientation: portrait), (max-aspect-ratio: 1/1) {
+  .main { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  #pitch { height: auto; aspect-ratio: 65 / 47.5; max-height: 52vh; }
+  .side { min-height: 240px; }
+}
+@media (max-width: 720px) {
+  .make-in { flex-direction: column; gap: 20px; }
+  .pcard { width: 200px; }
+  .pcard .face { min-height: 290px; }
+  .make-form h1 { font-size: 40px; }
+}
+@media (max-width: 560px) {
+  .game { overflow-y: auto; }
+  .main { display: flex; flex-direction: column; }
+  .side { min-height: auto; overflow: visible; }
+  .skills { gap: 12px; }
+  .face { padding: 26px 10px 44px; min-height: 260px; }
+  .sk-rate { font-size: 38px; }
+  .sk-blurb { display: none; }
+  .me-lv { display: none; }
+  .pnum { width: 40px; height: 40px; font-size: 21px; }
+  .cta { font-size: 30px; min-height: 64px; }
+}
+
+/* pitch */
+.runoff { fill: var(--runoff); stroke: var(--gold); stroke-width: .3; }
+.g1 { fill: var(--grass-1); } .g2 { fill: var(--grass-2); }
+.chalk { fill: none; stroke: var(--chalk); stroke-width: .2; }
+.spot { fill: var(--chalk); }
+.net { fill: rgba(255,255,255,.2); stroke: var(--chalk); stroke-width: .2; }
+.legend { font-family: var(--body); font-size: 1.45px; font-weight: 500; fill: rgba(255,255,255,.88); dominant-baseline: central; }
+.legend-arrow { fill: none; stroke: rgba(255,255,255,.88); stroke-width: .22; stroke-linecap: round; stroke-linejoin: round; }
+.torso, .hand { stroke: #fff; stroke-width: .2; }
+.hand { stroke-width: .14; }
+.tok.us .torso, .tok.us .hand { fill: var(--us); }
+.tok.them .torso, .tok.them .hand { fill: var(--them); }
+.head { fill: #3A2A20; stroke: #fff; stroke-width: .1; }
+.foot { fill: #1A2330; }
+.num { font-family: var(--display); font-weight: 400; font-size: 1.2px; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none;
+  paint-order: stroke; stroke: rgba(10, 20, 40, .55); stroke-width: .28px; stroke-linejoin: round; }
+.name { font-family: var(--body); font-weight: 600; font-size: 1.15px; fill: #fff; text-anchor: middle; dominant-baseline: central;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .7); stroke-width: .34px; stroke-linejoin: round; pointer-events: none; }
+.tok.you { cursor: grab; }
+.tok.you .torso, .tok.you .hand { fill: var(--you); stroke: var(--you-ink); stroke-width: .22; }
+.tok.you .head { stroke: var(--you-ink); }
+.tok.you .you-name { font-family: var(--display); font-weight: 400; font-size: 1.55px; fill: var(--you); }
+.tok.you .hit { fill: transparent; stroke: none; }
+.tok.you .halo { fill: none; stroke: var(--you); stroke-width: .28; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.drag .tok.you .halo { animation: halo 1.8s ease-out infinite; }
+.cheer .tok.you .halo { animation: cheer .9s ease-out 2; }
+@keyframes halo { from { opacity: .9; transform: scale(.7); } to { opacity: 0; transform: scale(1.45); } }
+@keyframes cheer { from { opacity: 1; transform: scale(.8); stroke-width: .5; } to { opacity: 0; transform: scale(2.6); } }
+.trail { stroke: var(--you); stroke-width: .3; stroke-linecap: round; opacity: .75; }
+.tok.receive .anim { animation: receive .38s ease-out; transform-box: fill-box; transform-origin: center; }
+@keyframes kick { 50% { transform: scale(1.28); } }
+@keyframes receive { 40% { transform: scale(1.25); } }
+.demo-ring { fill: none; stroke: var(--you); stroke-width: .25; stroke-dasharray: .5 .4; }
+.tok { transition: opacity .5s; }
+.tok.hid { opacity: 0; }
+.fog { fill: rgba(4, 12, 26, .64); }
+.fog-edge { stroke: rgba(255, 255, 255, .7); stroke-width: .16; stroke-dasharray: .6 .5; }
+.fog-label { font-family: var(--body); font-weight: 600; font-size: 1.6px; fill: rgba(255, 255, 255, .82); text-anchor: middle; dominant-baseline: central; }
+#pitch g.gone { opacity: 0; transition: opacity .5s; }
+.vision { fill: rgba(255, 201, 60, .2); stroke: var(--you); stroke-width: .16; stroke-dasharray: .6 .45; }
+.stance-arrow { cursor: pointer; }
+.stance-arrow .sa-bg { fill: rgba(10, 24, 16, .55); stroke: #fff; stroke-width: .18; }
+.stance-arrow .sa-chev { fill: none; stroke: #fff; stroke-width: .3; stroke-linecap: round; stroke-linejoin: round; }
+.stance-arrow.on .sa-bg { fill: var(--you); stroke: var(--you-ink); }
+.stance-arrow.on .sa-chev { stroke: var(--you-ink); }
+.sa-label { font-family: var(--body); font-weight: 600; font-size: 1.1px; fill: #fff; dominant-baseline: central; pointer-events: none;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .8); stroke-width: .34px; stroke-linejoin: round; }
+.sa-label.on { fill: var(--you); }
+#pitch.tapping { cursor: pointer; }
+.tok.us .pickring { fill: none; stroke: var(--you); stroke-width: .3; opacity: 0; }
+.picking .tok.us { cursor: pointer; }
+.picking .tok.us .pickring { opacity: .6; stroke-dasharray: .5 .4; }
+.tok.us.picked .pickring { opacity: 1; stroke-dasharray: none; stroke-width: .45; }
+.tackle { fill: rgba(255, 45, 85, .16); stroke: rgba(255, 45, 85, .7); stroke-width: .14; }
+.tackle.hot { fill: rgba(255, 45, 85, .32); stroke: #FF2D55; stroke-width: .24; }
+.run-path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.run-path.plan { stroke: var(--you); stroke-width: .3; stroke-dasharray: .7 .45; }
+.run-path.done { stroke: var(--you); stroke-width: .45; }
+.run-path.rest { stroke: #FF2D55; stroke-width: .22; stroke-dasharray: .5 .5; opacity: .75; }
+.arrowhead { fill: var(--you); }
+.lane-ok { stroke: #fff; stroke-width: .28; stroke-linecap: round; }
+.lane-open.thin, .lane-cut.thin { stroke-width: .3; }
+.starlbl { font-family: var(--display); font-weight: 400; font-size: 1.5px; fill: var(--you); text-anchor: middle;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .8); stroke-width: .35px; stroke-linejoin: round; }
+.starlbl.none { fill: #FF9AAB; }
+.tok.kick .anim { animation: kick .26s ease-out; transform-box: fill-box; transform-origin: center; }
+.tok.them.caught .torso { stroke: #FF2D55; stroke-width: .45; }
+.ball { fill: #fff; stroke: #1A2330; stroke-width: .18; }
+.run { fill: rgba(255,255,255,.06); stroke: rgba(255,255,255,.62); stroke-width: .16; stroke-dasharray: .7 .5; }
+.ghost { fill: none; stroke: rgba(255,255,255,.55); stroke-width: .16; stroke-dasharray: .4 .35; }
+.lane-plan { stroke: rgba(255,255,255,.8); stroke-width: .18; stroke-dasharray: .6 .5; }
+.lane-open { stroke: var(--you); stroke-width: .45; stroke-linecap: round; }
+.lane-cut { stroke: #FF2D55; stroke-width: .45; stroke-linecap: round; }
+.lane-rest { stroke: #FF2D55; stroke-width: .2; stroke-dasharray: .5 .5; opacity: .75; }
+.lane-meh { stroke: #fff; stroke-width: .3; stroke-dasharray: .8 .5; }
+.shadow { fill: rgba(6, 18, 36, .36); }
+.shadow.hot { stroke: #FF2D55; stroke-width: .22; }
+.zone { fill: rgba(255, 201, 60, .16); stroke: var(--you); stroke-width: .18; stroke-dasharray: .8 .5; }
+.dot { fill: var(--you); opacity: .8; }
+@media (prefers-reduced-motion: reduce) {
+  .drag .tok.you .halo, .cheer .tok.you .halo { animation: none; opacity: .5; transform: none; }
+  .tok, #pitch g.gone { transition: none; }
+  .stars svg.on { animation: none; }
+  .tok.kick .anim, .tok.receive .anim { animation: none; }
+}
+
+.kit-light .tok.us .torso, .kit-light .tok.us .hand { stroke: #1A2330; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tier-gold .face::after { animation: none; }
+  .skill, .cta { transition: none; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="coach-art" viewBox="0 0 64 64">
+    <circle cx="32" cy="36" r="20" fill="#F2C79B" stroke="#1A2330" stroke-width="2.5"/>
+    <path d="M12 30c0-12 9-19 20-19s20 7 20 19z" fill="#E3B341" stroke="#1A2330" stroke-width="2.5"/>
+    <path d="M40 29h18c0 3-3 5-6 5H40z" fill="#E3B341" stroke="#1A2330" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="25" cy="38" r="2.4" fill="#1A2330"/><circle cx="39" cy="38" r="2.4" fill="#1A2330"/>
+    <path d="M25 46c4 4 10 4 14 0" fill="none" stroke="#1A2330" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M18 52c5 6 23 6 28 0" fill="none" stroke="#E23" stroke-width="2"/>
+    <rect x="40" y="52" width="9" height="5" rx="2" fill="#C9D3DD" stroke="#1A2330" stroke-width="1.8"/>
+  </symbol>
+  <symbol id="shirt-shape" viewBox="0 0 100 100">
+    <path class="body" style="fill: var(--us); stroke: var(--shirt-edge); stroke-width: 3; stroke-linejoin: round" d="M34 10 L20 16 L6 34 L20 44 L26 38 L26 92 L74 92 L74 38 L80 44 L94 34 L80 16 L66 10 Q50 22 34 10 Z"/>
+  </symbol>
+</svg>
+<div class="app">
+  <button class="round narrate" id="narrate" aria-pressed="false" aria-label="Read aloud" title="Read aloud" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+
+  <section class="screen make" id="make" hidden>
+    <div class="make-in">
+      <div class="pcard" aria-hidden="true"><span class="face">
+        <span class="pc-num" id="pc-num">8</span>
+        <svg class="shirt" viewBox="0 0 100 100"><use href="#shirt-shape"/><text x="50" y="58" id="pc-shirt-num">8</text></svg>
+        <span class="pc-name" id="pc-name">Your name</span>
+        <span class="pc-lv" id="pc-lv">Academy</span>
+      </span></div>
+      <form class="make-form" id="make-form" autocomplete="off">
+        <h1>Make your player</h1>
+        <label class="lbl" for="p-name">Your name</label>
+        <input id="p-name" maxlength="12" placeholder="Type your name" enterkeyhint="done">
+        <span class="lbl" id="num-lbl">Shirt number</span>
+        <div class="numpick" role="group" aria-labelledby="num-lbl">
+          <button class="round" type="button" id="num-down" aria-label="Lower number">−</button>
+          <output id="p-num" aria-live="polite">8</output>
+          <button class="round" type="button" id="num-up" aria-label="Higher number">+</button>
+        </div>
+        <span class="lbl" id="kit-lbl">Team kit</span>
+        <div class="kits" id="kits" role="radiogroup" aria-labelledby="kit-lbl"></div>
+        <div class="make-row">
+          <button class="ghost-btn make-cancel" type="button" id="make-cancel" hidden>Back</button>
+          <button class="cta" type="submit" id="make-go">Let’s go</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="screen home" id="home">
+    <header class="top">
+      <h1 class="logo">Find the <span>space</span></h1>
+      <button class="me" id="me" aria-label="Change your player">
+        <svg class="shirt" viewBox="0 0 100 100" aria-hidden="true"><use href="#shirt-shape"/><text x="50" y="58" id="me-num">8</text></svg>
+        <span><span class="me-name" id="me-name">Player</span><span class="me-lv" id="me-lv">Academy</span></span>
+      </button>
+    </header>
+    <section class="level" aria-label="Your level">
+      <div class="lv-top"><span class="lv-name" id="lv-name">Academy</span><span class="lv-next" id="lv-next"></span></div>
+      <div class="lv-steps" id="lv-steps"></div>
+      <div class="lv-labels" id="lv-labels"></div>
+    </section>
+    <div class="coach-row"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="home-sub"></p></div>
+    <div class="skills" id="skills"></div>
+    <button class="reset" id="reset" hidden>Clear my stars</button>
+  </section>
+
+  <section class="screen game" id="game" hidden>
+    <header class="hud">
+      <button class="round" id="back" aria-label="All skills"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="hud-title"><span class="sec-name" id="sec-name"></span><h1 id="title"></h1></div>
+      <ol class="nums" id="progress" aria-label="Puzzles in this skill"></ol>
+      <div class="total" aria-label="Stars in this skill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><span id="total">0</span></div>
+    </header>
+    <div class="main">
+      <div class="field">
+        <svg id="pitch" viewBox="-2.5 -2.5 65 47.5" role="img" tabindex="0" aria-label="Pitch"></svg>
+      </div>
+      <aside class="side">
+        <div class="stack" id="play">
+          <section class="stack" id="setup">
+            <div class="coach-talk"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="prompt"></p></div>
+            <p class="how"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L4.6 14a1.5 1.5 0 0 1 2.3-1.9L9 14"/></svg><span id="how"></span></p>
+            <div class="controls" id="controls" hidden></div>
+            <div class="chips"><button class="chip" id="hint" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span id="hint-label">Shadows</span></button></div>
+            <div class="push"><button class="cta" id="check">Check my spot</button></div>
+          </section>
+          <section class="stack" id="result" hidden aria-live="polite">
+            <div class="stars" id="stars"></div>
+            <ul class="checks" id="checks"></ul>
+            <div class="coach-talk"><svg class="coach-face" aria-hidden="true"><use href="#coach-art"/></svg><p class="bubble" id="coach"></p></div>
+            <div class="chips">
+              <button class="chip" id="replay-pass"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Watch again</button>
+              <button class="chip" id="extra" aria-pressed="false"></button>
+            </div>
+            <p class="tip" id="extra-tip" hidden></p>
+            <div class="push row">
+              <button class="ghost-btn" id="again">Try again</button>
+              <button class="cta" id="next">Next puzzle</button>
+            </div>
+          </section>
+        </div>
+        <section class="stack" id="end" hidden>
+          <div class="end-card" id="end-card"></div>
+          <h2 id="end-title"></h2>
+          <p class="prompt-end" id="end-sub"></p>
+          <ul class="lessons" id="lessons"></ul>
+          <div class="push">
+            <button class="cta" id="next-skill"></button>
+            <button class="ghost-btn" id="to-home">All skills</button>
+            <button class="link" id="replay">Play this skill again</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<script>
+const Engine = (() => {
+  const L = 60, W = 40;               // 7v7 pitch in metres, we attack to the right
+  const R_INTERCEPT = 2.0;            // a defender this close to the pass line can cut it out
+  const SPACE_OPP = 4.0;              // a defender this close to you takes your time away
+  const SPACE_MATE = 3.0;             // a teammate this close means you're sharing their space
+  const PASS_MIN = 5, PASS_MAX = 25;  // sensible pass lengths for this age
+  const EDGE = 0.8;                   // stay this far inside the lines
+  const TACKLE = 2.5;                 // a defender this close to the ball can tackle
+  const VISION = 80;                  // degrees either side of where you face that you can see
+
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+  function segInfo(p, a, b) {
+    const vx = b.x - a.x, vy = b.y - a.y, len2 = vx * vx + vy * vy;
+    if (len2 === 0) return { dist: dist(p, a), t: 0, point: { x: a.x, y: a.y } };
+    const t = ((p.x - a.x) * vx + (p.y - a.y) * vy) / len2;
+    const tc = Math.max(0, Math.min(1, t));
+    const point = { x: a.x + vx * tc, y: a.y + vy * tc };
+    return { dist: dist(p, point), t, point };
+  }
+
+  const passer = (pz) => pz.mates.find((m) => m.n === pz.ball);
+
+  function blockerOn(from, to, opps) {
+    let best = null;
+    for (const o of opps) {
+      const s = segInfo(o, from, to);
+      if (s.t > 0 && s.t < 1 && s.dist < R_INTERCEPT && (!best || s.t < best.t)) {
+        best = { opp: o, t: s.t, point: s.point };
+      }
+    }
+    return best;
+  }
+  const laneBlocker = (pz, you) => blockerOn(passer(pz), you, pz.opps);
+
+  function objective(pz, you, b) {
+    const g = pz.goal;
+    let ok = false;
+    if (g.type === 'zone') ok = you.x >= g.x0 && you.x <= g.x1 && you.y >= g.y0 && you.y <= g.y1;
+    else if (g.type === 'spacing') { const dd = dist(b, you); ok = dd >= g.min && dd <= g.max; }
+    else if (g.type === 'support') ok = you.x <= b.x + g.ahead && you.x >= b.x - g.behind;
+    return { ok, label: g.label, why: ok ? g.ok : g.fail };
+  }
+
+  function evaluate(pz, you) {
+    const b = passer(pz);
+    const len = dist(b, you);
+    const blocker = laneBlocker(pz, you);
+
+    let c1;
+    if (len < PASS_MIN) c1 = { ok: false, why: `Too close to ${b.name}. You bring your defender with you and there’s no room.` };
+    else if (blocker) c1 = { ok: false, why: 'A defender is in the way. You’re hiding in his shadow.' };
+    else if (len > PASS_MAX) c1 = { ok: false, why: 'Too far. A pass that long is easy to cut out.' };
+    else c1 = { ok: true, why: 'Clear line from the ball to you.' };
+    c1.label = `${b.name} can pass to you`;
+
+    const nearOpp = Math.min(...pz.opps.map((o) => dist(o, you)));
+    const crowded = pz.mates.filter((m) => m.n !== pz.ball).find((m) => dist(m, you) < SPACE_MATE);
+    let c2;
+    if (nearOpp < SPACE_OPP) c2 = { ok: false, why: 'A defender is right next to you. He’ll take the ball off you.' };
+    else if (crowded) c2 = { ok: false, why: `You’re crowding ${crowded.name}. Spread out.` };
+    else c2 = { ok: true, why: 'No one near you. You’ll have time to control it.' };
+    c2.label = 'You’ve got space';
+
+    const c3 = objective(pz, you, b);
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, blocker, passLen: len };
+  }
+
+  function clamp(pz, p) {
+    let x = p.x, y = p.y;
+    const dx = x - pz.you.x, dy = y - pz.you.y, r = Math.hypot(dx, dy);
+    if (r > pz.run) { x = pz.you.x + (dx / r) * pz.run; y = pz.you.y + (dy / r) * pz.run; }
+    x = Math.max(EDGE, Math.min(L - EDGE, x));
+    y = Math.max(EDGE, Math.min(W - EDGE, y));
+    return { x, y };
+  }
+
+  // Every spot you could reach that gets all three checks.
+  function openSpace(pz, step = 1) {
+    const pts = [];
+    for (let x = pz.you.x - pz.run; x <= pz.you.x + pz.run + 1e-9; x += step) {
+      for (let y = pz.you.y - pz.run; y <= pz.you.y + pz.run + 1e-9; y += step) {
+        if (Math.hypot(x - pz.you.x, y - pz.you.y) > pz.run) continue;
+        if (x < EDGE || x > L - EDGE || y < EDGE || y > W - EDGE) continue;
+        if (evaluate(pz, { x, y }).stars === 3) pts.push({ x, y });
+      }
+    }
+    return pts;
+  }
+
+  // The area each defender blocks: a cone running away from the ball behind him.
+  function shadows(pz, from) {
+    const b = from || passer(pz);
+    return pz.opps.map((o) => {
+      const dd = dist(b, o);
+      if (dd <= R_INTERCEPT) return null;
+      const th = Math.atan2(o.y - b.y, o.x - b.x), a = Math.asin(R_INTERCEPT / dd), near = dd * Math.cos(a);
+      const ray = (ang, len) => ({ x: b.x + Math.cos(ang) * len, y: b.y + Math.sin(ang) * len });
+      return { opp: o, poly: [ray(th + a, near), ray(th + a, 120), ray(th - a, 120), ray(th - a, near)] };
+    }).filter(Boolean);
+  }
+
+  const nearestOpp = (pz, p) => pz.opps.reduce((a, o) => (dist(o, p) < dist(a, p) ? o : a), pz.opps[0]);
+  const unit = (v) => { const l = Math.hypot(v.x, v.y) || 1; return { x: v.x / l, y: v.y / l }; };
+
+  // ---------- pick the pass: you have the ball ----------
+  function passSafe(pz, m) {
+    return !blockerOn(pz.you, m, pz.opps) && dist(pz.you, m) <= PASS_MAX && dist(nearestOpp(pz, m), m) >= SPACE_OPP;
+  }
+  function evaluatePass(pz, n) {
+    const m = pz.mates.find((q) => q.n === n), from = pz.you;
+    const len = dist(from, m), blocker = blockerOn(from, m, pz.opps);
+    let c1;
+    if (blocker) c1 = { ok: false, why: 'A defender is in the way. He’ll cut it out.' };
+    else if (len > PASS_MAX) c1 = { ok: false, why: 'Too far. A pass that long is easy to cut out.' };
+    else c1 = { ok: true, why: 'Clear line all the way to him.' };
+    c1.label = `The pass gets to ${m.name}`;
+    const c2 = dist(nearestOpp(pz, m), m) < SPACE_OPP
+      ? { ok: false, why: `${m.name} has a defender right on him. He’ll lose it.` }
+      : { ok: true, why: `${m.name} has space to control it.` };
+    c2.label = `${m.name} has space`;
+    const safe = pz.mates.filter((q) => passSafe(pz, q));
+    const topX = Math.max(...safe.map((q) => q.x));
+    const gain = Math.round(m.x - from.x);
+    let c3;
+    if (c1.ok && c2.ok && m.x >= topX - 1) {
+      c3 = { ok: true, why: gain > 2 ? `It’s the most forward safe pass: ${gain} metres up the pitch.` : 'Nothing forward was on, so keeping the ball was the smart choice.' };
+    } else if (c1.ok && c2.ok) c3 = { ok: false, why: 'Safe, but there was a pass further forward.' };
+    else c3 = { ok: false, why: 'A pass is only good if it gets there safely.' };
+    c3.label = 'You picked the best option';
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, blocker, target: m, passLen: len };
+  }
+
+  // ---------- check your shoulder: what's behind you is hidden until you look ----------
+  function fogged(pz, p) {
+    const b = passer(pz);
+    return (p.x - pz.you.x) * (b.x - pz.you.x) + (p.y - pz.you.y) * (b.y - pz.you.y) < 0;
+  }
+  function stanceDir(pz, stance) {
+    const b = passer(pz), y = pz.you;
+    const toB = unit({ x: b.x - y.x, y: b.y - y.y });
+    if (stance === 'face') return toB;
+    if (stance === 'back') return { x: -1, y: 0 };
+    const toO = unit({ x: pz.open.x - y.x, y: pz.open.y - y.y });
+    return unit({ x: toB.x + toO.x, y: toB.y + toO.y });
+  }
+  function canSee(pz, stance, p) {
+    const d = stanceDir(pz, stance), v = unit({ x: p.x - pz.you.x, y: p.y - pz.you.y });
+    return Math.acos(Math.max(-1, Math.min(1, d.x * v.x + d.y * v.y))) * 180 / Math.PI <= VISION;
+  }
+  // A tap on the pitch picks whichever of the three stances points closest to it.
+  const STANCES = ['face', 'half', 'back'];
+  function nearestStance(pz, p) {
+    const v = unit({ x: p.x - pz.you.x, y: p.y - pz.you.y });
+    let best = null, bd = -2;
+    for (const k of STANCES) { const d = stanceDir(pz, k), c = d.x * v.x + d.y * v.y; if (c > bd) { bd = c; best = k; } }
+    return best;
+  }
+  // What happens after the ball arrives. It follows how you stood, not just the score:
+  // half-turn takes a first touch into the space, back to goal shields it and plays it back,
+  // facing the passer just controls it. A bad stance means the defender nicks it.
+  function scanOutcome(pz, stance) {
+    const b = passer(pz), y = pz.you, toB = unit({ x: b.x - y.x, y: b.y - y.y });
+    const feet = { x: y.x + toB.x * 1.7, y: y.y + toB.y * 1.7 };
+    if (pz.stances[stance].grade === 'bad') {
+      const o = nearestOpp(pz, y), side = Math.sign((o.x - y.x) * (b.y - y.y) - (o.y - y.y) * (b.x - y.x)) || 1;
+      const perp = { x: -toB.y * side, y: toB.x * side };
+      const mid = { x: y.x + (feet.x - y.x) * .55, y: y.y + (feet.y - y.y) * .55 };
+      const lunge = { x: mid.x - perp.x * 2.8, y: mid.y - perp.y * 2.8 };
+      const away = unit({ x: lunge.x - y.x, y: lunge.y - y.y });
+      return { kind: 'lost', you: { ...y }, danger: o, lunge, ball: { x: lunge.x + away.x, y: lunge.y + away.y } };
+    }
+    if (stance === 'half') {
+      const d = unit({ x: pz.open.x - y.x, y: pz.open.y - y.y });
+      const touch = { x: y.x + d.x * 3.5, y: y.y + d.y * 3.5 };
+      return { kind: 'turn', you: touch, ball: { x: touch.x + d.x * 1.2, y: touch.y + d.y * 1.2 } };
+    }
+    if (stance === 'back') return { kind: 'layoff', you: { ...y }, ball: feet, to: b };
+    return { kind: 'hold', you: { ...y }, ball: feet };
+  }
+
+  function evaluateScan(pz, scanned, stance) {
+    const s = pz.stances[stance];
+    const c1 = scanned
+      ? { ok: true, why: 'You looked before the ball came, so you knew what was behind you.' }
+      : { ok: false, why: 'You didn’t look. Always check your shoulder before the ball arrives.' };
+    c1.label = 'You checked your shoulder';
+    const c2 = { ok: s.grade === 'best', why: s.why, label: 'You stood the best way' };
+    const c3 = s.grade === 'bad' ? { ok: false, why: 'He got to the ball first.' } : { ok: true, why: 'Your first touch kept it safe.' };
+    c3.label = 'You kept the ball';
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, grade: s.grade, danger: nearestOpp(pz, pz.you) };
+  }
+
+  // ---------- drive into space: you draw your run ----------
+  function pathLength(path) {
+    let l = 0;
+    for (let i = 1; i < path.length; i++) l += dist(path[i - 1], path[i]);
+    return l;
+  }
+  function samplePath(path, step = 0.25) {
+    const pts = [{ ...path[0] }];
+    for (let i = 1; i < path.length; i++) {
+      const a = path[i - 1], b = path[i], n = Math.max(1, Math.ceil(dist(a, b) / step));
+      for (let k = 1; k <= n; k++) pts.push({ x: a.x + ((b.x - a.x) * k) / n, y: a.y + ((b.y - a.y) * k) / n });
+    }
+    return pts;
+  }
+  function evaluateDribble(pz, path) {
+    const pts = samplePath(path.length ? path : [pz.you]);
+    let tackle = null;
+    for (let i = 0; i < pts.length && !tackle; i++) {
+      for (const o of pz.opps) if (dist(o, pts[i]) < TACKLE) { tackle = { opp: o, index: i, point: pts[i] }; break; }
+    }
+    const end = tackle ? tackle.point : pts[pts.length - 1];
+    const c1 = tackle
+      ? { ok: false, why: 'You ran too close to a defender and he tackled you.' }
+      : { ok: true, why: 'No defender could reach the ball.' };
+    c1.label = 'You stayed out of tackling range';
+    let c2;
+    if (tackle) c2 = { ok: false, why: 'You lost the ball before you got there.' };
+    else if (dist(nearestOpp(pz, end), end) < SPACE_OPP) c2 = { ok: false, why: 'You finished right next to a defender. Stop in the open.' };
+    else c2 = { ok: true, why: 'Nobody near you at the end of your run.' };
+    c2.label = 'You ended up in space';
+    const g = pz.goal, gain = Math.round(end.x - pz.you.x);
+    let ok;
+    if (tackle) ok = false;
+    else if (g.type === 'gain') ok = end.x - pz.you.x >= g.min;
+    else ok = end.x >= g.x0 && end.x <= g.x1 && end.y >= g.y0 && end.y <= g.y1;
+    const c3 = { ok, label: g.label, why: ok ? g.ok.replace('{gain}', gain) : g.fail };
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, tackle, end, pts };
+  }
+
+  // Skills, in the order they appear on the home screen. Each puzzle names its section.
+  const SECTIONS = [
+    { id: 'space', title: 'Get open', blurb: 'Move into space so a teammate can pass to you.' },
+    { id: 'pass', title: 'Pick the pass', blurb: 'You have the ball. Choose the pass that helps most.' },
+    { id: 'scan', title: 'Check your shoulder', blurb: 'Look before the ball comes, then stand the right way.' },
+    { id: 'dribble', title: 'Drive into space', blurb: 'Run with the ball into open grass.' },
+  ];
+
+  const PUZZLES = [
+    {
+      type: 'space', section: 'space', id: 'shadow', title: 'Step out of the shadow',
+      prompt: 'Mia has the ball. A defender is standing right between you and her. Move so she can pass to you.',
+      teach: 'If a defender is between you and the ball, the passer can’t see you. A few steps to the side gets you out of his shadow.',
+      lesson: 'Get out of the defender’s shadow.',
+      ball: 2, youN: 8, you: { x: 24, y: 17 }, run: 10,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 14, y: 30 },
+        { n: 7, name: 'Ava', x: 27, y: 5 }, { n: 11, name: 'Sam', x: 27, y: 34 }, { n: 9, name: 'Kai', x: 38, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 19, y: 13.5 }, { n: 7, x: 34, y: 10 }, { n: 8, x: 32, y: 20 },
+        { n: 11, x: 34, y: 30 }, { n: 5, x: 44, y: 14 }, { n: 4, x: 44, y: 26 }],
+      goal: { type: 'zone', x0: 18, x1: 32, y0: 10, y1: 30, label: 'You stay in the middle',
+        ok: 'You kept your place in the middle of the pitch.', fail: 'You drifted out of the middle. Your team needs you there.' },
+    },
+    {
+      type: 'space', section: 'space', id: 'crowd', title: 'Don’t crowd the ball',
+      prompt: 'Ava has the ball on the left. You’ve run right up next to her. Give her a pass she can actually make.',
+      teach: 'Standing next to the ball brings your defender with you. Give your teammate some room and a clear pass.',
+      lesson: 'Don’t crowd the ball. Give your teammate room.',
+      ball: 7, youN: 8, you: { x: 31, y: 10.5 }, run: 12,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 10 }, { n: 3, name: 'Leo', x: 16, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 8 }, { n: 11, name: 'Sam', x: 30, y: 33 }, { n: 9, name: 'Kai', x: 41, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 24, y: 20 }, { n: 7, x: 33.5, y: 8 }, { n: 8, x: 36, y: 14 },
+        { n: 11, x: 34, y: 25 }, { n: 5, x: 44, y: 15 }, { n: 4, x: 44, y: 26 }],
+      goal: { type: 'spacing', min: 8, max: 16, label: 'You give Ava room',
+        ok: 'Good distance: close enough to help, far enough to have space.', fail: 'Find the right distance from Ava: not on top of her, not miles away.' },
+    },
+    {
+      type: 'space', section: 'space', id: 'wide', title: 'Make the pitch big',
+      prompt: 'Noah has the ball. Everyone is bunched up in the middle, including you. Find a better spot.',
+      teach: 'When your team has the ball, spread out. A wide player pulls defenders apart and makes space for everyone.',
+      lesson: 'When we have the ball, make the pitch big.',
+      ball: 6, youN: 11, you: { x: 28, y: 26 }, run: 12,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 12, y: 10 }, { n: 3, name: 'Leo', x: 12, y: 30 },
+        { n: 6, name: 'Noah', x: 26, y: 20 }, { n: 7, name: 'Ava', x: 27, y: 12 }, { n: 9, name: 'Kai', x: 38, y: 19 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 21, y: 23 }, { n: 7, x: 33, y: 14 }, { n: 8, x: 34, y: 20 },
+        { n: 11, x: 31, y: 27 }, { n: 5, x: 42, y: 17 }, { n: 4, x: 42, y: 25 }],
+      goal: { type: 'zone', x0: 15, x1: 50, y0: 34, y1: 40, label: 'You get wide',
+        ok: 'You’re out wide. Now their defenders have to spread out too.', fail: 'Still too narrow. Get out near the sideline.' },
+    },
+    {
+      type: 'space', section: 'space', id: 'support', title: 'Help a teammate in trouble',
+      prompt: 'Sam is stuck on the right with a defender in his face. He can’t go forward. Help him out.',
+      teach: 'When a teammate is under pressure, get beside or just behind them, at an angle. A safe pass keeps the ball for your team.',
+      lesson: 'Under pressure? Give a safe pass beside or behind.',
+      ball: 11, youN: 8, you: { x: 36, y: 22 }, run: 10,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 12 }, { n: 3, name: 'Leo', x: 21, y: 31 },
+        { n: 7, name: 'Ava', x: 34, y: 8 }, { n: 11, name: 'Sam', x: 40, y: 34 }, { n: 9, name: 'Kai', x: 46, y: 24 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 2, x: 42.5, y: 32.5 }, { n: 6, x: 38, y: 28 }, { n: 8, x: 34, y: 17 },
+        { n: 4, x: 47, y: 21 }, { n: 5, x: 45, y: 12 }, { n: 9, x: 26, y: 22 }],
+      goal: { type: 'support', behind: 12, ahead: 0, label: 'You give a safe pass',
+        ok: 'You’re beside or behind the ball, so the pass is safe.', fail: 'You’re ahead of the ball. Under pressure, Sam needs a safe pass back or sideways.' },
+    },
+    {
+      type: 'space', section: 'space', id: 'gap', title: 'Find the gap',
+      prompt: 'Mia has the ball at the back. Their midfield is lined up across the pitch. Find a spot that helps us go forward.',
+      teach: 'The gap between their midfield and their defence is gold. Get the ball there and you can turn and face their goal.',
+      lesson: 'Find the gap between their lines.',
+      ball: 2, youN: 8, you: { x: 24, y: 20 }, run: 14,
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 14 }, { n: 3, name: 'Leo', x: 15, y: 30 },
+        { n: 7, name: 'Ava', x: 31, y: 4 }, { n: 11, name: 'Sam', x: 32, y: 36 }, { n: 9, name: 'Kai', x: 45, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 9, x: 21, y: 10 }, { n: 7, x: 32, y: 10 }, { n: 8, x: 31, y: 20 },
+        { n: 11, x: 32, y: 30 }, { n: 5, x: 42, y: 15 }, { n: 4, x: 42, y: 25 }],
+      goal: { type: 'zone', x0: 33, x1: 40, y0: 3, y1: 37, label: 'You’re between their lines',
+        ok: 'You’re in the gap between their midfield and defence. Turn and you’re facing goal.', fail: 'Get further forward, into the gap between their midfield and their defence.' },
+    },
+    // ---------- pick the pass ----------
+    {
+      type: 'pass', section: 'pass', id: 'pass-forward', title: 'Look forward first', best: 9,
+      prompt: 'You’ve got the ball in the middle. Who’s your best pass?',
+      teach: 'Look forward first. If a teammate up the pitch is free and the lane is clear, that pass hurts them most.',
+      lesson: 'Look forward first.',
+      youN: 8, you: { x: 24, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 14, y: 10 }, { n: 3, name: 'Leo', x: 14, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 5 }, { n: 11, name: 'Sam', x: 30, y: 35 }, { n: 9, name: 'Kai', x: 40, y: 18 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 46, y: 14 }, { n: 4, x: 46, y: 26 }, { n: 7, x: 33, y: 9 },
+        { n: 8, x: 37, y: 25 }, { n: 11, x: 31, y: 29.5 }, { n: 9, x: 19, y: 23 }],
+    },
+    {
+      type: 'pass', section: 'pass', id: 'pass-keep', title: 'When forward is shut', best: 2,
+      prompt: 'You’re in midfield and they’ve closed everything in front of you. What now?',
+      teach: 'If every forward pass is blocked, don’t force it. Keep the ball, pass back and go again.',
+      lesson: 'Forward shut? Keep the ball and go again.',
+      youN: 8, you: { x: 34, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 24, y: 9 }, { n: 3, name: 'Leo', x: 24, y: 31 },
+        { n: 7, name: 'Ava', x: 38, y: 5 }, { n: 11, name: 'Sam', x: 40, y: 34 }, { n: 9, name: 'Kai', x: 46, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 48.5, y: 21.5 }, { n: 5, x: 45, y: 11 }, { n: 7, x: 36, y: 12 },
+        { n: 11, x: 37, y: 27 }, { n: 8, x: 41, y: 17 }, { n: 9, x: 29, y: 24 }],
+    },
+    {
+      type: 'pass', section: 'pass', id: 'pass-switch', title: 'Switch the play', best: 11,
+      prompt: 'You’re on the left and they’ve all rushed over to your side. Find the pass.',
+      teach: 'When one side is crowded, the other side is open. Switch it and your teammate has all the time in the world.',
+      lesson: 'Crowded on one side? Switch it.',
+      youN: 7, you: { x: 30, y: 7 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 10 }, { n: 3, name: 'Leo', x: 18, y: 30 },
+        { n: 6, name: 'Noah', x: 34, y: 16 }, { n: 11, name: 'Sam', x: 34, y: 29 }, { n: 9, name: 'Kai', x: 44, y: 15 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 46.5, y: 13 }, { n: 4, x: 46, y: 26 }, { n: 7, x: 33.5, y: 4.5 },
+        { n: 8, x: 36.5, y: 18.5 }, { n: 11, x: 37, y: 11 }, { n: 9, x: 24, y: 16 }],
+    },
+    // ---------- check your shoulder ----------
+    {
+      type: 'scan', section: 'scan', id: 'scan-open', title: 'Look before it arrives', best: 'half',
+      prompt: 'Mia is about to pass to you. Get ready to receive it.',
+      teach: 'Check your shoulder before the ball comes. If there’s space behind you, a half-turn lets you go forward with your first touch.',
+      lesson: 'Check your shoulder before the ball comes.',
+      ball: 2, youN: 8, you: { x: 26, y: 21 }, open: { x: 38, y: 22 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 8 }, { n: 3, name: 'Leo', x: 16, y: 32 },
+        { n: 7, name: 'Ava', x: 30, y: 5 }, { n: 11, name: 'Sam', x: 33, y: 34 }, { n: 9, name: 'Kai', x: 44, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 48, y: 14 }, { n: 4, x: 48, y: 28 }, { n: 7, x: 34, y: 6 },
+        { n: 11, x: 36, y: 33 }, { n: 8, x: 40, y: 19 }, { n: 9, x: 19, y: 26 }],
+      stances: {
+        half: { grade: 'best', why: 'There was space behind you. Half-turned, you can take it forward with your first touch.' },
+        face: { grade: 'ok', why: 'Safe, but now you have to turn with the ball, and that wastes time.' },
+        back: { grade: 'ok', why: 'Safe, but nobody was there to protect it from. You could have turned.' },
+      },
+    },
+    {
+      type: 'scan', section: 'scan', id: 'scan-tight', title: 'Man on!', best: 'back',
+      prompt: 'Leo is passing to you. Something might be behind you. Find out before you choose how to stand.',
+      teach: 'When a defender is tight on your back, don’t try to turn. Keep your body between him and the ball and play it back.',
+      lesson: 'Defender on your back? Protect it, don’t turn.',
+      ball: 3, youN: 8, you: { x: 27, y: 24 }, open: { x: 38, y: 22 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 34 },
+        { n: 7, name: 'Ava', x: 32, y: 6 }, { n: 11, name: 'Sam', x: 36, y: 35 }, { n: 9, name: 'Kai', x: 42, y: 20 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 46, y: 15 }, { n: 4, x: 46, y: 27 }, { n: 7, x: 35, y: 10 },
+        { n: 11, x: 38, y: 31 }, { n: 8, x: 28.6, y: 21.7 }, { n: 9, x: 19, y: 18 }],
+      stances: {
+        back: { grade: 'best', why: 'He was right on your back. With your body between him and the ball, he can’t get it.' },
+        face: { grade: 'ok', why: 'You can play it straight back, but square-on he can still poke round you. Get side-on and protect it.' },
+        half: { grade: 'bad', why: 'You tried to turn with him right behind you. He nicked it.' },
+      },
+    },
+    {
+      type: 'scan', section: 'scan', id: 'scan-side', title: 'Which way is free?', best: 'half',
+      prompt: 'Leo is passing to you. Check what’s behind you, then choose how to stand.',
+      teach: 'When a defender is closing in, open your body away from him. Your first touch takes you into the space he left.',
+      lesson: 'Open up away from the defender.',
+      ball: 3, youN: 8, you: { x: 26, y: 22 }, open: { x: 35, y: 26 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 15, y: 10 }, { n: 3, name: 'Leo', x: 18, y: 33 },
+        { n: 7, name: 'Ava', x: 30, y: 4 }, { n: 11, name: 'Sam', x: 40, y: 36 }, { n: 9, name: 'Kai', x: 45, y: 18 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 47, y: 14 }, { n: 4, x: 47, y: 28 }, { n: 7, x: 36, y: 8 },
+        { n: 11, x: 41, y: 31 }, { n: 8, x: 30, y: 17 }, { n: 9, x: 18, y: 22 }],
+      stances: {
+        half: { grade: 'best', why: 'He was closing in from behind. Opened up away from him, you’re gone before he gets there.' },
+        back: { grade: 'ok', why: 'You’ll keep it, but with your back to goal you can’t go forward.' },
+        face: { grade: 'bad', why: 'Square-on, you had to turn with the ball. By then he was on you.' },
+      },
+    },
+    // ---------- drive into space ----------
+    {
+      type: 'dribble', section: 'dribble', id: 'drive-open', title: 'Run with it', maxRun: 16,
+      solution: [{ x: 24, y: 20 }, { x: 38, y: 20 }],
+      prompt: 'You’ve got the ball and there’s loads of space in front of you. Draw your run.',
+      teach: 'When there’s space in front of you, run with the ball. Big touches into open grass, eyes up.',
+      lesson: 'Space in front? Run with the ball.',
+      youN: 8, you: { x: 24, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 13, y: 10 }, { n: 3, name: 'Leo', x: 13, y: 30 },
+        { n: 7, name: 'Ava', x: 30, y: 3 }, { n: 11, name: 'Sam', x: 30, y: 37 }, { n: 9, name: 'Kai', x: 45, y: 24 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 48, y: 13 }, { n: 4, x: 48, y: 27 }, { n: 7, x: 34, y: 7 },
+        { n: 11, x: 33, y: 33 }, { n: 8, x: 21, y: 13 }, { n: 9, x: 17, y: 25 }],
+      goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward. When there’s space in front, use it.' },
+    },
+    {
+      type: 'dribble', section: 'dribble', id: 'drive-around', title: 'Go around him', maxRun: 16,
+      solution: [{ x: 24, y: 20 }, { x: 27, y: 25.5 }, { x: 35, y: 25.5 }],
+      prompt: 'A defender is standing right in front of you. Get past him with the ball.',
+      teach: 'Don’t run straight at a defender. Take the ball into the space beside him, then go forward.',
+      lesson: 'Go around a defender, not through him.',
+      youN: 8, you: { x: 24, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 13, y: 10 }, { n: 3, name: 'Leo', x: 13, y: 30 },
+        { n: 7, name: 'Ava', x: 31, y: 3 }, { n: 11, name: 'Sam', x: 29, y: 37 }, { n: 9, name: 'Kai', x: 44, y: 14 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 47, y: 13 }, { n: 4, x: 47, y: 27 }, { n: 7, x: 33, y: 7 },
+        { n: 11, x: 33, y: 33 }, { n: 8, x: 31, y: 20 }, { n: 9, x: 18, y: 24 }],
+      goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward, past the defender.' },
+    },
+    {
+      type: 'dribble', section: 'dribble', id: 'drive-gap', title: 'Attack the gap', maxRun: 14,
+      solution: [{ x: 34, y: 20 }, { x: 46, y: 20 }],
+      prompt: 'You’ve beaten their midfield. Only two defenders are left. Draw your run.',
+      teach: 'Drive at the gap between two defenders. Neither knows who should come to you, and that’s when chances happen.',
+      lesson: 'Drive at the gap between defenders.',
+      youN: 8, you: { x: 34, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 20, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 30 },
+        { n: 7, name: 'Ava', x: 36, y: 4 }, { n: 11, name: 'Sam', x: 38, y: 36 }, { n: 9, name: 'Kai', x: 50, y: 7 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 46, y: 13 }, { n: 4, x: 46, y: 27 }, { n: 7, x: 29, y: 12 },
+        { n: 11, x: 30, y: 29 }, { n: 8, x: 39, y: 25.5 }, { n: 9, x: 20, y: 21 }],
+      goal: { type: 'zone', x0: 44, x1: 60, y0: 15, y1: 25, label: 'You attacked the gap', ok: 'You drove right between their two defenders.', fail: 'Aim for the gap between their two defenders.' },
+    },
+  ];
+
+  return { L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
+    evaluate, clamp, openSpace, shadows, passSafe, evaluatePass, fogged, stanceDir, canSee, STANCES, nearestStance, scanOutcome, evaluateScan, pathLength, samplePath, evaluateDribble, SECTIONS, PUZZLES };
+})();
+if (typeof module !== 'undefined') module.exports = Engine;
+
+</script>
+<script>
+(() => {
+  const E = Engine;
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  const svg = $('pitch');
+  const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const STAR = 'M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z';
+  const lerp = (a, b, t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+  const add = (p, d, k) => ({ x: p.x + d.x * k, y: p.y + d.y * k });
+  const dir = (a, b) => E.unit({ x: b.x - a.x, y: b.y - a.y });
+  const tr = (p) => `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)})`;
+  const ptsAttr = (arr) => arr.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+
+  function el(tag, attrs, parent) {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  // ---------- static pitch ----------
+  (function drawPitch() {
+    const defs = el('defs', {}, svg);
+    el('rect', { x: 0, y: 0, width: 60, height: 40 }, el('clipPath', { id: 'pc' }, defs));
+    el('rect', { x: -2.5, y: -2.5, width: 65, height: 47.5, rx: 1.8, class: 'runoff' }, svg);
+    for (let i = 0; i < 10; i++) el('rect', { x: i * 6, y: 0, width: 6.02, height: 40, class: i % 2 ? 'g2' : 'g1' }, svg);
+    const c = el('g', { class: 'chalk' }, svg);
+    el('rect', { x: 0, y: 0, width: 60, height: 40 }, c);
+    el('line', { x1: 30, y1: 0, x2: 30, y2: 40 }, c);
+    el('circle', { cx: 30, cy: 20, r: 5 }, c);
+    el('rect', { x: 0, y: 9, width: 10, height: 22 }, c);
+    el('rect', { x: 50, y: 9, width: 10, height: 22 }, c);
+    el('rect', { x: 0, y: 15, width: 4, height: 10 }, c);
+    el('rect', { x: 56, y: 15, width: 4, height: 10 }, c);
+    el('path', { d: 'M1 0A1 1 0 0 1 0 1M59 0A1 1 0 0 0 60 1M0 39A1 1 0 0 1 1 40M60 39A1 1 0 0 0 59 40' }, c);
+    for (const [x, y] of [[30, 20], [8, 20], [52, 20]]) el('circle', { cx: x, cy: y, r: .32, class: 'spot' }, svg);
+    el('rect', { x: -1.4, y: 17.5, width: 1.4, height: 5, class: 'net' }, svg);
+    el('rect', { x: 60, y: 17.5, width: 1.4, height: 5, class: 'net' }, svg);
+    const lg = el('g', {}, svg);
+    el('circle', { cx: .9, cy: 43, r: .85, style: 'fill:var(--us)' }, lg);
+    el('text', { x: 2.3, y: 43, class: 'legend' }, lg).textContent = 'Us';
+    el('circle', { cx: 6.8, cy: 43, r: .85, style: 'fill:var(--them)' }, lg);
+    el('text', { x: 8.2, y: 43, class: 'legend' }, lg).textContent = 'Them';
+    el('text', { x: 55.4, y: 43, class: 'legend', 'text-anchor': 'end' }, lg).textContent = 'We attack this way';
+    el('path', { d: 'M56.4 43H60.2M58.9 41.8L60.2 43L58.9 44.2', class: 'legend-arrow' }, lg);
+  })();
+
+  const L = {};
+  for (const k of ['zone', 'fog', 'shadows', 'tackle', 'space', 'run', 'lane', 'path', 'vision', 'players', 'fx']) {
+    L[k] = el('g', ['fog', 'shadows', 'tackle'].includes(k) ? { 'clip-path': 'url(#pc)' } : {}, svg);
+  }
+
+  // ---------- state ----------
+  let idx = 0, pz, state = 'setup', res = null, hint = false, extra = false, anim = null, dragging = false;
+  let you, shownYou = null, pick = null, scanned = false, stance = null, path = [];
+  const best = E.PUZZLES.map(() => 0), tried = E.PUZZLES.map(() => false);
+  let sec = null;  // the skill section being played
+  const listOf = (sid) => E.PUZZLES.map((p, i) => (p.section === sid ? i : -1)).filter((i) => i >= 0);
+  const starsIn = (list) => list.reduce((a, i) => a + best[i], 0);
+  // Where to pick a skill back up: the first puzzle without 3 stars, else the start.
+  const continueIndex = (sid) => { const l = listOf(sid); const k = l.find((i) => best[i] < 3); return k === undefined ? l[0] : k; };
+
+  // Stars are saved in this browser only, keyed by puzzle id so new puzzles don't upset old saves.
+  const SAVE_KEY = 'fts-progress-v1';
+  function loadProgress() {
+    try {
+      const d = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}') || {};
+      E.PUZZLES.forEach((p, i) => {
+        const b = d.best && d.best[p.id];
+        if (Number.isInteger(b) && b >= 0 && b <= 3) best[i] = b;
+        if (d.tried && d.tried[p.id] === true) tried[i] = true;
+      });
+    } catch (e) { /* no saved stars, or storage blocked: start fresh */ }
+  }
+  function saveProgress() {
+    try {
+      const d = { best: {}, tried: {} };
+      E.PUZZLES.forEach((p, i) => { if (tried[i]) { d.best[p.id] = best[i]; d.tried[p.id] = true; } });
+      localStorage.setItem(SAVE_KEY, JSON.stringify(d));
+    } catch (e) { /* private browsing: stars last until the page closes */ }
+  }
+  let youG, ballEl, oppEls, mateEls, spacePts = [];
+  const T = () => TYPES[pz.type];
+
+  // ---------- small helpers ----------
+  function ballHomeFrom(from) {
+    const n = E.nearestOpp(pz, from), d = E.dist(n, from) || 1;
+    return { x: from.x + ((from.x - n.x) / d) * 1.75, y: from.y + ((from.y - n.y) / d) * 1.75 };
+  }
+  const holder = () => (pz.type === 'space' || pz.type === 'scan' ? E.passer(pz) : pz.you);
+  const feetOf = (target, from) => add(target, dir(target, from), 1.7);
+  const setBall = (p) => { ballEl.setAttribute('cx', p.x.toFixed(2)); ballEl.setAttribute('cy', p.y.toFixed(2)); };
+  function bump(g, cls) { if (!g) return; g.classList.remove(cls); void g.getBBox(); g.classList.add(cls); }
+  const nearestMate = (p, max) => pz.mates.reduce((a, m) => (E.dist(m, p) < (a ? E.dist(a, p) : max) ? m : a), null);
+
+  function tween(ms, step, done) {
+    if (reduceMotion()) { step(1); if (done) done(); return; }
+    let t0 = null;
+    const f = (now) => {
+      if (t0 === null) t0 = now;
+      const t = Math.min(1, (now - t0) / ms);
+      step(t);
+      if (t < 1) anim = requestAnimationFrame(f); else { anim = null; if (done) done(); }
+    };
+    anim = requestAnimationFrame(f);
+  }
+  function wait(ms, done) {
+    if (reduceMotion()) { done(); return; }
+    anim = setTimeout(() => { anim = null; done(); }, ms);
+  }
+
+  // Where a pass ends up: at the receiver's feet, at the defender who cuts it out, or short if it's too far.
+  function passTarget(from, target, r) {
+    if (r.blocker) {
+      const p = r.blocker.point, d = E.dist(p, from) || 1;
+      return { x: p.x - ((p.x - from.x) / d) * 1.6, y: p.y - ((p.y - from.y) / d) * 1.6 };
+    }
+    if (r.checks[0].ok) return feetOf(target, from);
+    const len = E.dist(from, target);
+    if (len > E.PASS_MAX) return lerp(from, target, (len - 4) / len);
+    return null;
+  }
+  // Kick, then the ball rolls along a gold trail and slows as it arrives.
+  function playPass(from, target, r, done, kicker) {
+    const to = passTarget(from, target, r);
+    if (!to) { done(); return; }
+    const start = ballHomeFrom(from);
+    setBall(start);
+    bump(kicker, 'kick');
+    const trail = el('line', { x1: start.x, y1: start.y, x2: start.x, y2: start.y, class: 'trail' }, L.fx);
+    wait(230, () => tween(450 + E.dist(start, to) * 38, (t) => {
+      const p = lerp(start, to, 1 - (1 - t) * (1 - t));
+      setBall(p); trail.setAttribute('x2', p.x); trail.setAttribute('y2', p.y);
+    }, () => { trail.remove(); done(); }));
+  }
+  function landedPass(from, target, r, receiver, quiet) {
+    setBall(passTarget(from, target, r) || ballHomeFrom(from));
+    oppEls.forEach((g) => g.classList.remove('caught'));
+    if (r.blocker) oppEls.get(r.blocker.opp).classList.add('caught');
+    else if (r.checks[0].ok && !quiet) bump(receiver, 'receive');
+  }
+
+  // ---------- drawing ----------
+  // A player seen from above: shoulders, hands and head, all turned the way he faces.
+  // Real proportions (Reuven picked option C: person with feet). The shirt number sits just behind him and stays upright.
+  function figure(g, n) {
+    const a = el('g', { class: 'anim' }, el('g', { class: 'pose' }, g));
+    el('ellipse', { class: 'foot', cx: .95, cy: -.4, rx: .36, ry: .2 }, a);
+    el('ellipse', { class: 'foot', cx: .6, cy: .4, rx: .36, ry: .2 }, a);
+    el('circle', { class: 'hand', cx: .3, cy: -1.28, r: .3 }, a);
+    el('circle', { class: 'hand', cx: .3, cy: 1.28, r: .3 }, a);
+    el('ellipse', { class: 'torso', cx: 0, cy: 0, rx: .6, ry: 1.3 }, a);
+    el('circle', { class: 'head', cx: .12, cy: 0, r: .56 }, a);
+    el('text', { class: 'num' }, g).textContent = n;
+  }
+  const angTo = (a, b) => Math.atan2(b.y - a.y, b.x - a.x);
+  function setFace(g, ang) {
+    if (!g) return;
+    const deg = (ang * 180) / Math.PI, k = g === youG ? 1.15 : 1;
+    g.querySelector('.pose').setAttribute('transform', `rotate(${deg.toFixed(1)}) scale(${k})`);
+    const num = g.querySelector('.num');
+    num.setAttribute('x', (-Math.cos(ang) * 1.3 * k).toFixed(2));
+    num.setAttribute('y', (-Math.sin(ang) * 1.3 * k).toFixed(2));
+  }
+  // Which way you face: towards the ball, where you're about to pass or run, or the stance you picked.
+  function youAngle() {
+    const at = shownYou || you;
+    if (pz.type === 'scan' && stance) { const d = E.stanceDir(pz, stance); return Math.atan2(d.y, d.x); }
+    if (pz.type === 'space' || pz.type === 'scan') return angTo(at, E.passer(pz));
+    if (pz.type === 'pass') { const m = pz.mates.find((q) => q.n === pick); return m ? angTo(at, m) : 0; }
+    if (pz.type === 'dribble' && state === 'setup' && path.length > 1) return angTo(path[0], path[Math.min(3, path.length - 1)]);
+    return 0;
+  }
+  // Everyone else watches the ball. Whoever has it looks at you.
+  function facePlayers() {
+    const h = holder(), ball = h === pz.you ? (shownYou || you) : h;
+    oppEls.forEach((g, o) => setFace(g, angTo(o, ball)));
+    mateEls.forEach((g, m) => setFace(g, angTo(m, m === h ? (shownYou || you) : ball)));
+  }
+
+  function drawPlayers() {
+    L.players.replaceChildren();
+    oppEls = new Map(); mateEls = new Map();
+    for (const o of pz.opps) {
+      const g = el('g', { class: 'tok them', transform: tr(o) }, L.players);
+      figure(g, o.n);
+      oppEls.set(o, g);
+    }
+    for (const m of pz.mates) {
+      const g = el('g', { class: 'tok us' + (pick === m.n ? ' picked' : ''), transform: tr(m) }, L.players);
+      el('circle', { class: 'pickring', r: 2.15 }, g);
+      figure(g, m.n);
+      el('text', { class: 'name', y: 2.6 }, g).textContent = m.name;
+      mateEls.set(m, g);
+    }
+    ballEl = el('circle', { class: 'ball', r: .62 }, L.players);
+    setBall(ballHomeFrom(holder()));
+    youG = el('g', { class: 'tok you' }, L.players);
+    el('circle', { class: 'halo', r: 2.1 }, youG);
+    figure(youG, playerNum());
+    el('text', { class: 'name you-name', y: 2.95 }, youG).textContent = 'You';
+    el('circle', { class: 'hit', r: 3.2 }, youG);
+    facePlayers();
+    updateHidden();
+  }
+
+  function updateHidden() {
+    const hide = (p) => pz.type === 'scan' && !scanned && state !== 'result' && E.fogged(pz, p);
+    oppEls.forEach((g, o) => g.classList.toggle('hid', hide(o)));
+    mateEls.forEach((g, m) => g.classList.toggle('hid', hide(m)));
+  }
+
+  function placeYou() {
+    youG.setAttribute('transform', tr(shownYou || you));
+    setFace(youG, youAngle());
+  }
+
+  function drawLane(from, to, r) {
+    const line = (a, z, cls) => el('line', { x1: a.x, y1: a.y, x2: z.x, y2: z.y, class: cls }, L.lane);
+    if (state === 'playing') return;
+    if (state === 'setup' || !r) { line(from, to, 'lane-plan'); return; }
+    if (r.blocker) { line(from, r.blocker.point, 'lane-cut'); line(r.blocker.point, to, 'lane-rest'); }
+    else if (r.checks[0].ok) line(from, to, 'lane-open');
+    else line(from, to, 'lane-meh');
+  }
+
+  function drawShadows(from, hot) {
+    for (const s of E.shadows(pz, from)) {
+      const cls = s.opp === hot ? 'shadow hot' : 'shadow';
+      el('polygon', { points: ptsAttr(s.poly), class: cls }, L.shadows);
+      el('circle', { cx: s.opp.x, cy: s.opp.y, r: E.R_INTERCEPT, class: cls }, L.shadows);
+    }
+  }
+
+  function drawRect(x0, y0, x1, y1) {
+    el('rect', { x: x0, y: y0, width: x1 - x0, height: y1 - y0, class: 'zone' }, L.zone);
+  }
+
+  // ---------- the four puzzle types ----------
+  const TYPES = {
+    space: {
+      how: 'Drag yourself (gold) or tap a spot inside the dashed circle.',
+      primary: 'Check my spot',
+      hint: ['Show defenders’ shadows', 'Hide defenders’ shadows'],
+      extra: ['Show all the open space', 'Hide the open space'],
+      extraTip: 'Tap a gold dot to watch the pass go there.',
+      drag: true,
+      ready: () => true,
+      down(p) { dragging = true; moveYou(p); },
+      move(p) { moveYou(p); },
+      draw() {
+        const b = E.passer(pz);
+        if (state === 'setup') {
+          el('circle', { cx: pz.you.x, cy: pz.you.y, r: pz.run, class: 'run' }, L.run);
+          el('circle', { cx: pz.you.x, cy: pz.you.y, r: 1.25, class: 'ghost' }, L.run);
+        }
+        if (hint || state === 'result') drawShadows(b, res && res.blocker ? res.blocker.opp : null);
+        if (state === 'result') {
+          const g = pz.goal;
+          if (g.type === 'zone') drawRect(g.x0, g.y0, g.x1, g.y1);
+          else if (g.type === 'support') drawRect(b.x - g.behind, 0, b.x + g.ahead, 40);
+          else if (g.type === 'spacing') {
+            const ring = (r) => `M${b.x - r} ${b.y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
+            el('path', { d: ring(g.max) + ring(g.min), 'fill-rule': 'evenodd', class: 'zone', 'clip-path': 'url(#pc)' }, L.zone);
+          }
+        }
+        spacePts = state === 'result' && extra ? E.openSpace(pz, 1) : [];
+        for (const p of spacePts) el('circle', { cx: p.x, cy: p.y, r: .36, class: 'dot' }, L.space);
+        drawLane(b, you, res);
+      },
+      submit() { res = E.evaluate(pz, you); },
+      play(done) { playPass(E.passer(pz), you, res, done, mateEls.get(E.passer(pz))); },
+      final(quiet) { landedPass(E.passer(pz), you, res, youG, quiet); },
+      hasReplay: () => !!passTarget(E.passer(pz), you, res),
+      extraTap(p) {
+        let q = null, bd = 1.6;
+        for (const s of spacePts) { const d = E.dist(s, p); if (d < bd) { bd = d; q = s; } }
+        if (!q) return;
+        L.fx.replaceChildren();
+        el('circle', { cx: q.x, cy: q.y, r: 1.4, class: 'demo-ring' }, L.fx);
+        oppEls.forEach((g) => g.classList.remove('caught'));
+        const b = E.passer(pz), r = E.evaluate(pz, q);
+        playPass(b, q, r, () => landedPass(b, q, r, null, true), mateEls.get(b));
+      },
+    },
+
+    pass: {
+      how: 'You have the ball. Tap the teammate you’d pass to.',
+      primary: 'Make the pass',
+      hint: ['Show defenders’ shadows', 'Hide defenders’ shadows'],
+      extra: ['Show all my passes', 'Hide my passes'],
+      extraTip: 'Tap any teammate to watch that pass.',
+      ready: () => pick !== null,
+      down(p) {
+        const m = nearestMate(p, 3);
+        if (!m) return;
+        pick = m.n;
+        mateEls.forEach((g, q) => g.classList.toggle('picked', q.n === pick));
+        render(); updatePrimary();
+      },
+      draw() {
+        if (hint || state === 'result') drawShadows(pz.you, res && res.blocker ? res.blocker.opp : null);
+        const m = pz.mates.find((q) => q.n === pick);
+        if (m) drawLane(pz.you, m, state === 'result' ? res : null);
+        if (state === 'result' && extra) {
+          for (const q of pz.mates) {
+            if (q.n === pick) continue;
+            const r = E.evaluatePass(pz, q.n);
+            if (r.blocker) {
+              el('line', { x1: pz.you.x, y1: pz.you.y, x2: r.blocker.point.x, y2: r.blocker.point.y, class: 'lane-cut thin' }, L.space);
+            } else {
+              el('line', { x1: pz.you.x, y1: pz.you.y, x2: q.x, y2: q.y, class: r.stars === 3 ? 'lane-open thin' : r.stars === 2 ? 'lane-ok' : 'lane-meh' }, L.space);
+            }
+          }
+          for (const q of pz.mates) {
+            const s = E.evaluatePass(pz, q.n).stars;
+            el('text', { x: q.x, y: q.y - 2.3, class: 'starlbl' + (s < 2 ? ' none' : '') }, L.fx).textContent = s ? '★'.repeat(s) : '✕';
+          }
+        }
+      },
+      submit() { res = E.evaluatePass(pz, pick); },
+      play(done) { playPass(pz.you, res.target, res, done, youG); },
+      final(quiet) { landedPass(pz.you, res.target, res, mateEls.get(res.target), quiet); },
+      hasReplay: () => true,
+      extraTap(p) {
+        const m = nearestMate(p, 3);
+        if (!m) return;
+        const r = E.evaluatePass(pz, m.n);
+        oppEls.forEach((g) => g.classList.remove('caught'));
+        playPass(pz.you, m, r, () => landedPass(pz.you, m, r, mateEls.get(m)), youG);
+      },
+    },
+
+    scan: {
+      how: 'Tap the dark area to look behind you. Then tap an arrow to turn.',
+      primary: 'Receive the ball',
+      hint: null, extra: null,
+      ready: () => !!stance,
+      // Arrows first (one can sit in the dark area), then the dark area, then anywhere else snaps to the nearest arrow.
+      down(p) {
+        const hit = E.STANCES.find((k) => E.dist(arrowAt(k), p) < 2);
+        if (hit) { setStance(hit); return; }
+        if (!scanned && E.fogged(pz, p)) { doScan(); return; }
+        if (E.dist(p, you) > 1.5) setStance(E.nearestStance(pz, p));
+      },
+      draw() {
+        if (!scanned && state !== 'result') drawFog();
+        if (stance) drawVision();
+        drawLane(E.passer(pz), you, state === 'result' ? { checks: [{ ok: true }] } : null);
+        if (state === 'setup') drawArrows();
+        if (state === 'result' && E.scanOutcome(pz, stance).kind === 'turn') {
+          el('line', { x1: you.x, y1: you.y, x2: pz.open.x, y2: pz.open.y, class: 'lane-plan' }, L.lane);
+        }
+      },
+      submit() { res = E.evaluateScan(pz, scanned, stance); },
+      // What happens next follows how he stood: turn into space, shield and play it back, or just control it.
+      play(done) {
+        const b = E.passer(pz), out = E.scanOutcome(pz, stance), ok = { checks: [{ ok: true }] };
+        playPass(b, you, ok, () => {
+          bump(youG, 'receive');
+          if (out.kind === 'turn') {
+            tween(450, (t) => { const p = lerp(you, out.you, t); youG.setAttribute('transform', tr(p)); setBall(lerp(feetOf(you, b), out.ball, t)); }, done);
+          } else if (out.kind === 'lost') {
+            const g = oppEls.get(out.danger), from = { x: out.danger.x, y: out.danger.y }, ball0 = feetOf(you, b);
+            wait(120, () => tween(380, (t) => { g.setAttribute('transform', tr(lerp(from, out.lunge, t))); if (t > .6) setBall(lerp(ball0, out.ball, (t - .6) / .4)); }, done));
+          } else if (out.kind === 'layoff') {
+            wait(380, () => playPass(you, b, ok, () => { bump(mateEls.get(b), 'receive'); done(); }, youG));
+          } else wait(200, done);
+        }, mateEls.get(b));
+      },
+      final() {
+        const b = E.passer(pz), out = E.scanOutcome(pz, stance);
+        if (out.kind === 'turn') { shownYou = out.you; placeYou(); }
+        if (out.kind === 'lost') { const g = oppEls.get(out.danger); g.setAttribute('transform', tr(out.lunge)); g.classList.add('caught'); }
+        setBall(out.kind === 'layoff' ? feetOf(b, you) : out.ball);
+      },
+      hasReplay: () => true,
+    },
+
+    dribble: {
+      how: () => `Draw your run with your finger, starting from you. Up to ${pz.maxRun} metres, then tap Go.`,
+      primary: 'Go!',
+      hint: ['Show tackle zones', 'Hide tackle zones'],
+      extra: null,
+      drag: true,
+      ready: () => E.pathLength(path) >= 2,
+      down(p) { dragging = true; path = [{ ...pz.you }]; extendPath(p); render(); updatePrimary(); },
+      move(p) { extendPath(p); render(); updatePrimary(); },
+      draw() {
+        if (hint || state === 'result') {
+          const hot = res && res.tackle ? res.tackle.opp : null;
+          for (const o of pz.opps) el('circle', { cx: o.x, cy: o.y, r: E.TACKLE, class: o === hot ? 'tackle hot' : 'tackle' }, L.tackle);
+        }
+        if (state === 'result') {
+          const g = pz.goal;
+          if (g.type === 'gain') drawRect(pz.you.x + g.min, 0, 60, 40);
+          else drawRect(g.x0, g.y0, g.x1, g.y1);
+        }
+        if (state === 'result' && res) {
+          const p = res.pts, last = res.tackle ? res.tackle.index : p.length - 1;
+          if (p.length > 1) el('polyline', { points: ptsAttr(p.slice(0, last + 1)), class: 'run-path done' }, L.path);
+          if (res.tackle) el('polyline', { points: ptsAttr(p.slice(last)), class: 'run-path rest' }, L.path);
+        } else if (path.length > 1) {
+          el('polyline', { points: ptsAttr(path), class: 'run-path plan' }, L.path);
+          const a = path[Math.max(0, path.length - 3)], z = path[path.length - 1], d = dir(a, z), n = { x: -d.y, y: d.x };
+          el('polygon', { points: ptsAttr([add(z, d, .9), add(z, n, .65), add(z, n, -.65)]), class: 'arrowhead' }, L.path);
+        }
+      },
+      submit() { res = E.evaluateDribble(pz, path.length > 1 ? path : [pz.you]); },
+      lastIdx: () => (res.tackle ? res.tackle.index : res.pts.length - 1),
+      at(i) {
+        const p = res.pts[i], q = res.pts[Math.min(i + 3, res.pts.length - 1)], o = res.pts[Math.max(0, i - 3)];
+        const d = E.dist(p, q) > .01 ? dir(p, q) : E.dist(o, p) > .01 ? dir(o, p) : { x: 1, y: 0 };
+        return { p, ball: add(p, d, 1.3) };
+      },
+      lunge() {
+        const o = res.tackle.opp, target = res.pts[this.lastIdx()];
+        const pos = add(o, dir(o, target), .3);  // a short step in: he pokes it away rather than running through you
+        return { pos, ball: add(pos, dir(target, pos), 1.5) };  // ball ends up on his side
+      },
+      play(done) {
+        const last = this.lastIdx();
+        if (last < 1) { done(); return; }
+        tween(300 + last * 0.25 * 85, (t) => {
+          const s = this.at(Math.round(t * last));
+          youG.setAttribute('transform', tr(s.p)); setFace(youG, angTo(s.p, s.ball)); setBall(s.ball);
+        }, () => {
+          if (!res.tackle) { done(); return; }
+          const g = oppEls.get(res.tackle.opp), from = { x: res.tackle.opp.x, y: res.tackle.opp.y }, l = this.lunge(), b0 = this.at(last).ball;
+          tween(320, (t) => { g.setAttribute('transform', tr(lerp(from, l.pos, t))); setBall(lerp(b0, l.ball, t)); }, done);
+        });
+      },
+      final() {
+        const last = this.lastIdx(), s = this.at(last);
+        shownYou = s.p; placeYou(); if (last > 0) setFace(youG, angTo(s.p, s.ball));
+        if (res.tackle) {
+          const l = this.lunge(), g = oppEls.get(res.tackle.opp);
+          g.setAttribute('transform', tr(l.pos)); g.classList.add('caught'); setBall(l.ball);
+        } else setBall(s.ball);
+      },
+      hasReplay: () => res.pts.length > 1,
+    },
+  };
+
+  function moveYou(p) { you = nudge(E.clamp(pz, p)); render(); }
+
+  // Keep "you" from landing on top of another player.
+  function nudge(p) {
+    let q = { ...p };
+    for (let k = 0; k < 3; k++) {
+      for (const o of [...pz.mates, ...pz.opps]) {
+        const d = E.dist(o, q);
+        if (d < 2.6) {
+          const ux = d ? (q.x - o.x) / d : 1, uy = d ? (q.y - o.y) / d : 0;
+          q = E.clamp(pz, { x: o.x + ux * 2.6, y: o.y + uy * 2.6 });
+        }
+      }
+    }
+    return q;
+  }
+
+  function extendPath(p) {
+    const q = { x: Math.max(E.EDGE, Math.min(60 - E.EDGE, p.x)), y: Math.max(E.EDGE, Math.min(40 - E.EDGE, p.y)) };
+    const last = path[path.length - 1], d = E.dist(last, q);
+    if (d < .5) return;
+    const left = pz.maxRun - E.pathLength(path);
+    if (left <= .05) return;
+    path.push(d > left ? lerp(last, q, left / d) : q);
+  }
+
+  function drawFog() {
+    const b = E.passer(pz), u = dir(you, b), n = { x: -u.y, y: u.x }, F = 120;
+    const P = (a, c) => ({ x: you.x + n.x * a - u.x * c, y: you.y + n.y * a - u.y * c });
+    el('polygon', { points: ptsAttr([P(F, 0), P(F, F), P(-F, F), P(-F, 0)]), class: 'fog' }, L.fog);
+    el('line', { x1: P(F, 0).x, y1: P(F, 0).y, x2: P(-F, 0).x, y2: P(-F, 0).y, class: 'fog-edge' }, L.fog);
+    const lp = P(0, 9), lx = Math.max(7, Math.min(53, lp.x)), ly = Math.max(3, Math.min(35.5, lp.y));
+    el('text', { x: lx, y: ly, class: 'fog-label' }, L.fog).textContent = 'Behind you';
+    el('text', { x: lx, y: ly + 2.1, class: 'fog-label' }, L.fog).textContent = 'Tap to look';
+  }
+
+  // Three arrows round you on the pitch, one for each way to stand. Tap one to turn that way.
+  const ARROW_R = 5.4;
+  const STANCE_LABEL = { face: 'Face the ball', half: 'Half-turn', back: 'Back to goal' };
+  const arrowAt = (k) => add(you, E.stanceDir(pz, k), ARROW_R);
+  function drawArrows() {
+    for (const k of E.STANCES) {
+      const d = E.stanceDir(pz, k), p = arrowAt(k), on = stance === k;
+      const g = el('g', { class: 'stance-arrow' + (on ? ' on' : ''), transform: `${tr(p)} rotate(${(Math.atan2(d.y, d.x) * 180 / Math.PI).toFixed(1)})` }, L.vision);
+      el('circle', { class: 'sa-bg', r: 1.25 }, g);
+      el('path', { class: 'sa-chev', d: 'M-.7 0H.6M.1 -.5L.62 0L.1 .5' }, g);
+      // label on the outside of the arrow: to its left or right when it points sideways, else above or below
+      const side = d.x < -.3 ? -1 : d.x > .3 ? 1 : 0;
+      const at = side ? { x: p.x + side * 1.6, y: p.y } : { x: p.x, y: p.y + (d.y < 0 ? -2 : 2) };
+      el('text', { x: at.x.toFixed(2), y: at.y.toFixed(2), 'text-anchor': side < 0 ? 'end' : side > 0 ? 'start' : 'middle', class: 'sa-label' + (on ? ' on' : '') }, L.vision).textContent = STANCE_LABEL[k];
+    }
+  }
+  function setStance(k) {
+    if (state !== 'setup') return;
+    unlockSpeech();
+    stance = k; render(); updatePrimary();
+  }
+
+  function drawVision() {
+    const d = E.stanceDir(pz, stance), a0 = Math.atan2(d.y, d.x), A = E.VISION * Math.PI / 180, R = 14;
+    const p1 = { x: you.x + Math.cos(a0 - A) * R, y: you.y + Math.sin(a0 - A) * R };
+    const p2 = { x: you.x + Math.cos(a0 + A) * R, y: you.y + Math.sin(a0 + A) * R };
+    el('path', { d: `M${you.x} ${you.y}L${p1.x.toFixed(2)} ${p1.y.toFixed(2)}A${R} ${R} 0 0 1 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}Z`, class: 'vision', 'clip-path': 'url(#pc)' }, L.vision);
+  }
+
+  function doScan() {
+    if (scanned || state !== 'setup') return;
+    unlockSpeech();
+    scanned = true;
+    buildControls();
+    updateHidden();
+    say('Now tap an arrow to choose which way to face.');
+    if (reduceMotion()) { render(); return; }
+    L.fog.classList.add('gone');
+    setTimeout(() => { L.fog.classList.remove('gone'); if (state === 'setup') render(); }, 520);
+  }
+
+  function render() {
+    svg.classList.toggle('setup', state === 'setup');
+    svg.classList.toggle('drag', state === 'setup' && !!T().drag);
+    svg.classList.toggle('picking', state === 'setup' && pz.type === 'pass');
+    svg.classList.toggle('tapping', state === 'setup' && pz.type === 'scan');
+    for (const k of ['zone', 'fog', 'shadows', 'tackle', 'space', 'run', 'lane', 'path', 'vision', 'fx']) L[k].replaceChildren();
+    updateHidden();
+    T().draw();
+    placeYou();
+    facePlayers();
+    svg.setAttribute('aria-label', `Pitch. ${pz.prompt}`);
+  }
+
+  // ---------- panel ----------
+  const show = (screen) => { for (const id of ['home', 'game', 'make']) $(id).hidden = id !== screen; };
+
+  // Levels across all 42 stars, and card tiers per skill: bronze for any stars, silver at half, gold when every puzzle has 3.
+  const LEVELS = [['Academy', 0], ['Youth', 12], ['Pro', 24], ['Legend', 36]];
+  function levelOf(total) {
+    let i = 0;
+    LEVELS.forEach((l, k) => { if (total >= l[1]) i = k; });
+    return { i, name: LEVELS[i][0], next: LEVELS[i + 1] || null };
+  }
+  const tierOf = (got, mx) => (got >= mx ? 'gold' : got >= mx / 2 ? 'silver' : got > 0 ? 'bronze' : 'new');
+  const TIER_LABEL = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze', new: 'New' };
+  const SKILL_ICON = {
+    space: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="5" fill="currentColor"/><path d="M15 29Q24 10 36 14" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="37" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="37" cy="15" r="2.5" fill="currentColor"/></svg>',
+    pass: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="12" cy="34" r="6" fill="none" stroke="currentColor" stroke-width="3"/><path d="M18 30L36 16M28 15h9v9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    scan: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 26s7-11 18-11 18 11 18 11-7 11-18 11S6 26 6 26z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="26" r="5" fill="currentColor"/><path d="M14 9q10-6 21 1m0 0l-1-6m1 6l-6 1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+    dribble: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="30" cy="26" r="9" fill="none" stroke="currentColor" stroke-width="3"/><path d="M4 18h12M2 26h11M4 34h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M30 17l4 5-4 5-4-5z" fill="currentColor"/></svg>',
+  };
+  function skillCard(sc, tag) {
+    const list = listOf(sc.id), got = starsIn(list), mx = list.length * 3, tier = tierOf(got, mx);
+    const b = document.createElement(tag || 'button');
+    b.className = `skill tier-${tier}`;
+    b.innerHTML = '<span class="face"><span class="sk-head"><span class="sk-rate"></span><span class="sk-tier"></span></span><span class="sk-icon"></span>'
+      + '<strong class="sk-title"></strong><span class="sk-blurb"></span><span class="sk-foot"><span class="skill-stars"></span><span class="skill-bar"><i></i></span></span><span class="skill-go"></span></span>';
+    b.querySelector('.sk-rate').textContent = got;
+    b.querySelector('.sk-tier').textContent = TIER_LABEL[tier];
+    b.querySelector('.sk-icon').innerHTML = SKILL_ICON[sc.id];
+    b.querySelector('.sk-title').textContent = sc.title;
+    b.querySelector('.sk-blurb').textContent = `${sc.blurb} ${list.length} puzzles.`;
+    b.querySelector('.skill-stars').textContent = `★ ${got} of ${mx}`;
+    b.querySelector('.skill-bar i').style.width = `${(100 * got) / mx}%`;
+    b.querySelector('.skill-go').textContent = !list.some((i) => tried[i]) ? 'Start' : list.every((i) => best[i] === 3) ? 'Play again' : 'Continue';
+    if (!tag) b.setAttribute('aria-label', `${sc.title}. ${TIER_LABEL[tier]} card, ${got} of ${mx} stars.`);
+    return b;
+  }
+
+  function renderTop() {
+    if (state === 'home' || state === 'make') return;
+    const list = listOf(sec), nums = $('progress');
+    $('sec-name').textContent = E.SECTIONS.find((x) => x.id === sec).title;
+    nums.replaceChildren();
+    list.forEach((pi, k) => {
+      const li = document.createElement('li'), b = document.createElement('button');
+      const here = pi === idx && state !== 'end';
+      b.className = 'pnum' + (here ? ' current' : tried[pi] ? ' done' : '');
+      b.textContent = k + 1;
+      b.setAttribute('aria-label', `Puzzle ${k + 1}: ${E.PUZZLES[pi].title}${tried[pi] ? `, ${best[pi]} of 3 stars` : ''}`);
+      if (here) b.setAttribute('aria-current', 'step');
+      b.addEventListener('click', () => { if (!anim && !here) load(pi); });
+      li.appendChild(b); nums.appendChild(li);
+    });
+    $('total').textContent = starsIn(list);
+  }
+
+  function buildControls() {
+    const box = $('controls');
+    box.replaceChildren();
+    box.hidden = !T().controls;
+    if (T().controls) T().controls(box);
+  }
+  const updatePrimary = () => { $('check').disabled = !T().ready(); };
+  const HINT_CHIP = { space: 'Shadows', pass: 'Shadows', dribble: 'Tackle zones' };
+  const EXTRA_CHIP = { space: 'Open space', pass: 'All my passes' };
+
+  function showSetup() {
+    show('game'); $('play').hidden = false; $('end').hidden = true;
+    $('setup').hidden = false; $('result').hidden = true;
+    const t = T();
+    $('title').textContent = pz.title;
+    $('prompt').textContent = pz.prompt;
+    $('how').textContent = typeof t.how === 'function' ? t.how() : t.how;
+    $('check').textContent = t.primary;
+    buildControls();
+    $('hint').hidden = !t.hint;
+    if (t.hint) { $('hint-label').textContent = HINT_CHIP[pz.type]; $('hint').setAttribute('aria-pressed', String(hint)); }
+    updatePrimary();
+    renderTop();
+  }
+
+  function syncExtra() {
+    const t = T();
+    $('extra').hidden = !t.extra;
+    if (t.extra) { $('extra').textContent = EXTRA_CHIP[pz.type]; $('extra').setAttribute('aria-pressed', String(extra)); }
+    $('extra-tip').hidden = !(t.extra && extra);
+    $('extra-tip').textContent = t.extraTip || '';
+  }
+
+  function showResult() {
+    $('setup').hidden = true; $('result').hidden = false;
+    const stars = $('stars');
+    stars.replaceChildren();
+    for (let i = 0; i < 3; i++) {
+      const s = el('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, stars);
+      el('path', { d: STAR }, s);
+      if (i < res.stars) { s.classList.add('on'); s.style.animationDelay = `${i * 0.14}s`; }
+    }
+    const of = document.createElement('span');
+    of.className = 'of'; of.textContent = `${res.stars} of 3`;
+    stars.appendChild(of);
+    const list = $('checks');
+    list.replaceChildren();
+    res.checks.forEach((c, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="mark ${c.ok ? 'ok' : 'bad'}" aria-hidden="true">${c.ok ? '✓' : '✕'}</span><div><strong><span class="sr">${c.ok ? 'Done: ' : 'Not yet: '}</span></strong><span class="why"></span></div>`;
+      li.querySelector('strong').append(c.label);
+      if (i === 2 && (pz.type === 'space' || pz.type === 'dribble')) li.querySelector('strong').insertAdjacentHTML('beforeend', ' <span class="swatch" title="Gold area on the pitch"></span>');
+      li.querySelector('.why').textContent = c.why;
+      list.appendChild(li);
+    });
+    const cheer = document.createElement('strong');
+    cheer.textContent = res.stars === 3 ? `Brilliant, ${playerName()}! ` : res.stars === 2 ? 'So close! ' : 'Have another go. ';
+    $('coach').replaceChildren(cheer, pz.teach);
+    const inSec = listOf(sec), last = inSec.indexOf(idx) === inSec.length - 1, perfect = res.stars === 3;
+    $('next').textContent = last ? 'Finish skill' : 'Next puzzle';
+    $('again').className = perfect ? 'ghost-btn' : 'cta';
+    $('next').className = perfect ? 'cta' : 'ghost-btn';
+    $('replay-pass').hidden = !T().hasReplay();
+    syncExtra();
+    renderTop();
+    (perfect ? $('next') : $('again')).focus({ preventScroll: true });
+  }
+
+  let resetArmed = false, resetTimer = null;
+  function showHome() {
+    if (anim) return;
+    state = 'home';
+    show('home');
+    const all = E.PUZZLES.map((_, i) => i), total = starsIn(all);
+    const lv = levelOf(total);
+    $('lv-name').textContent = lv.name;
+    $('lv-next').textContent = lv.next ? `★ ${total} · ${lv.next[1] - total} more to ${lv.next[0]}` : `★ ${total} · top level!`;
+    const steps = $('lv-steps'), labels = $('lv-labels');
+    steps.replaceChildren(); labels.replaceChildren();
+    LEVELS.forEach(([n, from], k) => {
+      const to = LEVELS[k + 1] ? LEVELS[k + 1][1] : all.length * 3;
+      const s = document.createElement('span'); s.className = 'lv-step';
+      const fill = document.createElement('i'); fill.style.width = `${Math.max(0, Math.min(1, (total - from) / (to - from))) * 100}%`;
+      s.appendChild(fill); steps.appendChild(s);
+      const l = document.createElement('span'); l.textContent = n; if (k <= lv.i) l.className = 'on'; labels.appendChild(l);
+    });
+    const nm = playerName();
+    $('home-sub').textContent = total
+      ? `Welcome back, ${nm}! ${lv.next ? `${lv.next[1] - total} more stars and you’re ${lv.next[0]}.` : 'You’re a Legend. Can you get every card to gold?'}`
+      : `Hi ${nm}! Pick a skill and let’s train.`;
+    syncMe();
+    const box = $('skills');
+    box.replaceChildren();
+    E.SECTIONS.forEach((sc) => {
+      const b = skillCard(sc);
+      b.addEventListener('click', () => load(continueIndex(sc.id)));
+      box.appendChild(b);
+    });
+    resetArmed = false; clearTimeout(resetTimer);
+    $('reset').textContent = 'Clear my stars';
+    $('reset').hidden = total === 0 && !tried.some(Boolean);
+    const nextSec = E.SECTIONS.find((sc) => listOf(sc.id).some((i) => best[i] < 3)) || E.SECTIONS[0];
+    prep(continueIndex(nextSec.id));
+  }
+
+  function showSectionEnd() {
+    state = 'end';
+    show('game'); $('play').hidden = true; $('end').hidden = false;
+    const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), got = starsIn(list);
+    const card = skillCard(sc, 'div');
+    card.querySelector('.skill-go').remove();
+    $('end-card').replaceChildren(card);
+    $('end-title').textContent = sc.title;
+    $('end-sub').textContent = `You got ${got} of ${list.length * 3} stars. Here’s what you practised:`;
+    const ul = $('lessons');
+    ul.replaceChildren();
+    for (const i of list) {
+      const li = document.createElement('li');
+      const t = document.createElement('span'); t.textContent = E.PUZZLES[i].lesson;
+      const m = document.createElement('span'); m.className = 'mini';
+      m.setAttribute('aria-label', `${best[i]} of 3 stars`);
+      m.innerHTML = '★'.repeat(best[i]) + `<span class="off">${'★'.repeat(3 - best[i])}</span>`;
+      li.append(t, m); ul.appendChild(li);
+    }
+    const nx = E.SECTIONS[E.SECTIONS.indexOf(sc) + 1];
+    $('next-skill').textContent = nx ? `Next: ${nx.title}` : 'All skills';
+    $('next-skill').dataset.go = nx ? nx.id : '';
+    $('to-home').hidden = !nx;
+    renderTop();
+    $('next-skill').focus({ preventScroll: true });
+    say(endSpeech());
+  }
+
+  // ---------- his player: name, shirt number and team kit, kept on this iPad only ----------
+  const PLAYER_KEY = 'fts-player-v1';
+  const KITS = [['blue', '#2F6BFF', 'Blue'], ['sky', '#1FA8E0', 'Sky blue'], ['purple', '#8E5BFF', 'Purple'],
+    ['pink', '#F0459A', 'Pink'], ['black', '#20242C', 'Black'], ['white', '#F2F4F7', 'White']];
+  let player = null, draft = null;
+  try {
+    const d = JSON.parse(localStorage.getItem(PLAYER_KEY) || 'null');
+    if (d && typeof d.name === 'string' && Number.isInteger(d.num) && KITS.some((k) => k[0] === d.kit)) {
+      player = { name: d.name.slice(0, 12), num: Math.max(1, Math.min(99, d.num)), kit: d.kit };
+    }
+  } catch (e) { player = null; }
+  const playerName = () => (player && player.name.trim()) || 'Player';
+  const playerNum = () => (player ? player.num : pz.youN);
+  function applyKit(kitId) {
+    const k = KITS.find((x) => x[0] === kitId) || KITS[0];
+    document.documentElement.style.setProperty('--us', k[1]);
+    document.documentElement.classList.toggle('kit-light', k[0] === 'white');
+  }
+  function syncMe() {
+    $('me-name').textContent = playerName();
+    $('me-num').textContent = player ? player.num : 8;
+    const total = starsIn(E.PUZZLES.map((_, i) => i));
+    $('me-lv').textContent = `${levelOf(total).name} · ★ ${total}`;
+  }
+  function syncCard() {
+    $('pc-num').textContent = draft.num; $('pc-shirt-num').textContent = draft.num; $('p-num').textContent = draft.num;
+    $('pc-name').textContent = draft.name.trim() || 'Your name';
+    $('pc-lv').textContent = levelOf(starsIn(E.PUZZLES.map((_, i) => i))).name;
+    applyKit(draft.kit);
+    $('kits').querySelectorAll('.kit').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.kit === draft.kit)));
+  }
+  function openMake() {
+    if (anim) return;
+    state = 'make';
+    draft = player ? { ...player } : { name: '', num: 8, kit: 'blue' };
+    $('p-name').value = draft.name;
+    $('make-cancel').hidden = !player;
+    show('make'); syncCard();
+  }
+  const kits = $('kits');
+  for (const [id, c, label] of KITS) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'kit'; b.dataset.kit = id; b.style.setProperty('--k', c);
+    b.setAttribute('role', 'radio'); b.setAttribute('aria-label', label);
+    b.addEventListener('click', () => { draft.kit = id; syncCard(); });
+    kits.appendChild(b);
+  }
+  $('p-name').addEventListener('input', () => { draft.name = $('p-name').value.slice(0, 12); syncCard(); });
+  $('num-down').addEventListener('click', () => { draft.num = draft.num <= 1 ? 99 : draft.num - 1; syncCard(); });
+  $('num-up').addEventListener('click', () => { draft.num = draft.num >= 99 ? 1 : draft.num + 1; syncCard(); });
+  $('make-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    player = { name: draft.name.trim().slice(0, 12), num: draft.num, kit: draft.kit };
+    try { localStorage.setItem(PLAYER_KEY, JSON.stringify(player)); } catch (err) { /* private mode: keep it for this visit */ }
+    $('p-name').blur();
+    showHome(); say(homeSpeech());
+  });
+  $('make-cancel').addEventListener('click', () => { applyKit(player.kit); showHome(); });
+  $('me').addEventListener('click', openMake);
+  if (player) applyKit(player.kit);
+
+  // ---------- flow ----------
+  function prep(i) {
+    idx = i; pz = E.PUZZLES[i]; you = { ...pz.you };
+    res = null; hint = false; extra = false; shownYou = null;
+    pick = null; scanned = false; stance = null; path = [];
+    svg.classList.remove('cheer');
+  }
+  function load(i) {
+    if (anim) return;
+    prep(i);
+    sec = pz.section; state = 'setup';
+    drawPlayers(); render(); showSetup();
+    say(setupSpeech());
+  }
+
+  function check() {
+    if (state !== 'setup' || anim || !T().ready()) return;
+    unlockSpeech();
+    T().submit();
+    state = 'playing'; tried[idx] = true;
+    best[idx] = Math.max(best[idx], res.stars);
+    saveProgress();
+    render();
+    T().play(() => {
+      state = 'result';
+      render();
+      T().final();
+      if (res.stars === 3) svg.classList.add('cheer');
+      showResult();
+      say(resultSpeech());
+    });
+  }
+
+  function tryAgain() {
+    if (anim) return;
+    state = 'setup'; res = null; extra = false; shownYou = null;
+    if (pz.type === 'scan') { scanned = false; stance = null; }
+    if (pz.type === 'pass') pick = null;
+    svg.classList.remove('cheer');
+    drawPlayers(); render(); showSetup();
+    svg.focus({ preventScroll: true });
+  }
+
+  function replayResult() {
+    if (anim || state !== 'result') return;
+    shownYou = null;
+    drawPlayers(); render();
+    T().play(() => T().final());
+  }
+
+  // ---------- input ----------
+  function toModel(e) {
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  svg.addEventListener('pointerdown', (e) => {
+    if (anim) return;
+    const p = toModel(e);
+    if (state === 'result' && extra && T().extraTap) { T().extraTap(p); return; }
+    if (state !== 'setup' || !T().down) return;
+    svg.setPointerCapture(e.pointerId);
+    T().down(p);
+    e.preventDefault();
+  });
+  svg.addEventListener('pointermove', (e) => { if (dragging && state === 'setup' && T().move) T().move(toModel(e)); });
+  const stop = () => { dragging = false; };
+  svg.addEventListener('pointerup', stop);
+  svg.addEventListener('pointercancel', stop);
+  svg.addEventListener('keydown', (e) => {
+    if (state !== 'setup') return;
+    const k = { ArrowLeft: [-.5, 0], ArrowRight: [.5, 0], ArrowUp: [0, -.5], ArrowDown: [0, .5] }[e.key];
+    if (k && pz.type === 'space') { moveYou({ x: you.x + k[0], y: you.y + k[1] }); e.preventDefault(); }
+    else if (pz.type === 'scan' && (e.key === 's' || e.key === 'S')) { doScan(); e.preventDefault(); }
+    else if (pz.type === 'scan' && ['1', '2', '3'].includes(e.key)) { setStance(E.STANCES[+e.key - 1]); e.preventDefault(); }
+    else if (e.key === 'Enter') { check(); e.preventDefault(); }
+  });
+
+  $('check').addEventListener('click', check);
+  $('hint').addEventListener('click', () => {
+    if (state !== 'setup') return;
+    hint = !hint; render();
+    $('hint').setAttribute('aria-pressed', String(hint));
+  });
+  $('again').addEventListener('click', tryAgain);
+  $('next').addEventListener('click', () => {
+    if (anim) return;
+    const list = listOf(sec), k = list.indexOf(idx);
+    if (k < list.length - 1) load(list[k + 1]); else showSectionEnd();
+  });
+  $('extra').addEventListener('click', () => {
+    if (anim) return;
+    extra = !extra;
+    render(); T().final(true);
+    syncExtra();
+  });
+  $('replay-pass').addEventListener('click', replayResult);
+  $('replay').addEventListener('click', () => load(listOf(sec)[0]));
+  $('back').addEventListener('click', () => { showHome(); say(homeSpeech()); });
+  $('to-home').addEventListener('click', () => { showHome(); say(homeSpeech()); });
+  $('next-skill').addEventListener('click', () => {
+    const go = $('next-skill').dataset.go;
+    if (go) load(continueIndex(go)); else { showHome(); say(homeSpeech()); }
+  });
+  // Two taps to clear, so a stray tap can't wipe his stars.
+  $('reset').addEventListener('click', () => {
+    if (!resetArmed) {
+      resetArmed = true;
+      $('reset').textContent = 'Tap again to clear all stars';
+      resetTimer = setTimeout(() => { resetArmed = false; $('reset').textContent = 'Clear my stars'; }, 4000);
+      return;
+    }
+    best.fill(0); tried.fill(false); saveProgress(); showHome();
+  });
+
+  // ---------- read aloud (the device's own voice; nothing leaves the iPad) ----------
+  const canSpeak = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+  let narrate = false, voice = null, unlocked = false;
+  try { narrate = canSpeak && localStorage.getItem('fts-narrate') === '1'; } catch (e) { narrate = false; }
+  function pickVoice() {
+    const junk = /novelty|bells|bad news|good news|whisper|zarvox|trinoids|albert|bahh|boing|bubbles|cellos|deranged|hysterical|jester|organ|superstar|wobble|junior|ralph|fred|kathy|grandpa|grandma|rocko|shelley|flo|eddy|reed|sandy/i;
+    const score = (v) => (/^en/i.test(v.lang) ? 20 : 0) + (/en[-_](ZA|GB|AU|IE|NZ)/i.test(v.lang) ? 4 : /en[-_]US/i.test(v.lang) ? 3 : 0)
+      + (/enhanced|premium|natural|neural/i.test(v.name) ? 5 : 0) + (/samantha|daniel|karen|tessa|serena|moira|google uk/i.test(v.name) ? 2 : 0)
+      + (v.localService ? 1 : 0) - (junk.test(v.name) ? 50 : 0);
+    const vs = speechSynthesis.getVoices();
+    voice = vs.length ? vs.slice().sort((a, b) => score(b) - score(a))[0] : null;
+  }
+  function say(text) {
+    if (!narrate || !canSpeak || !text) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if (voice) { u.voice = voice; u.lang = voice.lang; }
+      u.rate = 0.95; u.pitch = 1.05;
+      speechSynthesis.speak(u);
+    } catch (e) { /* speech is a nice-to-have */ }
+  }
+  // iPad only lets a page talk after a tap, so the first tap wakes the voice up.
+  function unlockSpeech() {
+    if (!narrate || unlocked || !canSpeak) return;
+    unlocked = true;
+    try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } catch (e) { /* ignore */ }
+  }
+  const setupSpeech = () => `${pz.title}. ${pz.prompt}`;
+  function resultSpeech() {
+    const head = ['No stars this time.', 'One star.', 'Two stars.', 'Three stars! Brilliant.'][res.stars];
+    const fixes = res.checks.filter((c) => !c.ok).map((c) => c.why).join(' ');
+    return `${head} ${fixes} Coach says: ${pz.teach}`;
+  }
+  function endSpeech() {
+    const sc = E.SECTIONS.find((x) => x.id === sec), list = listOf(sec), t = starsIn(list), max = list.length * 3;
+    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work.`;
+  }
+  const homeSpeech = () => `${$('home-sub').textContent} ${E.SECTIONS.map((x) => x.title).join('. ')}.`;
+  const makeSpeech = () => 'Make your player. Type your name, pick your shirt number and your team kit.';
+  const currentSpeech = () => (state === 'make' ? makeSpeech() : state === 'home' ? homeSpeech() : state === 'end' ? endSpeech() : state === 'result' ? resultSpeech() : setupSpeech());
+  const nb = $('narrate');
+  if (canSpeak) {
+    nb.hidden = false;
+    pickVoice();
+    if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', pickVoice);
+  }
+  const syncNarrate = () => nb.setAttribute('aria-pressed', String(narrate));
+  syncNarrate();
+  nb.addEventListener('click', () => {
+    narrate = !narrate;
+    try { localStorage.setItem('fts-narrate', narrate ? '1' : '0'); } catch (e) { /* private mode */ }
+    syncNarrate();
+    if (narrate) { unlocked = true; say(currentSpeech()); } else if (canSpeak) speechSynthesis.cancel();
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (narrate && !unlocked && e.target !== nb && !nb.contains(e.target)) { unlocked = true; say(currentSpeech()); }
+  }, { capture: true });
+
+  loadProgress();
+  showHome();
+  if (!player) openMake();  // first visit: make his player before anything else
+})();
+
+</script>
+</body>
+</html>
