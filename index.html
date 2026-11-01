@@ -2652,8 +2652,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
       const l = document.createElement('span'); l.textContent = n; if (k <= lv.i) l.className = 'on'; labels.appendChild(l);
     });
     const nm = playerName();
+    const allGold = E.SECTIONS.every((sc) => listOf(sc.id).every((i) => best[i] === 3));
     $('home-sub').textContent = total
-      ? `Welcome back, ${nm}! ${lv.next ? `${lv.next[1] - total} more stars and you’re ${lv.next[0]}.` : 'You’re a Legend. Can you get every card to gold?'}`
+      ? `Welcome back, ${nm}! ${lv.next ? `${lv.next[1] - total} more stars and you’re ${lv.next[0]}.` : (allGold ? 'Every card is gold. You’re a true Legend. Play Match mode to stay sharp.' : 'You’re a Legend. Can you get every card to gold?')}`
       : `Hi ${nm}! Pick a skill and let’s train.`;
     syncMe(); setCoach('happy');
     // The challenge from the last skill he finished, to try in his next real match.
