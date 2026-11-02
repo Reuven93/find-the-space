@@ -331,7 +331,7 @@ button { cursor: pointer; }
   .sk-rate { font-size: 38px; }
   .sk-blurb { display: none; }
   .me-lv { display: none; }
-  .pnum { width: 40px; height: 40px; font-size: 21px; }
+  .pnum { width: 44px; height: 44px; font-size: 21px; }
   .cta { font-size: 30px; min-height: 64px; }
 }
 
@@ -475,6 +475,44 @@ button { cursor: pointer; }
   .hero { gap: 12px; }
 }
 .fresh { color: var(--ok); }
+/* ---------- v15: shoot and full moves ---------- */
+.goalview { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; border-radius: 14px; border: 2px solid var(--edge); background: #10301d; }
+.gv-grass { fill: var(--grass-1); }
+.gv-net { fill: rgba(255, 255, 255, .07); }
+.gv-mesh { stroke: rgba(255, 255, 255, .26); stroke-width: .022; }
+.gv-frame { fill: none; stroke: #fff; stroke-width: .13; stroke-linejoin: round; stroke-linecap: round; }
+.gv-reach { fill: rgba(255, 90, 54, .2); stroke: rgba(255, 90, 54, .85); stroke-width: .03; stroke-dasharray: .1 .08; }
+.gv-best { fill: rgba(255, 210, 63, .22); stroke: var(--you); stroke-width: .03; stroke-dasharray: .1 .08; }
+.gv-keeper .k-kit { fill: var(--them); stroke: #fff; stroke-width: .035; }
+.gv-keeper .k-skin { fill: #3A2A20; stroke: #fff; stroke-width: .03; }
+.gv-keeper .k-glove { fill: #FFE38A; stroke: #1A2330; stroke-width: .025; }
+.gv-keeper .k-leg { stroke: #1A2330; stroke-width: .11; stroke-linecap: round; }
+.gv-aim { fill: #fff; stroke: #1A2330; stroke-width: .045; }
+.gv-cross { stroke: var(--you); stroke-width: .045; fill: none; }
+.gv-label { font-family: var(--label); font-weight: 700; font-size: .24px; letter-spacing: .01px; fill: rgba(255, 255, 255, .8); text-anchor: middle; dominant-baseline: central; }
+.gv-tip { font-family: var(--label); font-weight: 700; font-size: .27px; fill: rgba(255, 255, 255, .8); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.net.ripple { animation: ripple .55s ease-out 2; transform-box: fill-box; transform-origin: left center; }
+@keyframes ripple { 35% { transform: scaleX(1.8); fill: rgba(255, 255, 255, .6); } }
+.goal-text { font-family: var(--display); font-size: 6.5px; letter-spacing: .3px; fill: var(--you); text-anchor: middle; dominant-baseline: central; pointer-events: none;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .9); stroke-width: .9px; stroke-linejoin: round; animation: goalpop .6s cubic-bezier(.2, 1.6, .4, 1) both; transform-box: fill-box; transform-origin: center; }
+@keyframes goalpop { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.banner { font-family: var(--display); font-size: 2.7px; letter-spacing: .1px; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none;
+  paint-order: stroke; stroke: rgba(8, 32, 14, .92); stroke-width: .7px; stroke-linejoin: round; }
+.banner.cap { fill: var(--you); }
+.mvbar { display: flex; align-items: center; gap: 12px; }
+.mvbar[hidden] { display: none; }
+.mv-k { font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); white-space: nowrap; }
+.mvsteps { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex: 1; }
+.mvsteps li { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .1); border: 2px solid rgba(255, 255, 255, .25); }
+.mvsteps li { font-family: var(--display); font-size: 18px; line-height: 1; color: var(--text); }
+.mvsteps li.s3, .mvsteps li.s2, .mvsteps li.s1, .mvsteps li.s0 { color: var(--card-ink); }
+.mvsteps li.cur { border-color: var(--gold-hi); background: rgba(255, 227, 138, .18); }
+.mvsteps li.s3 { background: var(--gold-grad); border-color: var(--gold); }
+.mvsteps li.s2 { background: var(--silver-grad); border-color: #C9D1DB; }
+.mvsteps li.s1, .mvsteps li.s0 { background: var(--bronze-grad); border-color: #C9773A; }
+@media (prefers-reduced-motion: reduce) { .goal-text, .net.ripple { animation: none; } }
+/* phones: the game screen scrolls, so nothing in it may shrink (the pitch used to squash under the title) */
+@media (max-width: 560px) { .game > .hud, .game > .main, .main > .field, .main > .side { flex: none; } }
 /* ---------- v14: your look ---------- */
 .look-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .look { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px 14px; border: 2px solid var(--edge); border-radius: 14px; background: rgba(0, 0, 0, .22); }
@@ -591,6 +629,7 @@ button { cursor: pointer; }
       </div>
       <aside class="side">
         <div class="stack" id="play">
+          <div class="mvbar" id="mvbar" hidden><span class="mv-k" id="mv-k"></span><ol class="mvsteps" id="mvsteps" aria-label="Steps in this move"></ol></div>
           <section class="stack" id="setup">
             <div class="coach-talk"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><p class="bubble" id="prompt"></p></div>
             <p class="how"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L4.6 14a1.5 1.5 0 0 1 2.3-1.9L9 14"/></svg><span id="how"></span></p>
@@ -614,6 +653,7 @@ button { cursor: pointer; }
             </div>
             <p class="tip" id="extra-tip" hidden></p>
             <div class="push row">
+              <button class="cta" id="finish" hidden>Finish it</button>
               <button class="cta" id="show-me" hidden>Show me how</button>
               <button class="ghost-btn" id="again">Try again</button>
               <button class="cta" id="next">Next puzzle</button>
@@ -981,6 +1021,7 @@ const Engine = (() => {
       return !blockerOn(end, m, pz.opps) && dist(nearestOpp(pz, m), m) >= SPACE_OPP;
     }
     if (o.after) return o.safe !== false;  // pressing or dropping: no ball to lose
+    if (o.safe === false) return false;  // free, but nowhere the ball can reach you
     const free = dist(nearestOpp(pz, end), end) >= SPACE_OPP;
     if (!o.receive) return free;
     const from = o.via ? mate(o.via) : ballHolder(pz);
@@ -995,9 +1036,11 @@ const Engine = (() => {
     const L3 = pz.labels || ['The right risk', 'It helped the team', 'The best choice'];
     const lostWhy = o.risky && !riskOk && luck !== undefined ? (luck ? o.whyWon : o.whyLost) || o.why : o.why;
     const c1 = { ok: safe && riskOk, label: L3[0],
-      why: !safe || !riskOk ? lostWhy : o.risky ? 'Risky, but up here losing it costs little. Worth a go!' : (o.safeWhy || pz.safeWhy || 'Nobody could stop it.') };
-    const c2 = { ok: !!o.helps && kept, label: L3[1],
-      why: o.helps && kept ? (o.helpsWhy || 'It moved your team on.') : o.helps ? 'Losing the ball never helps the team.' : (o.key === b.key ? o.why : (pz.noHelpWhy || 'It didn’t help your team go forward.')) };
+      why: !safe && o.unsafeWhy ? o.unsafeWhy : !safe || !riskOk ? lostWhy : o.risky ? 'Risky, but up here losing it costs little. Worth a go!' : (o.safeWhy || pz.safeWhy || 'Nobody could stop it.') };
+    // Pass too early in a 2 against 1 and the defender slides across: it arrives, but it hasn't helped.
+    const slid = o.react === 'slide';
+    const c2 = { ok: !!o.helps && kept && !slid, label: L3[1],
+      why: slid && kept ? o.slideWhy : o.helps && kept ? (o.helpsWhy || 'It moved your team on.') : o.helps ? 'Losing the ball never helps the team.' : (o.key === b.key ? o.why : (pz.noHelpWhy || 'It didn’t help your team go forward.')) };
     const c3 = { ok: o.key === b.key, label: L3[2], why: o.key === b.key ? o.why : `Best was: ${b.label}. ${b.why}` };
     if (!c1.ok && !c2.ok && c1.why === c2.why) c2.why = pz.noHelpWhy || 'It didn’t help your team go forward.';
     const checks = [c1, c2, c3];
@@ -1062,6 +1105,112 @@ const Engine = (() => {
     return capStill({ checks, stars: checks.filter((c) => c.ok).length, follow: f, end }, dist(end, pz.you), STILL_RUN);
   }
 
+  // ---------- shoot: pick your spot in the goal ----------
+  // Their goal is the gap x = 60, y 17.5 to 22.5, 2 m high. He taps where to aim: across the goal (y) and how high (h).
+  // What the keeper can reach is worked out from where you stand: a keeper off his line covers more of the goal.
+  const GOAL_Y0 = 17.5, GOAL_Y1 = 22.5, BAR = 2.0;
+  const KEEPER_REACH = 1.1;   // how far a young keeper can dive either side of himself
+  const POST = 0.25;          // aim at least this far inside a post to be on target
+  const LOW = 0.8;            // a shot below this is low: hardest for a young keeper to get down to
+  const SHOT_BLOCK = 1.0;     // a defender this close to the shot's path blocks it
+  const keeper = (pz) => pz.opps.find((o) => o.n === 1);
+  // Where the keeper appears on the goal line from where you stand, and how much of it he covers.
+  function keeperView(pz) {
+    const k = keeper(pz), y = pz.you, f = (L - y.x) / Math.max(0.5, k.x - y.x);
+    const at = y.y + (k.y - y.y) * f, r = KEEPER_REACH * f;
+    const g0 = Math.max(0, at - r - GOAL_Y0), g1 = Math.max(0, GOAL_Y1 - (at + r));
+    return { at, r, lo: at - r, hi: at + r, g0, g1, big: g0 > g1 ? -1 : 1, even: Math.abs(g0 - g1) < 0.4 };
+  }
+  function shotOutcome(pz, aim) {
+    const T = { x: L, y: aim.y }, kv = keeperView(pz);
+    let block = null;
+    for (const o of pz.opps) {
+      if (o.n === 1) continue;
+      const si = segInfo(o, pz.you, T);
+      if (si.t > 0 && si.t < 1 && si.dist < SHOT_BLOCK && (!block || si.t < block.t)) block = { opp: o, t: si.t, point: si.point };
+    }
+    const wide = aim.y < GOAL_Y0 + POST || aim.y > GOAL_Y1 - POST, over = aim.h > BAR - 0.1;
+    const kind = block ? 'blocked' : wide ? 'wide' : over ? 'over' : Math.abs(aim.y - kv.at) < kv.r ? 'saved' : 'goal';
+    return { kind, block, kv, low: aim.h <= LOW, bigSide: kv.even || Math.sign(aim.y - kv.at) === kv.big };
+  }
+  // On target, beat the keeper, the best spot (low, into the bigger gap). Any goal is 2 stars; a save is 1.
+  function evaluateShot(pz, aim) {
+    const out = shotOutcome(pz, aim), goal = out.kind === 'goal';
+    const c1 = { ok: !['blocked', 'wide', 'over'].includes(out.kind), label: 'On target',
+      why: out.kind === 'blocked' ? `Their #${out.block.opp.n} was in the way. Aim where he can’t reach.` : out.kind === 'wide' ? 'Wide of the post. Aim just inside it.' : out.kind === 'over' ? 'Over the bar. Keep it low.' : 'It was going in the goal.' };
+    const c2 = { ok: goal, label: 'It beat the keeper',
+      why: goal ? 'The keeper couldn’t reach it.' : out.kind === 'saved' ? 'Too close to the keeper: he saved it. Aim away from him.' : 'Hit the target first, away from the keeper.' };
+    const best = goal && out.low && out.bigSide;
+    const c3 = { ok: best, label: 'The best spot',
+      why: best ? 'Low, into the bigger gap. That’s how you finish.' : goal && !out.bigSide ? 'Goal! Next time, hit the bigger gap: there was more room on the other side of him.'
+        : goal ? 'Goal! Even better: low. Young keepers find low shots hardest to reach.' : 'Low, into the bigger gap, away from the keeper.' };
+    const checks = [c1, c2, c3];
+    return { checks, stars: checks.filter((c) => c.ok).length, out, aim, goal };
+  }
+  // A bonus finish after a 3-star answer: the shot from `at` (or from where he really ended up), with their
+  // keeper on his line and cheating a little towards the near post. `by` is 'you' or the teammate who shoots.
+  function finishShot(pz, from) {
+    const f = pz.finish;
+    if (!f) return null;
+    const at = { ...(from || f.at) }, side = Math.sign(at.y - 20) || 1, u = unit({ x: at.x - L, y: at.y - 20 });
+    const kp = { x: L + u.x * 1.5, y: 20 + u.y * 1.5 + side * 0.6 };
+    return {
+      type: 'shoot', id: `${pz.id}!`, title: pz.title, age: pz.age, section: pz.section, youN: pz.youN, finisher: f.by, varied: pz.varied,
+      prompt: 'Bonus: finish it! Look at the keeper, then tap the goal where you want to shoot.',
+      you: at, mates: pz.mates.filter((m) => f.by === 'you' || m.n !== f.by).map((m) => ({ ...m })),
+      // A defender he has just beaten (`past`) is chasing, a few steps behind him.
+      opps: pz.opps.map((o) => (o.n === 1 ? { ...o, ...kp } : (f.past || []).includes(o.n) ? { ...o, x: at.x + u.x * 3.2, y: at.y + u.y * 3.2 } : { ...o })),
+    };
+  }
+  // The middle of the best spot: low, in the bigger gap, nearest its centre.
+  function bestAim(pz) {
+    const ys = [];
+    for (let y = GOAL_Y0; y <= GOAL_Y1 + 1e-9; y += 0.05) if (evaluateShot(pz, { y, h: 0.3 }).stars === 3) ys.push(y);
+    return ys.length ? { y: (ys[0] + ys[ys.length - 1]) / 2, h: 0.3, width: ys[ys.length - 1] - ys[0] } : null;
+  }
+
+  // ---------- full moves: one passage of play, step by step, on the same picture ----------
+  // A chain starts from its own picture. Each step can move players (`set`: you, m9, o4 ...) and adds its own
+  // decision. Everyone else stays where they were, so the picture carries over from one step to the next.
+  function composeStep(ch, k) {
+    const pos = { you: { ...ch.you } };
+    for (const m of ch.mates) pos['m' + m.n] = { x: m.x, y: m.y };
+    for (const o of ch.opps) pos['o' + o.n] = { x: o.x, y: o.y };
+    for (let j = 0; j <= k; j++) for (const key in ch.steps[j].set || {}) pos[key] = { ...ch.steps[j].set[key] };
+    const st = JSON.parse(JSON.stringify(ch.steps[k]));
+    delete st.set;
+    return Object.assign(st, {
+      id: `${ch.id}#${k + 1}`, chain: ch.id, step: k, steps: ch.steps.length, title: ch.title, age: ch.age, section: ch.section, youN: ch.youN,
+      you: pos.you, mates: ch.mates.map((m) => ({ ...m, ...pos['m' + m.n] })), opps: ch.opps.map((o) => ({ ...o, ...pos['o' + o.n] })),
+    });
+  }
+  const chainSteps = (ch) => ch.built || ch.steps.map((_, k) => composeStep(ch, k));
+  // Whether a step went well enough to carry on (we kept the ball, or won it), or the move stops and he tries it again.
+  function stepKept(pz, r) {
+    if (pz.type === 'defend') return r.stopped;
+    if (pz.type === 'pass') return r.checks[0].ok;
+    if (pz.type === 'space') return r.checks[0].ok;
+    if (pz.type === 'move') return r.checks[0].ok && r.checks[1].ok;
+    if (pz.type === 'scan') return r.grade !== 'bad';
+    if (pz.type === 'dribble') return !r.tackle;
+    if (pz.type === 'choice') return r.kept;
+    if (pz.type === 'shoot') return r.goal;
+    return false;
+  }
+  // Where you end up after the worked answer of a step.
+  function stepEnd(pz) {
+    const s = solutionFor(pz);
+    if (pz.type === 'space') return s.you;
+    if (pz.type === 'defend') return defendOutcome(pz, s.you).youTo || s.you;
+    if (pz.type === 'choice') return optEnd(pz, pz.options.find((o) => o.key === pz.best));
+    if (pz.type === 'scan') return scanOutcome(pz, s.stance).you;
+    if (s.path) return s.path[s.path.length - 1];
+    return pz.you;
+  }
+  // A move's stars: one ball per step, and the level gets the average, rounded down (3 only if every step was 3).
+  const chainStars = (arr) => (arr.length ? Math.floor(arr.reduce((a, b) => a + b, 0) / arr.length + 1e-9) : 0);
+  const CHAIN_STEPS = { '6-8': 3, '8-10': 4, '10-12': 5 };
+
   // ---------- endless training: the same situation, a new picture ----------
   // Every player moves a little, and the pitch may flip top-to-bottom. Points that belong to someone
   // (a worked run starts at you, a pass goes to their #10) move with that player. A new picture is only
@@ -1082,23 +1231,35 @@ const Engine = (() => {
     const out = [], add = (p, f) => { if (p) out.push([p, f]); }, arr = (a, f) => (a || []).forEach((p) => add(p, f));
     if (pz.solution) { if (Array.isArray(pz.solution)) arr(pz.solution, 'you'); else add(pz.solution, 'you'); }
     arr(pz.naive, 'you'); add(pz.open, 'you');
+    if (pz.finish) add(pz.finish.at, pz.finish.by === 'you' ? 'you' : 'm' + pz.finish.by);
     if (pz.threat) { add(pz.threat.to, pz.threat.kind === 'pass' ? 'o' + pz.danger : 'o' + pz.ball); add(pz.threat.out, 'o' + pz.ball); }
     for (const o of pz.options || []) { arr(o.path, 'you'); add(o.to, null); add(o.passTo, 'o' + pz.oppBall); }
     return out;
   }
   function vary(base, seed) {
-    const r = rng(seed), pz = JSON.parse(JSON.stringify(base)), deps = depPoints(pz);
+    const r = rng(seed);
     const mirror = !NO_MIRROR.includes(base.id) && r() < 0.5;
+    const J = base.jitter || (base.type === 'chain' ? 0.9 : base.type === 'dribble' || base.type === 'move' ? 1.2 : 1.8);
+    const d = (k) => { const a = r() * Math.PI * 2, m = Math.sqrt(r()) * J * k; return { x: Math.cos(a) * m, y: Math.sin(a) * m }; };
+    const sh = { you: d(1) };
+    for (const m of base.mates) sh['m' + m.n] = d(m.n === 1 ? 0.3 : 1);   // keepers barely move
+    for (const o of base.opps) sh['o' + o.n] = d(o.n === 1 ? 0.3 : 1);
+    for (const k in base.tie || {}) sh[k] = sh[base.tie[k]];  // a marker moves with the player he marks
+    if (base.type !== 'chain') return varyWith(base, mirror, sh);
+    // A full move: every step gets the same flip and the same nudge for each player, so the story still joins up.
+    const built = chainSteps(base).map((st) => varyWith(st, mirror, sh));
+    if (built.some((st) => !st)) return null;
+    const ch = JSON.parse(JSON.stringify(base));
+    Object.assign(ch, { built, you: { ...built[0].you }, mates: built[0].mates.map((m) => ({ ...m })), opps: built[0].opps.map((o) => ({ ...o })), mirrored: mirror });
+    return ch;
+  }
+  function varyWith(base, mirror, sh) {
+    const pz = JSON.parse(JSON.stringify(base)), deps = depPoints(pz);
     if (mirror) {
       for (const p of [...pz.mates, ...pz.opps, pz.you]) p.y = W - p.y;
       for (const [p] of deps) p.y = W - p.y;
       for (const z of [pz.goal, pz.zone]) if (z && z.y0 !== undefined) { const a = z.y0; z.y0 = W - z.y1; z.y1 = W - a; }
     }
-    const J = base.jitter || (base.type === 'dribble' || base.type === 'move' ? 1.2 : 1.8);
-    const d = (k) => { const a = r() * Math.PI * 2, m = Math.sqrt(r()) * J * k; return { x: Math.cos(a) * m, y: Math.sin(a) * m }; };
-    const sh = { you: d(1) };
-    for (const m of pz.mates) sh['m' + m.n] = d(m.n === 1 ? 0.3 : 1);   // keepers barely move
-    for (const o of pz.opps) sh['o' + o.n] = d(o.n === 1 ? 0.3 : 1);
     const shift = (p, s) => {
       if (!s) return;
       p.x = Math.max(1, Math.min(L - 1, p.x + s.x));
@@ -1223,6 +1384,8 @@ const Engine = (() => {
         if (/in the way|ran straight into|lost it/.test(o.why)) need(!optSafe(pz, o), `${o.key} says it fails but the picture says it is clear`);
       }
       need(!pz.riskOk || pz.you.x > 40, 'a risk is fine away from their goal');
+      for (const o of pz.options.filter((q) => q.react === 'slide')) need(!evaluateChoice(pz, o.key).checks[1].ok, `${o.key}: the defender slides across, but it still "helped the team"`);
+      if ((pz.labels || [])[0] === 'You got free') for (const o of pz.options.filter((q) => q.kind === 'run' && !q.receive && !q.after && q.key !== pz.best)) need(!optSafe(pz, o), `${o.key}: ticks "You got free" but the ball can’t reach you`);
     }
     if (t === 'move') {
       const sol = evaluateMove(pz, pz.solution);
@@ -1240,6 +1403,35 @@ const Engine = (() => {
         need(sol.follow.turns >= 1, 'the worked run never changes direction');
       } else need(dist(sol.follow.marker, pz.opps.find((o) => o.n === pz.marker)) >= 4, 'the decoy does not drag the marker');
     }
+    if (t === 'shoot') {
+      const k = keeper(pz), b = bestAim(pz);
+      need(k && k.x > pz.you.x + 3 && k.x >= L - 6, 'the keeper is not in front of his goal');
+      need(dist(pz.you, { x: L, y: 20 }) <= 20 && pz.you.x >= 38, 'too far out to shoot');
+      need(!keeperView(pz).even, 'the gaps either side of the keeper are the same size');
+      need(b && b.width >= 0.5 && b.width <= 2.6, `the best spot is ${b ? b.width.toFixed(2) : 0} m wide (needs 0.5–2.6)`);
+      let saves = 0, twos = 0;
+      for (let y = GOAL_Y0; y <= GOAL_Y1 + 1e-9; y += 0.1) for (const h of [0.3, 1.5]) {
+        const e = evaluateShot(pz, { y, h });
+        if (e.out.kind === 'saved') saves++;
+        if (e.stars === 2) twos++;
+      }
+      need(saves >= 6, 'the keeper covers almost nothing');
+      need(twos > 0, 'every goal is a perfect one');
+      need(pz.opps.every((o) => o.n === 1 || dist(o, pz.you) >= TACKLE), 'a defender is already on the ball');
+    }
+    if (t === 'chain') {
+      const built = chainSteps(pz), bb = base ? chainSteps(base) : null;
+      need(pz.steps.length === CHAIN_STEPS[pz.age], `${pz.steps.length} steps for ages ${pz.age}`);
+      need(built[built.length - 1].type === 'shoot', 'the move does not end with a shot');
+      built.forEach((st, k) => {
+        for (const m of problems(st, bb ? bb[k] : undefined)) out.push(m);
+        if (k < built.length - 1) {
+          const gap = dist(stepEnd(st), built[k + 1].you);
+          // After a pass he can sprint on (pass and move); otherwise the next step starts where this one ended.
+          need(gap <= (pz.steps[k + 1].runIn ? 9 : 4.5), `step ${k + 1} ends ${gap.toFixed(1)} m from where step ${k + 2} starts`);
+        }
+      });
+    }
     if (base) {
       // The same story as the original: what the words say must still be true of the picture.
       if (t === 'scan') {
@@ -1247,6 +1439,10 @@ const Engine = (() => {
         need(n0.n === n1.n && Math.abs(dist(n0, base.you) - dist(n1, pz.you)) <= 1.2 && fogged(base, n0) === fogged(pz, n1), 'the nearest defender changed');
       }
       if (t === 'choice') for (const o of pz.options) need(optSafe(pz, o) === optSafe(base, base.options.find((q) => q.key === o.key)), `${o.key} changed from safe to unsafe or back`);
+      if (t === 'shoot') {
+        const side = (z) => { const b = bestAim(z); return b ? Math.sign(b.y - keeperView(z).at) * (z.mirrored ? -1 : 1) : 0; };
+        need(side(pz) === side(base), 'the best spot moved to the other side of the keeper');
+      }
       if (t === 'dribble') {
         const ahead = (z) => !!evaluateDribble(z, [z.you, { x: z.you.x + 14, y: z.you.y }]).tackle;
         need(ahead(pz) === ahead(base), 'running straight ahead changed outcome');
@@ -1280,6 +1476,8 @@ const Engine = (() => {
     if (pz.type === 'defend') return { you: { ...pz.solution } };
     if (pz.type === 'pass' || pz.type === 'choice') return { pick: pz.best };
     if (pz.type === 'scan') return { scanned: true, stance: pz.best };
+    if (pz.type === 'shoot') return { aim: bestAim(pz) };
+    if (pz.type === 'chain') return { steps: chainSteps(pz).map(solutionFor) };
     return { path: pz.solution.map((p) => ({ ...p })) };  // dribble and move: the worked run
   }
 
@@ -1297,6 +1495,8 @@ const Engine = (() => {
       challenge: 'After every pass, move! Never pass and stand still.' },
     { id: 'defend', title: 'Defend', blurb: 'They have the ball. Get in the way and win it back.',
       challenge: 'When they have the ball, ask: am I between my man and our goal? Can I see the ball and him?' },
+    { id: 'moves', title: 'Full moves', blurb: 'Win it, pass, run and score: a whole move, step by step.',
+      challenge: 'After every pass, keep running. When you see the goal, shoot low into the bigger gap.' },
   ];
 
   const PUZZLES = [
@@ -1488,7 +1688,7 @@ const Engine = (() => {
     },
     {
       type: 'dribble', section: 'dribble', id: 'drive-around', title: 'Go around him', maxRun: 16, age: '6-8',
-      solution: [{ x: 24, y: 20 }, { x: 27, y: 25.5 }, { x: 35, y: 25.5 }],
+      solution: [{ x: 24, y: 20 }, { x: 28, y: 20 }, { x: 30, y: 23.5 }, { x: 36, y: 24 }],
       prompt: 'A defender is standing right in front of you. Get past him with the ball.',
       teach: 'Dribble towards him, then take the ball into the space beside him, just out of his reach. Then go forward.',
       lesson: 'Go past a defender into the space beside him.',
@@ -1501,7 +1701,7 @@ const Engine = (() => {
       goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward, past the defender.' },
     },
     {
-      type: 'dribble', section: 'dribble', id: 'drive-gap', title: 'Attack the gap', maxRun: 14, age: '10-12',
+      type: 'dribble', section: 'dribble', id: 'drive-gap', title: 'Attack the gap', maxRun: 14, age: '10-12', finish: { by: 'you', at: { x: 47, y: 20 }, free: true },
       solution: [{ x: 34, y: 20 }, { x: 46, y: 20 }],
       prompt: 'You’ve beaten their midfield. Only two defenders are left. Draw your run.',
       teach: 'Drive at the gap between two defenders. Neither knows who should come to you, and that’s when chances happen.',
@@ -1667,7 +1867,7 @@ const Engine = (() => {
     },
     // ---------- decisions ----------
     {
-      type: 'choice', section: 'pass', id: 'ch-shoot', title: 'Shoot or pass?', age: '6-8', best: 'pass',
+      type: 'choice', section: 'pass', id: 'ch-shoot', title: 'Shoot or pass?', age: '6-8', best: 'pass', finish: { by: 9, at: { x: 52, y: 24.5 } },
       prompt: 'You’re near their goal with the ball. What’s your best move?',
       teach: 'Before you shoot, check: is a defender in the way? If a teammate has a clear chance, the pass is the better shot.',
       lesson: 'Shot blocked? Find the free teammate.',
@@ -1684,14 +1884,14 @@ const Engine = (() => {
         { n: 8, x: 36, y: 22 }, { n: 9, x: 24, y: 20 }, { n: 11, x: 40, y: 31 }],
     },
     {
-      type: 'choice', section: 'dribble', id: 'ch-2v1', title: '2 against 1', age: '6-8', best: 'drive',
+      type: 'choice', section: 'dribble', id: 'ch-2v1', title: '2 against 1', age: '6-8', best: 'drive', finish: { by: 9, at: { x: 49, y: 23 } },
       prompt: 'It’s you and Kai against one defender. What do you do?',
       teach: 'In a 2 against 1, run at the defender first. When he comes to you, pass to your free teammate. He can’t stop both of you.',
       lesson: '2 against 1: drive at him, then pass.',
       ask: { q: 'In a 2 against 1, when do you pass?', a: ['When the defender comes to you', 'Straight away', 'Never: dribble past him'] },
       youN: 8, you: { x: 34, y: 16 },
       options: [
-        { key: 'early', kind: 'pass', n: 9, label: 'Pass now', helps: true, react: 'slide', why: 'Good, but too early: the defender just slides over to Kai.' },
+        { key: 'early', kind: 'pass', n: 9, label: 'Pass now', helps: true, react: 'slide', safeWhy: 'It got to Kai.', slideWhy: 'Too early: the defender slid across to Kai, so now Kai is stuck.', why: 'Too early: the defender just slides over to Kai.' },
         { key: 'drive', kind: 'dribble', path: [{ x: 39.5, y: 17 }], then: 9, label: 'Drive at him, then pass', helps: true, react: 'commit', why: 'You made him come to you. Then Kai was wide open.' },
         { key: 'alone', kind: 'dribble', path: [{ x: 48, y: 18 }], label: 'Take him on', helps: true, why: 'He was waiting for you. With Kai free, why go alone?' },
       ],
@@ -1720,7 +1920,7 @@ const Engine = (() => {
         { n: 7, x: 27, y: 14 }, { n: 4, x: 45, y: 24 }, { n: 5, x: 44, y: 12 }],
     },
     {
-      type: 'choice', section: 'pass', id: 'ch-final', title: 'Near their goal', age: '10-12', best: 'skill', riskOk: true,
+      type: 'choice', section: 'pass', id: 'ch-final', title: 'Near their goal', age: '10-12', best: 'skill', riskOk: true, finish: { by: 'you', at: { x: 54.5, y: 12 }, past: [2] },
       prompt: 'You’ve got the ball near their corner, with a defender in front of you. What now?',
       teach: 'Near their goal, be brave. If a trick goes wrong up here, they’re still far from scoring. If it works, you’re in on goal.',
       lesson: 'Near their goal: be brave.',
@@ -1793,7 +1993,7 @@ const Engine = (() => {
         { n: 8, x: 35, y: 24.5 }, { n: 10, x: 39, y: 13 }, { n: 9, x: 22, y: 20 }],
     },
     {
-      type: 'choice', section: 'team', id: 'tm-overlap', title: 'The overlap', age: '10-12', best: 'overlap', ball: 11,
+      type: 'choice', section: 'team', id: 'tm-overlap', title: 'The overlap', age: '10-12', best: 'overlap', ball: 11, finish: { by: 'you', at: { x: 52, y: 32 } },
       prompt: 'Sam has the ball on the wing but a defender is in his way. How can you help him?',
       teach: 'Run around the outside of your teammate: the overlap. Now the defender has two players to stop, and Sam can slip you in.',
       lesson: 'Teammate stuck on the wing? Overlap him.',
@@ -1812,7 +2012,7 @@ const Engine = (() => {
         { n: 7, x: 36, y: 27.5 }, { n: 8, x: 33, y: 16 }, { n: 9, x: 24, y: 22 }],
     },
     {
-      type: 'choice', section: 'team', id: 'tm-thirdman', title: 'The third-man run', age: '10-12', best: 'run', ball: 2,
+      type: 'choice', section: 'team', id: 'tm-thirdman', title: 'The third-man run', age: '10-12', best: 'run', ball: 2, finish: { by: 'you', at: { x: 49, y: 11 } },
       prompt: 'Mia is about to pass to Kai, who will play it first time. Where should you run?',
       teach: 'When the ball goes from one teammate to another, the third player runs into space. Defenders watch the ball, so the third runner is often free.',
       lesson: 'Ball going from A to B? Be C: run into space.',
@@ -1822,17 +2022,92 @@ const Engine = (() => {
       youN: 8, you: { x: 28, y: 9 },
       options: [
         { key: 'run', kind: 'run', path: [{ x: 40, y: 6 }], receive: true, via: 9, label: 'Run in behind', helps: true, why: 'Mia to Kai, Kai to you. Their defenders were watching the ball, not you.' },
-        { key: 'ask', kind: 'run', path: [{ x: 24, y: 9 }], label: 'Go to Mia', helps: false, why: 'Mia already has a pass on. Coming to her just crowds her.' },
-        { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, why: 'Standing still, you’re no help to Kai.' },
+        { key: 'ask', kind: 'run', path: [{ x: 24, y: 9 }], label: 'Go to Mia', helps: false, safe: false, unsafeWhy: 'You’re free, but Kai can’t play it to you there.', why: 'Mia already has a pass on. Coming to her just crowds her.' },
+        { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, safe: false, unsafeWhy: 'You’re free, but not where Kai can use you.', why: 'Standing still, you’re no help to Kai.' },
       ],
       mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 21, y: 13 }, { n: 3, name: 'Leo', x: 14, y: 28 },
         { n: 6, name: 'Noah', x: 24, y: 24 }, { n: 11, name: 'Sam', x: 36, y: 34 }, { n: 9, name: 'Kai', x: 32, y: 16 }],
       opps: [{ n: 1, x: 57, y: 20 }, { n: 5, x: 35.5, y: 17 }, { n: 4, x: 46, y: 24 }, { n: 7, x: 27, y: 4 },
         { n: 8, x: 30, y: 22 }, { n: 9, x: 25, y: 30 }, { n: 10, x: 42, y: 14 }],
     },
+    // ---------- shoot and full moves ----------
+    {
+      type: 'shoot', section: 'moves', id: 'shoot-low', title: 'Shoot!', age: '6-8',
+      prompt: 'You’re through with the ball and only the keeper to beat. Tap the goal where you want to shoot.',
+      teach: 'Look at the keeper, then aim for the bigger gap. Low and just inside the post: young keepers find low shots the hardest to reach.',
+      lesson: 'See the goal? Shoot low into the bigger gap.',
+      ask: { q: 'Where is the best place to aim?', a: ['Low, into the bigger gap', 'Straight at the keeper', 'As high as you can'] },
+      youN: 10, you: { x: 49, y: 14 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 20, y: 10 }, { n: 3, name: 'Leo', x: 20, y: 30 },
+        { n: 6, name: 'Noah', x: 32, y: 20 }, { n: 7, name: 'Ava', x: 40, y: 5 }, { n: 9, name: 'Kai', x: 52, y: 31 }],
+      opps: [{ n: 1, x: 58.7, y: 18.6 }, { n: 4, x: 45, y: 16.5 }, { n: 5, x: 55, y: 27 }, { n: 2, x: 47, y: 34 },
+        { n: 8, x: 36, y: 13 }, { n: 7, x: 30, y: 30 }, { n: 9, x: 22, y: 20 }],
+    },
+    {
+      type: 'chain', section: 'moves', id: 'mv-onetwo', title: 'One-two finish', age: '6-8',
+      prompt: 'A whole move: pass, run and score!',
+      teach: 'Pass, then run past your defender. Kai can give it straight back: that’s a one-two. Then shoot low, into the bigger gap.',
+      lesson: 'Pass, then run past your man.',
+      ask: { q: 'You’ve just passed. What do you do next?', a: ['Run past my defender for the ball back', 'Stop and watch the pass', 'Run to the player I passed to'] },
+      youN: 8, you: { x: 36, y: 20 }, tie: { o6: 'you', o4: 'm9' },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 24, y: 11 }, { n: 3, name: 'Leo', x: 24, y: 30 },
+        { n: 7, name: 'Ava', x: 42, y: 5 }, { n: 11, name: 'Sam', x: 40, y: 35 }, { n: 9, name: 'Kai', x: 44, y: 24 }],
+      opps: [{ n: 1, x: 58.5, y: 20 }, { n: 6, x: 38, y: 17 }, { n: 4, x: 49.5, y: 25.5 }, { n: 5, x: 50, y: 14 },
+        { n: 7, x: 41, y: 9.5 }, { n: 2, x: 43, y: 32.5 }, { n: 9, x: 26, y: 18 }],
+      steps: [
+        { type: 'pass', best: 9, cap: 'Pass to Kai',
+          prompt: 'You’ve got the ball. Look forward first: who’s free up front?' },
+        { type: 'choice', ball: 9, best: 'go', cap: 'Run past your man', intro: 'Kai’s got it!',
+          prompt: 'You passed to Kai. Your defender is right next to you. Where do you run now?',
+          labels: ['You got free', 'It helped the team', 'The best choice'], safeWhy: 'Nobody near you: Kai can pass to you.',
+          set: { o6: { x: 38.2, y: 22.5 }, o4: { x: 47.2, y: 25 } },
+          options: [
+            { key: 'go', kind: 'run', path: [{ x: 39.5, y: 18.5 }, { x: 45, y: 16 }], receive: true, label: 'Run past him', helps: true, why: 'You ran past your defender, so Kai gave it straight back. One-two!' },
+            { key: 'stay', kind: 'run', path: [], label: 'Stay', helps: false, why: 'You stood still, so your defender is still right next to you.' },
+            { key: 'short', kind: 'run', path: [{ x: 40.2, y: 24.8 }], label: 'Run to Kai', helps: false, why: 'You ran towards Kai and took your defender with you.' },
+          ] },
+        { type: 'shoot', cap: 'Low into the bigger gap', intro: 'One-two! You’re through.',
+          prompt: 'Look at the keeper. Tap the goal where you want to shoot.',
+          set: { you: { x: 46, y: 16 }, o6: { x: 42, y: 19 }, o5: { x: 51, y: 13.5 }, o1: { x: 58.6, y: 19.1 } } },
+      ],
+    },
+    {
+      type: 'chain', section: 'moves', id: 'mv-winit', title: 'Win it and go', age: '8-10',
+      prompt: 'A whole move: win the ball, then go and score!',
+      teach: 'Win it, then look forward first: their players are out of position for a few seconds. Pass forward, keep running, check your shoulder and finish low.',
+      lesson: 'Win it, look forward, then run.',
+      ask: { q: 'You’ve just won the ball. Why look forward first?', a: ['Their players are out of position', 'Forward passes are always safe', 'The nearest teammate is always best'] },
+      youN: 6, you: { x: 28.5, y: 18.5 }, tie: { o10: 'you', o8: 'you' },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 12 }, { n: 3, name: 'Leo', x: 16, y: 31 },
+        { n: 7, name: 'Ava', x: 34, y: 5 }, { n: 11, name: 'Sam', x: 40, y: 36 }, { n: 9, name: 'Kai', x: 44, y: 20 }],
+      opps: [{ n: 1, x: 57.5, y: 20 }, { n: 10, x: 35, y: 27 }, { n: 8, x: 26, y: 24 }, { n: 9, x: 20, y: 20 },
+        { n: 7, x: 22, y: 8 }, { n: 11, x: 37, y: 33.5 }, { n: 4, x: 48.5, y: 16 }],
+      steps: [
+        { type: 'defend', ball: 10, run: 8, cap: 'Pressed from the inside',
+          prompt: 'Their #10 is dribbling at you. Close him down so he can’t cut inside, and win it!',
+          rules: ['press', 'inside', 'goalsideBall'], stopIf: ['press', 'inside'],
+          threat: { kind: 'dribble', to: { x: 24, y: 31 } }, solution: { x: 32.5, y: 24 } },
+        { type: 'pass', best: 9, cap: 'Forward to Kai', intro: 'You won it!',
+          prompt: 'Their players are still up the pitch. Look forward first: who’s your pass?',
+          set: { you: { x: 33.5, y: 26.5 }, o10: { x: 33, y: 29.5 }, o8: { x: 29, y: 25 } } },
+        { type: 'scan', ball: 9, best: 'half', runIn: true, cap: 'Looked, then turned', intro: 'Pass and move! You sprint on, and Kai sets it back.',
+          prompt: 'Kai is passing it back to you. Is anyone behind you? Look, then choose how to stand.',
+          open: { x: 50, y: 34 },
+          set: { you: { x: 42, y: 27 }, m9: { x: 46.5, y: 20.5 }, o8: { x: 39, y: 28.5 }, o10: { x: 34, y: 30.5 }, o4: { x: 50, y: 18.5 } },
+          stances: {
+            half: { grade: 'best', why: 'Their #8 was chasing you. Opened up, your first touch takes you towards goal.' },
+            face: { grade: 'ok', why: 'Safe, but now you have to turn with the ball, and their #8 is closing in.' },
+            back: { grade: 'ok', why: 'Safe, but with your back to goal you can’t go forward. There was space to turn.' },
+          } },
+        { type: 'shoot', cap: 'Low into the bigger gap', intro: 'You turned! Now finish it.',
+          prompt: 'Look at the keeper. Tap the goal where you want to shoot.',
+          set: { you: { x: 45.5, y: 28.5 }, o8: { x: 41, y: 30 }, o4: { x: 51.5, y: 20.5 }, o1: { x: 58.7, y: 21.6 } } },
+      ],
+    },
   ];
 
-  return { pro, solutionFor, evaluateSpot, defendSpot, STILL, STILL_RUN, rng, vary, problems, isValid, variant, NO_MIRROR, follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
+  return { finishShot, GOAL_Y0, GOAL_Y1, BAR, LOW, KEEPER_REACH, keeper, keeperView, shotOutcome, evaluateShot, bestAim, composeStep, chainSteps, stepKept, stepEnd, chainStars, CHAIN_STEPS,
+    pro, solutionFor, evaluateSpot, defendSpot, STILL, STILL_RUN, rng, vary, problems, isValid, variant, NO_MIRROR, follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
     evaluate, clamp, openSpace, shadows, passSafe, evaluatePass, fogged, stanceDir, canSee, STANCES, nearestStance, scanOutcome, evaluateScan, pathLength, samplePath, evaluateDribble, SECTIONS, PUZZLES };
 })();
 if (typeof module !== 'undefined') module.exports = Engine;
@@ -1876,7 +2151,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     el('path', { d: 'M1 0A1 1 0 0 1 0 1M59 0A1 1 0 0 0 60 1M0 39A1 1 0 0 1 1 40M60 39A1 1 0 0 0 59 40' }, c);
     for (const [x, y] of [[30, 20], [8, 20], [52, 20]]) el('circle', { cx: x, cy: y, r: .32, class: 'spot' }, svg);
     el('rect', { x: -1.4, y: 17.5, width: 1.4, height: 5, class: 'net' }, svg);
-    el('rect', { x: 60, y: 17.5, width: 1.4, height: 5, class: 'net' }, svg);
+    el('rect', { x: 60, y: 17.5, width: 1.4, height: 5, class: 'net their-net' }, svg);
     const lg = el('g', {}, svg);
     el('circle', { cx: .9, cy: 43, r: .85, style: 'fill:var(--us)' }, lg);
     el('text', { x: 2.3, y: 43, class: 'legend' }, lg).textContent = 'Us';
@@ -1893,7 +2168,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
 
   // ---------- state ----------
   let idx = 0, pz, state = 'setup', res = null, hint = false, extra = false, anim = null, dragging = false;
-  let you, shownYou = null, pick = null, scanned = false, stance = null, path = [];
+  let you, shownYou = null, pick = null, scanned = false, stance = null, path = [], aim = null;
   // Honest stars: misses in a row on this puzzle, whether the answer has been shown, and whether the coach showed it.
   let misses = 0, revealed = false, demoShown = false;
   const best = E.PUZZLES.map(() => 0), tried = E.PUZZLES.map(() => false);
@@ -1963,7 +2238,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function bump(g, cls) { if (!g) return; g.classList.remove(cls); void g.getBBox(); g.classList.add(cls); }
   const nearestMate = (p, max) => pz.mates.reduce((a, m) => (E.dist(m, p) < (a ? E.dist(a, p) : max) ? m : a), null);
 
+  let speed = 1;  // the replay of a whole move runs at double speed
   function tween(ms, step, done) {
+    ms /= speed;
     if (reduceMotion()) { step(1); if (done) done(); return; }
     let t0 = null;
     const f = (now) => {
@@ -1976,7 +2253,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   }
   function wait(ms, done) {
     if (reduceMotion()) { done(); return; }
-    anim = setTimeout(() => { anim = null; done(); }, ms);
+    anim = setTimeout(() => { anim = null; done(); }, ms / speed);
   }
 
   // ---------- confetti: falls over the screen in his academy's colours (skipped with reduced motion) ----------
@@ -2045,6 +2322,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     star(a, t, i) { const f = 660 * Math.pow(1.26, i); tone(a, t + i * 0.14, f, f * 1.5, 0.12, 'triangle', 0.22); },
     miss(a, t) { tone(a, t, 392, 0, 0.16, 'triangle', 0.16); tone(a, t + 0.18, 330, 0, 0.3, 'triangle', 0.16); },
     fanfare(a, t) { [523, 659, 784, 1047].forEach((f, k) => tone(a, t + k * 0.12, f, 0, k === 3 ? 0.55 : 0.16, 'triangle', 0.22)); },
+    goal(a, t) { hiss(a, t, 1.6, 0.22); hiss(a, t + 0.25, 1.2, 0.14); SFX.fanfare(a, t + 0.15); },
     whistle(a, t) {
       for (const [s0, d] of [[0, 0.16], [0.22, 0.38]]) {
         const o = a.createOscillator(), l = a.createOscillator(), lg = a.createGain(), g = a.createGain();
@@ -2128,6 +2406,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       return h === pz.you ? 0 : angTo(at, h);
     }
     if (pz.type === 'pass') { const m = pz.mates.find((q) => q.n === pick); return m ? angTo(at, m) : 0; }
+    if (pz.type === 'shoot') return angTo(at, { x: 60, y: aim ? aim.y : 20 });
     if (pz.type === 'dribble' && state === 'setup' && path.length > 1) return angTo(path[0], path[Math.min(3, path.length - 1)]);
     return 0;
   }
@@ -2445,9 +2724,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
         }
       },
       // A trick near our goal is a real 50/50: sometimes he gets away with it, sometimes not (it alternates).
+      // The first try loses, so the first thing he sees is what it costs.
       submit() {
         const o = pz.options.find((q) => q.key === pick);
-        const luck = o.risky && !pz.riskOk ? (plays[pz.id] || 0) % 2 === 0 : undefined;
+        const luck = o.risky && !pz.riskOk ? (plays[pz.id] || 0) % 2 === 1 : undefined;
         res = E.evaluateChoice(pz, pick, luck); res.luck = luck;
       },
       // Where everything ends up for the chosen move.
@@ -2549,6 +2829,58 @@ if (typeof module !== 'undefined') module.exports = Engine;
       hasReplay: () => true,
     },
 
+    shoot: {
+      how: 'Tap the goal below where you want to shoot, then tap Shoot!',
+      primary: 'Shoot!',
+      hint: ['Show the keeper’s reach', 'Hide the keeper’s reach'],
+      extra: null,
+      ready: () => !!aim,
+      controls(box) { goalView(box); },
+      // A tap near their goal on the pitch aims across the goal too.
+      down(p) { if (p.x >= 52) setAim({ y: p.y, h: aim ? aim.h : 0.3 }); },
+      draw() {
+        const kv = E.keeperView(pz);
+        if (hint || state === 'result') el('polygon', { points: ptsAttr([pz.you, { x: 60, y: kv.lo }, { x: 60, y: kv.hi }]), class: 'shadow' }, L.shadows);
+        if (aim && state !== 'playing') {
+          const T = { x: 60, y: aim.y };
+          el('line', { x1: pz.you.x, y1: pz.you.y, x2: T.x, y2: T.y, class: state === 'setup' ? 'opt-line on' : res && res.goal ? 'lane-open' : 'lane-cut' }, L.lane);
+        }
+        if (state === 'result' && res && res.goal) el('text', { x: 30, y: 9, class: 'goal-text' }, L.fx).textContent = 'GOAL!';
+        drawGoalView();
+      },
+      submit() { res = E.evaluateShot(pz, aim); },
+      // Where the ball and the keeper end up.
+      plan() {
+        const out = res.out, k = E.keeper(pz), T = { x: 60, y: aim.y }, onLine = E.segInfo(k, pz.you, T).point;
+        const toward = (d) => add(k, dir(k, onLine), Math.min(E.dist(k, onLine), d));
+        if (out.kind === 'blocked') return { ball: add(out.block.point, dir(out.block.point, pz.you), 1.0), keeper: { x: k.x, y: k.y } };
+        if (out.kind === 'saved') return { ball: onLine, keeper: toward(9) };
+        if (out.kind === 'goal') return { ball: { x: 60.8, y: aim.y }, keeper: toward(E.KEEPER_REACH * 0.9) };
+        return { ball: { x: 61.9, y: out.kind === 'wide' ? aim.y + Math.sign(aim.y - 20) * 0.8 : aim.y }, keeper: toward(0.6) };
+      },
+      play(done) {
+        const pl = this.plan(), k = E.keeper(pz), g = oppEls.get(k), b0 = ballHomeFrom(pz.you), k0 = { x: k.x, y: k.y };
+        bump(youG, 'kick'); sfx('kick');
+        gvShot();
+        wait(180, () => tween(620, (t) => {
+          setBall(lerp(b0, pl.ball, 1 - (1 - t) * (1 - t)));
+          if (t > .3) g.setAttribute('transform', tr(lerp(k0, pl.keeper, Math.min(1, (t - .3) / .55))));
+        }, () => {
+          if (res.goal) { bump(svg.querySelector('.their-net'), 'ripple'); sfx('goal'); }
+          else if (res.out.kind === 'blocked') oppEls.get(res.out.block.opp).classList.add('caught');
+          done();
+        }));
+      },
+      final() {
+        const pl = this.plan(), k = E.keeper(pz), g = oppEls.get(k);
+        g.setAttribute('transform', tr(pl.keeper));
+        oppEls.forEach((q) => q.classList.remove('caught'));
+        if (res.out.kind === 'saved') g.classList.add('caught');
+        if (res.out.kind === 'blocked') oppEls.get(res.out.block.opp).classList.add('caught');
+        setBall(pl.ball);
+      },
+      hasReplay: () => true,
+    },
     move: {
       how: () => `Draw your run with your finger, starting from you. Up to ${pz.maxRun} metres. Careful: your marker follows you!`,
       primary: 'Go!',
@@ -2669,6 +3001,71 @@ if (typeof module !== 'undefined') module.exports = Engine;
       hasReplay: () => res.pts.length > 1,
     },
   };
+
+  // ---------- shoot: the goal as you see it, where you tap to aim ----------
+  // Across is the goal from post to post (left is the left post as you look at it); up is how high.
+  const GV = { y0: 16.2, y1: 23.8, top: 2.75 };
+  let gvEl = null;
+  const gx = (y) => y - GV.y0, gy = (h) => GV.top - h;
+  function goalView(box) {
+    gvEl = el('svg', { viewBox: `0 0 ${(GV.y1 - GV.y0).toFixed(2)} ${(GV.top + 0.42).toFixed(2)}`, class: 'goalview', role: 'img', 'aria-label': 'Their goal. Tap where you want to shoot.' });
+    box.appendChild(gvEl);
+    gvEl.addEventListener('pointerdown', (e) => {
+      if (state !== 'setup' || anim) return;
+      unlockSpeech();
+      const pt = gvEl.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const q = pt.matrixTransform(gvEl.getScreenCTM().inverse());
+      setAim({ y: GV.y0 + q.x, h: GV.top - q.y });
+      e.preventDefault();
+    });
+    drawGoalView();
+  }
+  function setAim(a) {
+    if (state !== 'setup' || pz.type !== 'shoot') return;
+    aim = { y: Math.max(GV.y0 + 0.1, Math.min(GV.y1 - 0.1, a.y)), h: Math.max(0.15, Math.min(GV.top - 0.08, a.h)) };
+    render(); updatePrimary();
+  }
+  function drawGoalView() {
+    if (!gvEl || !gvEl.isConnected || pz.type !== 'shoot') return;
+    gvEl.replaceChildren();
+    const kv = E.keeperView(pz), k = E.keeper(pz), f = Math.min(1.7, (60 - pz.you.x) / Math.max(0.5, k.x - pz.you.x));
+    const W = GV.y1 - GV.y0, Y0 = E.GOAL_Y0, Y1 = E.GOAL_Y1, B = E.BAR;
+    el('rect', { x: 0, y: gy(0), width: W, height: 0.42, class: 'gv-grass' }, gvEl);
+    el('rect', { x: gx(Y0), y: gy(B), width: Y1 - Y0, height: B, class: 'gv-net' }, gvEl);
+    const mesh = el('g', { class: 'gv-mesh' }, gvEl);
+    for (let y = Y0 + 0.33; y < Y1; y += 0.33) el('line', { x1: gx(y), y1: gy(B), x2: gx(y), y2: gy(0) }, mesh);
+    for (let h = 0.33; h < B; h += 0.33) el('line', { x1: gx(Y0), y1: gy(h), x2: gx(Y1), y2: gy(h) }, mesh);
+    if (hint || state === 'result') el('rect', { x: gx(Math.max(Y0, kv.lo)), y: gy(B), width: Math.max(0, Math.min(Y1, kv.hi) - Math.max(Y0, kv.lo)), height: B, class: 'gv-reach' }, gvEl);
+    // The keeper, as big as he looks from where you stand.
+    const kg = el('g', { class: 'gv-keeper', transform: `translate(${gx(kv.at).toFixed(3)} ${gy(0).toFixed(3)}) scale(${f.toFixed(3)})` }, gvEl);
+    el('line', { x1: -0.13, y1: 0, x2: -0.08, y2: -0.55, class: 'k-leg' }, kg);
+    el('line', { x1: 0.13, y1: 0, x2: 0.08, y2: -0.55, class: 'k-leg' }, kg);
+    el('path', { d: 'M-0.22 -0.5 L0.22 -0.5 L0.25 -1.05 L0.62 -1.3 L0.66 -1.2 L0.3 -0.92 L-0.3 -0.92 L-0.66 -1.2 L-0.62 -1.3 L-0.25 -1.05 Z', class: 'k-kit' }, kg);
+    el('circle', { cx: -0.7, cy: -1.32, r: 0.09, class: 'k-glove' }, kg);
+    el('circle', { cx: 0.7, cy: -1.32, r: 0.09, class: 'k-glove' }, kg);
+    el('circle', { cx: 0, cy: -1.19, r: 0.17, class: 'k-skin' }, kg);
+    el('path', { d: `M${gx(Y0)} ${gy(0)}V${gy(B)}H${gx(Y1)}V${gy(0)}`, class: 'gv-frame' }, gvEl);
+    const near = pz.you.y < 20 ? Y0 : Y1, far = near === Y0 ? Y1 : Y0;
+    el('text', { x: gx(near), y: gy(0) + 0.22, class: 'gv-label' }, gvEl).textContent = 'Near post';
+    el('text', { x: gx(far), y: gy(0) + 0.22, class: 'gv-label' }, gvEl).textContent = 'Far post';
+    if (!aim && state === 'setup') el('text', { x: W / 2, y: 0.22, class: 'gv-tip' }, gvEl).textContent = 'Tap where you want to shoot';
+    if (aim) {
+      const c = { x: gx(aim.y), y: gy(aim.h) };
+      el('path', { d: `M${c.x - 0.32} ${c.y}h0.2M${c.x + 0.12} ${c.y}h0.2M${c.x} ${c.y - 0.32}v0.2M${c.x} ${c.y + 0.12}v0.2`, class: 'gv-cross' }, gvEl);
+      el('circle', { cx: c.x, cy: c.y, r: 0.15, class: 'gv-aim', id: 'gv-ball' }, gvEl);
+    }
+  }
+  // The ball flies from your foot to where you aimed, getting smaller as it goes.
+  function gvShot() {
+    const b = gvEl && gvEl.isConnected && gvEl.querySelector('#gv-ball');
+    if (!b) return;
+    const W = GV.y1 - GV.y0, from = { x: Math.max(0.4, Math.min(W - 0.4, gx(pz.you.y))), y: GV.top + 0.3 }, to = { x: gx(aim.y), y: gy(aim.h) };
+    const put = (t) => { const p = lerp(from, to, t); b.setAttribute('cx', p.x.toFixed(3)); b.setAttribute('cy', p.y.toFixed(3)); b.setAttribute('r', (0.42 - 0.27 * t).toFixed(3)); };
+    if (reduceMotion()) return;
+    let t0 = null;
+    const f = (now) => { if (t0 === null) t0 = now + 180 / speed; const t = Math.max(0, Math.min(1, (now - t0) / (620 / speed))); put(t); if (t < 1 && b.isConnected) requestAnimationFrame(f); };
+    put(0); requestAnimationFrame(f);  // its own little loop: the pitch animation owns `anim`
+  }
 
   function moveYou(p) { you = nudge(E.clamp(pz, p)); render(); }
 
@@ -2806,6 +3203,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     scan: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 26s7-11 18-11 18 11 18 11-7 11-18 11S6 26 6 26z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="26" r="5" fill="currentColor"/><path d="M14 9q10-6 21 1m0 0l-1-6m1 6l-6 1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
     team: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="10" cy="34" r="5" fill="currentColor"/><circle cx="38" cy="34" r="5" fill="currentColor"/><circle cx="24" cy="12" r="5" fill="currentColor"/><path d="M14 30L21 17M27 17l7 13M15 34h18" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="3 3.5" stroke-linecap="round"/></svg>',
     defend: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 5l15 6v11c0 10-6.5 17-15 21-8.5-4-15-11-15-21V11z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="M17 24l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    moves: '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 38V12h32v26" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/><path d="M14 18h20M14 25h20M14 32h20M20 12v26M28 12v26" stroke="currentColor" stroke-width="1.4" opacity=".55"/><circle cx="31" cy="30" r="6.5" fill="currentColor"/><path d="M4 44h40" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
     dribble: '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="30" cy="26" r="9" fill="none" stroke="currentColor" stroke-width="3"/><path d="M4 18h12M2 26h11M4 34h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M30 17l4 5-4 5-4-5z" fill="currentColor"/></svg>',
   };
   function skillCard(sc, tag) {
@@ -2852,7 +3250,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (T().controls) T().controls(box);
   }
   const updatePrimary = () => { $('check').disabled = !T().ready(); };
-  const HINT_CHIP = { space: 'Shadows', pass: 'Shadows', dribble: 'Tackle zones', defend: 'Their attack' };
+  const HINT_CHIP = { space: 'Shadows', pass: 'Shadows', dribble: 'Tackle zones', defend: 'Their attack', shoot: 'Keeper’s reach' };
   const EXTRA_CHIP = { space: 'Open space', pass: 'All my passes' };
 
   function showSetup() {
@@ -2862,7 +3260,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('title').textContent = pz.title;
     $('age').textContent = `Ages ${pz.age.replace('-', '–')}${isCore(idx) ? '' : ' · Challenge'}`;
     $('fresh').hidden = !pz.varied;
-    $('prompt').textContent = pz.prompt;
+    $('prompt').textContent = inChain() && cstep === 0 ? `${chain.prompt} ${pz.prompt}` : pz.prompt;
+    syncMoveBar();
     $('how').textContent = typeof t.how === 'function' ? t.how() : t.how;
     $('check').textContent = t.primary;
     buildControls();
@@ -2907,7 +3306,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   const matchStars = {};
   function buildMatch(n = 5) {
     const rank = (i) => (tried[i] && best[i] < 3 ? 0 : !tried[i] ? 1 : 2);
-    const order = E.PUZZLES.map((_, i) => i).map((i) => ({ i, r: rank(i), t: seen[E.PUZZLES[i].id] || 0, z: Math.random() }))
+    const order = E.PUZZLES.map((_, i) => i).filter((i) => E.PUZZLES[i].type !== 'chain').map((i) => ({ i, r: rank(i), t: seen[E.PUZZLES[i].id] || 0, z: Math.random() }))
       .sort((a, b) => a.r - b.r || a.t - b.t || a.z - b.z).map((x) => x.i);
     const out = [], per = {};
     for (const i of order) {  // no more than 2 from one skill, and not the same skill twice in a row
@@ -2916,7 +3315,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       if ((per[s2] || 0) >= 2 || (out.length && E.PUZZLES[out[out.length - 1]].section === s2)) continue;
       out.push(i); per[s2] = (per[s2] || 0) + 1;
     }
-    for (const i of order) if (out.length < n && !out.includes(i)) out.push(i);
+    for (const i of order) if (out.length < n && !out.includes(i)) out.push(i);  // (full moves are never in a match)
     return out;
   }
   function startMatch() {
@@ -2937,22 +3336,29 @@ if (typeof module !== 'undefined') module.exports = Engine;
   // Once the answer has been shown (or he already got 3 stars), trying again means a new picture.
   const nextIsNew = () => revealed || (res && res.stars === 3);
   const syncAgain = () => { $('again').textContent = nextIsNew() ? 'New picture' : 'Try again'; };
-  function showResult() {
-    $('setup').hidden = true; $('result').hidden = false;
-    for (const id of ['stars', 'checks']) $(id).hidden = false;
-    $('demo-note').hidden = true;
+  function paintStars(n) {
     const stars = $('stars');
     stars.replaceChildren();
     for (let i = 0; i < 3; i++) {
       const s = el('svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' }, stars);
       el('path', { d: STAR }, s);
-      if (i < res.stars) { s.classList.add('on'); s.style.animationDelay = `${i * 0.14}s`; sfx('star', i); }
+      if (i < n) { s.classList.add('on'); s.style.animationDelay = `${i * 0.14}s`; sfx('star', i); }
     }
     const of = document.createElement('span');
-    of.className = 'of'; of.textContent = `${res.stars} of 3`;
+    of.className = 'of'; of.textContent = `${n} of 3`;
     stars.appendChild(of);
-    if (!res.stars) sfx('miss');
+    if (!n) sfx('miss');
+  }
+  function showResult() {
+    $('setup').hidden = true; $('result').hidden = false;
+    for (const id of ['stars', 'checks', 'next']) $(id).hidden = false;
+    $('demo-note').hidden = true;
+    paintStars(res.stars);
     setCoach(res.late ? 'oops' : res.stars === 3 ? 'happy' : res.stars === 2 ? 'think' : 'oops');
+    paintChecks(res);
+    afterChecks();
+  }
+  function paintChecks(res) {
     const list = $('checks');
     list.replaceChildren();
     if (res.still) {
@@ -2971,6 +3377,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
       li.querySelector('.why').textContent = c.why;
       list.appendChild(li);
     });
+  }
+  function afterChecks() {
     // Real football often has more than one good answer: name the others.
     const others = pz.type === 'pass' ? pz.mates.filter((m) => m.n !== pick && E.evaluatePass(pz, m.n).stars === 3) : [];
     $('also').hidden = !others.length;
@@ -2983,7 +3391,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     // Naming the right pass or move gives the answer away.
     if (res.stars < 3 && (others.length || pz.type === 'choice')) revealed = true;
     // Gold needs it twice, on two different pictures.
-    const g = (golds[pz.id] || []).length;
+    const g = (golds[E.PUZZLES[idx].id] || []).length;  // (a step of a full move has its own id)
     $('gold-tip').hidden = res.stars < 3 || g > 2;
     $('gold-tip').textContent = secure(idx) ? (g === 2 ? 'Gold puzzle! 3 stars on two different pictures.' : '') : 'For gold, do it once more: tap New picture.';
     if (!$('gold-tip').textContent) $('gold-tip').hidden = true;
@@ -3000,6 +3408,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     syncExtra();
     renderTop();
     (perfect ? $('next') : needDemo ? $('show-me') : $('again')).focus({ preventScroll: true });
+    syncFinish();
   }
 
   // The coach's worked answer, played on the pitch like a real go. It never counts for stars.
@@ -3010,6 +3419,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (s.pick !== undefined) pick = s.pick;
     if (s.scanned) { scanned = true; stance = s.stance; }
     if (s.path) path = s.path;
+    if (s.aim) aim = { ...s.aim };
     revealed = true; demoShown = true; misses = 0; extra = false;
     T().submit();
     for (const id of ['stars', 'checks', 'also', 'gold-tip', 'show-me']) $(id).hidden = true;
@@ -3065,6 +3475,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function showHome() {
     if (anim) return;
     stopClock();
+    chain = null; cmode = null; speed = 1;
     state = 'home';
     show('home');
     const all = E.PUZZLES.map((_, i) => i), total = starsIn(all);
@@ -3233,7 +3644,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
       miss: ['Back to it. Every great player misses.', 'Go again. That’s how you learn.'],
       late: 'Too slow: the ball arrived. Be ready before it comes.', yes: 'Yes, that’s the one.', no: 'Not quite.' },
   ];
-  window.FTS = { ACADEMIES, COACHES, current: () => ({ i: idx, pz }), secure: (i) => secure(i), golds: () => golds };  // the browser tests read these
+  window.FTS = { ACADEMIES, COACHES, current: () => ({ i: idx, pz }), secure: (i) => secure(i), golds: () => golds,
+    state: () => state, busy: () => !!anim, finish: () => ({ on: !!fin, done: finDone }),
+    chain: () => ({ on: inChain(), step: cstep, steps: cbuilt.length, stars: cstars.slice(), mode: cmode, misses: cmiss, demo: cdemo, replaying, replays, id: chain && chain.id, varied: !!(chain && chain.varied) }) };  // the browser tests read these
   const academyOf = (id) => ACADEMIES.find((a) => a.id === id) || null;
   const coachOf = (id) => COACHES.find((c) => c.id === id) || COACHES[0];
 
@@ -3536,8 +3949,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function prep(i) {
     idx = i; pz = E.PUZZLES[i]; you = { ...pz.you };
     res = null; hint = false; extra = false; shownYou = null;
-    pick = null; scanned = false; stance = null; path = [];
+    pick = null; scanned = false; stance = null; path = []; aim = null;
     misses = 0; revealed = false; demoShown = false;
+    chain = null; cmode = null; speed = 1; fin = null; finDone = false;
     svg.classList.remove('cheer');
   }
   // How many times he has played each puzzle: picks the next new picture.
@@ -3549,6 +3963,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     if (anim) return;
     stopClock();
     prep(i);
+    if (pz.type === 'chain') { sec = mode || pz.section; startChain(i, mode); return; }
     // Endless training: the first time he sees the hand-made picture; after that (and in Match mode)
     // a new picture of the same situation, a different one each time he plays it.
     if (mode === 'match' || tried[i]) { pz = E.variant(E.PUZZLES[i], (plays[pz.id] || 0) + 1); you = { ...pz.you }; }
@@ -3558,6 +3973,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
   }
 
   function check(force) {
+    if (inChain()) { chainCheck(); return; }
+    if (fin) { finishCheck(); return; }
     if (waiting && state === 'setup' && !anim) { startClock(); return; }
     if (state !== 'setup' || anim || (force !== true && !T().ready())) return;
     unlockSpeech();
@@ -3587,12 +4004,19 @@ if (typeof module !== 'undefined') module.exports = Engine;
   }
 
   function tryAgain() {
+    if (inChain()) { if (cmode === 'end') { stopAnim(); load(idx, sec === 'match' ? 'match' : undefined); } else stepRetry(); return; }
     if (anim) return;
+    if (fin) {
+      if (!(res && res.goal)) { aim = null; res = null; state = 'setup'; shownYou = null; drawPlayers(); render(); showSetup(); say(pz.prompt); return; }  // shoot again
+      pz = fin.base; res = fin.res; fin = null;  // scored: back to the puzzle, and a new picture
+    }
+    finDone = false;
     const fresh = nextIsNew();
     stopClock();
     state = 'setup'; res = null; extra = false; shownYou = null; revealed = false; demoShown = false;
     if (pz.type === 'scan') { scanned = false; stance = null; }
     if (pz.type === 'pass' || pz.type === 'choice') pick = null;
+    if (pz.type === 'shoot') aim = null;
     if (fresh) {
       // The answer has been seen, so the next go is a new picture of the same situation.
       pz = E.variant(E.PUZZLES[idx], (plays[E.PUZZLES[idx].id] || 0) + 1);
@@ -3610,6 +4034,300 @@ if (typeof module !== 'undefined') module.exports = Engine;
     drawPlayers(); render();
     T().play(() => T().final());
   }
+
+  // ---------- full moves: one passage of play, step by step, ending in a shot ----------
+  // Every step is an ordinary puzzle on the same picture. Keep the ball and the move goes on; lose it and
+  // he sees what it cost, then that step rewinds. Two misses: the coach shows how, then it's his turn (1 star).
+  let chain = null, cbuilt = [], cstep = 0, cstars = [], crec = [], cmiss = 0, cdemo = false, cmode = null, replaying = false, stepShown = 0, replays = 0;
+  const inChain = () => !!chain;
+  function stopAnim() {
+    if (anim) { cancelAnimationFrame(anim); clearTimeout(anim); anim = null; }
+    replaying = false; speed = 1;
+  }
+  function startChain(i, mode) {
+    const base = E.PUZZLES[i];
+    chain = mode === 'match' || tried[i] ? E.variant(base, (plays[base.id] || 0) + 1) : base;
+    cbuilt = E.chainSteps(chain).map((st) => Object.assign(st, { varied: !!chain.varied, ask: base.ask, teach: base.teach, lesson: base.lesson }));
+    cstep = 0; cstars = []; crec = [];
+    enterStep();
+    drawPlayers(); render(); showSetup();
+    say(`${chain.title}. ${chain.prompt} ${pz.prompt}`);
+  }
+  function enterStep(keepMiss) {
+    pz = cbuilt[cstep]; you = { ...pz.you };
+    res = null; hint = false; extra = false; shownYou = null; pick = null; scanned = false; stance = null; path = []; aim = null;
+    if (!keepMiss) { cmiss = 0; cdemo = false; }
+    cmode = 'step'; state = 'setup';
+    svg.classList.remove('cheer');
+  }
+  function syncMoveBar() {
+    $('mvbar').hidden = !inChain();
+    if (!inChain()) return;
+    const n = cbuilt.length, done = cmode === 'end';
+    $('mv-k').textContent = done ? 'Your move' : `Step ${cstep + 1} of ${n}`;
+    const ol = $('mvsteps');
+    ol.replaceChildren();
+    cbuilt.forEach((st, k) => {
+      const li = document.createElement('li'), got = cstars[k];
+      li.className = got !== undefined ? `s${got}` : k === cstep && !done ? 'cur' : '';
+      li.textContent = got === 3 ? '★' : String(k + 1);
+      li.setAttribute('aria-label', `Step ${k + 1}: ${got !== undefined ? `${got} of 3 stars` : k === cstep ? 'now' : 'to come'}`);
+      ol.appendChild(li);
+    });
+  }
+  // Where everyone is on the pitch right now (after an animation), so the next step can carry on from there.
+  function tokenAt(g) { const t = g.transform.baseVal.consolidate(); return t ? { x: t.matrix.e, y: t.matrix.f } : null; }
+  function scene() {
+    const at = { you: tokenAt(youG), ball: { x: +ballEl.getAttribute('cx'), y: +ballEl.getAttribute('cy') } };
+    oppEls.forEach((g, o) => { at['o' + o.n] = tokenAt(g); });
+    mateEls.forEach((g, m) => { at['m' + m.n] = tokenAt(g); });
+    return at;
+  }
+  function banner(text, cls) {
+    const t = el('text', { x: 30, y: 4.2, class: 'banner' + (cls ? ` ${cls}` : '') }, L.fx);
+    t.textContent = text;
+    return t;
+  }
+  // Everyone runs from where they were to where the next step starts.
+  function moveIn(from, text, done) {
+    const to = { you: { ...you }, ball: ballHomeFrom(holder()) }, gs = [[youG, 'you']];
+    oppEls.forEach((g, o) => { to['o' + o.n] = { x: o.x, y: o.y }; gs.push([g, 'o' + o.n]); });
+    mateEls.forEach((g, m) => { to['m' + m.n] = { x: m.x, y: m.y }; gs.push([g, 'm' + m.n]); });
+    state = 'playing'; render();
+    if (text) banner(text);
+    const step = (t) => {
+      const e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      for (const [g, k] of gs) if (from[k] && to[k]) g.setAttribute('transform', tr(lerp(from[k], to[k], e)));
+      setBall(lerp(from.ball, to.ball, e));
+    };
+    step(0);
+    tween(900, step, () => wait(text ? 450 : 0, done));
+  }
+  function snapshot() {
+    return { you: { ...you }, pick, path: path.slice(), scanned, stance, aim: aim && { ...aim }, res };
+  }
+  function chainCheck() {
+    if (state !== 'setup' || anim || !T().ready()) return;
+    unlockSpeech();
+    T().submit();
+    state = 'playing';
+    const kept = E.stepKept(pz, res), st = cdemo ? Math.min(1, res.stars) : res.stars;
+    render();
+    T().play(() => {
+      state = 'result'; render(); T().final();
+      if (kept) {
+        cstars[cstep] = st; crec[cstep] = snapshot();
+        if (cstep === cbuilt.length - 1) { wait(1100, chainEnd); return; }
+        if (st === 3) svg.classList.add('cheer');
+      } else cmiss++;
+      showStepResult(kept, st);
+    });
+  }
+  const LOST = {
+    defend: 'He got away from you. Let’s rewind and try that bit again.',
+    pass: 'They cut out the pass. Let’s rewind and try that bit again.',
+    choice: 'The move stopped there. Let’s rewind and try that bit again.',
+    scan: 'He nicked the ball off you. Let’s rewind and try that bit again.',
+    move: 'You couldn’t get the ball there. Let’s rewind and try that bit again.',
+    dribble: 'He tackled you. Let’s rewind and try that bit again.',
+    shoot: { saved: 'The keeper saved it! Rewind and have another go.', blocked: 'Their defender blocked it. Rewind and have another go.', wide: 'Wide! Rewind and have another go.', over: 'Over the bar! Rewind and have another go.' },
+    other: 'We lost the ball. Let’s rewind and try that bit again.',
+  };
+  function showStepResult(kept, st) {
+    cmode = 'stepres'; stepShown = st;
+    $('setup').hidden = true; $('result').hidden = false;
+    for (const id of ['stars', 'checks']) $(id).hidden = false;
+    for (const id of ['also', 'gold-tip', 'ask', 'coach-talk', 'extra', 'extra-tip']) $(id).hidden = true;
+    paintStars(st); paintChecks(res);
+    const note = kept
+      ? (cdemo ? 'You watched the coach first, so this bit is 1 star. On you go!' : st === 3 ? 'Brilliant! We keep the ball, and the move goes on.' : 'We kept the ball. The move goes on.')
+      : pz.type === 'shoot' ? LOST.shoot[res.out.kind] : LOST[pz.type] || LOST.other;
+    $('demo-note').hidden = false;
+    $('demo-text').replaceChildren(Object.assign(document.createElement('strong'), { textContent: kept ? 'Keep going! ' : 'Oops! ' }), note);
+    setCoach(kept ? (st === 3 ? 'happy' : 'think') : 'oops');
+    const needDemo = !kept && cmiss >= 2;
+    $('next').hidden = !kept; $('next').textContent = 'Keep going'; $('next').className = 'cta';
+    $('again').hidden = kept || needDemo; $('again').textContent = 'Try that again'; $('again').className = 'cta';
+    $('show-me').hidden = !needDemo;
+    $('replay-pass').hidden = false;
+    syncMoveBar(); renderTop();
+    (kept ? $('next') : needDemo ? $('show-me') : $('again')).focus({ preventScroll: true });
+    say(resultSpeech());
+  }
+  function stepNext() {
+    if (anim || cmode !== 'stepres') return;
+    const from = scene();
+    cstep++; enterStep();
+    drawPlayers();
+    showSetup(); $('check').disabled = true;
+    moveIn(from, pz.intro, () => { state = 'setup'; render(); updatePrimary(); say(pz.prompt); });
+  }
+  function stepRetry() {
+    if (anim || cmode !== 'stepres') return;
+    enterStep(true);
+    drawPlayers(); render(); showSetup();
+    say(pz.prompt);
+  }
+  // The coach plays this step for him, then it's his turn on the same picture.
+  function chainShowMe() {
+    if (anim || cmode !== 'stepres') return;
+    const s = E.solutionFor(pz);
+    if (s.you) you = { ...s.you };
+    if (s.pick !== undefined) pick = s.pick;
+    if (s.scanned) { scanned = true; stance = s.stance; }
+    if (s.path) path = s.path.map((p) => ({ ...p }));
+    if (s.aim) aim = { ...s.aim };
+    T().submit();
+    cdemo = true; cmiss = 0;
+    for (const id of ['stars', 'checks', 'show-me', 'next']) $(id).hidden = true;
+    $('demo-note').hidden = false;
+    $('demo-text').replaceChildren(Object.assign(document.createElement('strong'), { textContent: 'Watch this. ' }), `Here’s one way: ${pz.cap}. Now you do it.`);
+    setCoach('happy');
+    state = 'playing'; shownYou = null;
+    drawPlayers(); render();
+    say(`Watch this. Here’s one way: ${pz.cap}. Now you do it.`);
+    T().play(() => {
+      state = 'result'; render(); T().final();
+      $('again').hidden = false; $('again').textContent = 'Your turn'; $('again').className = 'cta';
+      $('again').focus({ preventScroll: true });
+    });
+  }
+  // The goal! Stars for the whole move, the lesson, the coach's question, and a replay at double speed.
+  function chainEnd() {
+    cmode = 'end';
+    const lv = E.chainStars(cstars);
+    tried[idx] = true;
+    plays[chain.id] = (plays[chain.id] || 0) + 1; savePlays();
+    best[idx] = Math.max(best[idx], lv);
+    if (lv === 3) {
+      const key = chain.varied ? `v${chain.seed}` : 'o', g = golds[chain.id] || (golds[chain.id] = []);
+      if (!g.includes(key)) { g.push(key); saveGolds(); }
+    }
+    saveProgress(); markSeen(chain.id);
+    res = Object.assign({}, res, { stars: lv, still: false });
+    revealed = true;  // a new go is always a new picture
+    $('setup').hidden = true; $('result').hidden = false;
+    for (const id of ['stars', 'checks', 'next']) $(id).hidden = false;
+    paintStars(lv);
+    paintChecks({ checks: cbuilt.map((st, k) => ({ ok: cstars[k] === 3, label: st.cap, why: cstars[k] === 3 ? 'Perfect: 3 stars.' : `${cstars[k]} of 3 stars.` })) });
+    $('demo-note').hidden = false;
+    $('demo-text').replaceChildren(Object.assign(document.createElement('strong'), { textContent: 'GOAL! ' }), `${chain.lesson} ${lv === 3 ? 'Every bit was perfect.' : 'Every ball gold makes it a 3-star move.'}`);
+    setCoach(lv === 3 ? 'happy' : 'think');
+    afterChecks();
+    $('replay-pass').hidden = false;
+    if (lv === 3) confetti(true);
+    syncMoveBar();
+    wait(600, replayMove);
+  }
+  // The whole move again at double speed, with what he did written on the pitch.
+  function replayMove() {
+    if (anim && !replaying) return;
+    stopAnim();
+    replaying = true; speed = 2; state = 'playing';
+    const keep = snapshot();
+    const run = (k) => {
+      if (k >= cbuilt.length) {
+        replaying = false; speed = 1; pz = cbuilt[cbuilt.length - 1]; replays++;
+        state = 'result'; render(); T().final();
+        res = keep.res; return;
+      }
+      pz = cbuilt[k];
+      const r = crec[k];
+      you = { ...r.you }; pick = r.pick; path = r.path.slice(); scanned = r.scanned; stance = r.stance; aim = r.aim && { ...r.aim }; res = r.res;
+      shownYou = null; drawPlayers(); render();
+      banner(`${k + 1}. ${pz.cap}`, 'cap');
+      T().play(() => { const keepRes = res; T().final(); res = keepRes; wait(500, () => run(k + 1)); });
+    };
+    run(0);
+  }
+
+  // ---------- a bonus finish: after a 3-star answer near their goal, the move ends with a shot ----------
+  // His own shot (the goal view, like Shoot!) or watching the teammate he set up score. It never changes his stars.
+  let fin = null, finDone = false;
+  function finishFor() {
+    if (inChain() || fin || !pz.finish || !res || res.stars !== 3 || demoShown || state !== 'result') return null;
+    let sh = pz.finish.free && shownYou ? E.finishShot(pz, shownYou) : null;
+    if (!sh || E.problems(sh).length) sh = E.finishShot(pz);
+    return E.problems(sh).length ? null : sh;  // a rare picture with no fair shot just has no bonus
+  }
+  function syncFinish() {
+    const sh = !finDone && finishFor();
+    $('finish').hidden = !sh;
+    if (!sh) return;
+    const m = pz.finish.by === 'you' ? null : pz.mates.find((q) => q.n === pz.finish.by);
+    $('finish').textContent = m ? `Watch ${m.name} finish it` : 'Finish it: shoot!';
+    $('next').className = 'ghost-btn'; $('again').className = 'ghost-btn';
+    $('finish').focus({ preventScroll: true });
+  }
+  function keeperDive(k0, at, aimY, short) {
+    const T = { x: 60, y: aimY }, onLine = E.segInfo(k0, at, T).point;
+    return add(k0, dir(k0, onLine), Math.min(E.dist(k0, onLine), short));
+  }
+  // The teammate runs on to the ball and scores, low into the bigger gap.
+  function mateFinish(sh) {
+    const m = pz.mates.find((q) => q.n === pz.finish.by), g = mateEls.get(m), k = E.keeper(pz), gk = oppEls.get(k);
+    const from = tokenAt(g), at = sh.you, kSpot = E.keeper(sh), k0 = tokenAt(gk), a = E.bestAim(sh);
+    const kTo = keeperDive(kSpot, at, a.y, E.KEEPER_REACH * 0.9), T = { x: 60.8, y: a.y };
+    state = 'playing'; render(); banner(`${m.name} finishes it!`);
+    tween(800, (t) => {
+      const p = lerp(from, at, t);
+      g.setAttribute('transform', tr(p)); setFace(g, angTo(p, T)); setBall(add(p, dir(from, at), 1.1));
+      gk.setAttribute('transform', tr(lerp(k0, kSpot, t)));
+    }, () => {
+      bump(g, 'kick'); sfx('kick');
+      const b0 = add(at, dir(at, T), 1.1);
+      tween(560, (t) => {
+        setBall(lerp(b0, T, 1 - (1 - t) * (1 - t)));
+        if (t > .3) gk.setAttribute('transform', tr(lerp(kSpot, kTo, Math.min(1, (t - .3) / .55))));
+      }, () => {
+        bump(svg.querySelector('.their-net'), 'ripple'); sfx('goal');
+        state = 'result'; render();
+        el('text', { x: 30, y: 9, class: 'goal-text' }, L.fx).textContent = 'GOAL!';
+        finDone = true; $('finish').hidden = true;
+        $('next').className = 'cta'; $('next').focus({ preventScroll: true });
+        say(`Goal! ${m.name} scores. You set it up.`);
+      });
+    });
+  }
+  // He carries it on to a shooting spot, then it's the shot, just like Shoot!.
+  function startFinish(sh) {
+    const from = scene();
+    fin = { base: pz, res };
+    pz = sh; you = { ...sh.you }; aim = null; res = null; hint = false; extra = false; shownYou = null; state = 'setup';
+    drawPlayers(); showSetup(); $('check').disabled = true;
+    moveIn(from, 'Finish it!', () => { state = 'setup'; render(); updatePrimary(); say(pz.prompt); });
+  }
+  function finishCheck() {
+    if (state !== 'setup' || anim || !T().ready()) return;
+    unlockSpeech();
+    T().submit();
+    state = 'playing'; render();
+    T().play(() => { state = 'result'; render(); T().final(); showFinishResult(); });
+  }
+  function showFinishResult() {
+    const goal = res.goal;
+    $('setup').hidden = true; $('result').hidden = false;
+    for (const id of ['stars', 'also', 'gold-tip', 'ask', 'coach-talk', 'extra', 'extra-tip', 'show-me', 'finish']) $(id).hidden = true;
+    $('checks').hidden = false; paintChecks(res);
+    $('demo-note').hidden = false;
+    $('demo-text').replaceChildren(Object.assign(document.createElement('strong'), { textContent: goal ? 'GOAL! ' : res.out.kind === 'saved' ? 'Saved! ' : 'Missed! ' }),
+      goal ? (res.stars === 3 ? 'Low into the bigger gap. What a finish!' : 'In it goes! The ticks show an even better spot.') : 'Have another go: look at the keeper and pick your spot.');
+    setCoach(goal ? 'happy' : 'think');
+    if (goal) { svg.classList.add('cheer'); if (res.stars === 3) confetti(false); }
+    finDone = goal;
+    $('next').hidden = false; $('next').className = goal ? 'cta' : 'ghost-btn';
+    $('again').hidden = false; $('again').textContent = goal ? 'New picture' : 'Shoot again'; $('again').className = goal ? 'ghost-btn' : 'cta';
+    $('replay-pass').hidden = false;
+    (goal ? $('next') : $('again')).focus({ preventScroll: true });
+    say(resultSpeech());
+  }
+  $('finish').addEventListener('click', () => {
+    if (anim || fin) return;
+    const sh = finishFor();
+    if (!sh) return;
+    $('finish').hidden = true;
+    if (pz.finish.by === 'you') startFinish(sh); else mateFinish(sh);
+  });
 
   // ---------- input ----------
   function toModel(e) {
@@ -3646,8 +4364,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('hint').setAttribute('aria-pressed', String(hint));
   });
   $('again').addEventListener('click', tryAgain);
-  $('show-me').addEventListener('click', showMe);
+  $('show-me').addEventListener('click', () => (inChain() ? chainShowMe() : showMe()));
   $('next').addEventListener('click', () => {
+    if (inChain() && cmode === 'stepres') { stepNext(); return; }
+    if (inChain() && cmode === 'end') stopAnim();
     if (anim) return;
     const list = listOf(sec), k = list.indexOf(idx);
     if (k < list.length - 1) load(list[k + 1], sec === 'match' ? 'match' : undefined); else showSectionEnd();
@@ -3659,11 +4379,11 @@ if (typeof module !== 'undefined') module.exports = Engine;
     render(); T().final(true);
     syncExtra();
   });
-  $('replay-pass').addEventListener('click', replayResult);
+  $('replay-pass').addEventListener('click', () => (inChain() && cmode === 'end' ? replayMove() : replayResult()));
   $('replay').addEventListener('click', () => (sec === 'match' ? startMatch() : load(listOf(sec)[0])));
   $('match').addEventListener('click', startMatch);
   $('hero-go').addEventListener('click', () => { const g = $('hero-go').dataset.go; if (g === 'match') startMatch(); else load(+g); });
-  $('back').addEventListener('click', () => { showHome(); say(homeSpeech()); });
+  $('back').addEventListener('click', () => { if (inChain() && cmode === 'end') stopAnim(); showHome(); say(homeSpeech()); });
   $('to-home').addEventListener('click', () => { showHome(); say(homeSpeech()); });
   $('next-skill').addEventListener('click', () => {
     const go = $('next-skill').dataset.go;
@@ -3720,6 +4440,8 @@ if (typeof module !== 'undefined') module.exports = Engine;
     return `${pz.title}. ${pz.prompt}${opts ? ` Your choices: ${opts.slice(0, -1).join(', ')}, or ${opts[opts.length - 1]}.` : ''}${pz.countdown ? ` You have ${pz.countdown} seconds. Tap Start the clock when you’re ready.` : ''}`;
   };
   function resultSpeech() {
+    if (fin) return $('demo-text').textContent;
+    if (inChain() && cmode === 'stepres') return `${['No stars this time.', 'One star.', 'Two stars.', 'Three stars!'][stepShown]} ${$('demo-text').textContent}`;
     const head = ['No stars this time.', 'One star.', 'Two stars.', 'Three stars! Brilliant.'][res.stars];
     const fixes = (res.still ? 'You stayed where you started, so it’s 1 star at most. ' : '') + res.checks.filter((c) => !c.ok).map((c) => c.why).join(' ');
     if (!pz.ask) return `${head} ${fixes} Coach says: ${pz.teach}`;
@@ -3763,7 +4485,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
 
   // ---------- version: shown on home, and the app fetches itself once at start to pick up a newer version ----------
-  const APP_VERSION = 14;
+  const APP_VERSION = 15;
   $('ver').textContent = `Version ${APP_VERSION}`;
   (async () => {
     if (!/^https?:$/.test(location.protocol)) return;
