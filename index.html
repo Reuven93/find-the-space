@@ -93,7 +93,11 @@ button { cursor: pointer; }
 .logo span { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .me { appearance: none; display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px; border-radius: 14px;
   border: 2px solid var(--gold); background: rgba(0, 0, 0, .35); text-align: left; min-height: 56px; }
-.me .shirt { width: 44px; height: 44px; }
+.me-pic { position: relative; width: 46px; height: 46px; flex: none; }
+.me-face { width: 46px; height: 46px; border-radius: 50%; background: rgba(255, 255, 255, .14); }
+.me-badge { position: absolute; right: -6px; bottom: -4px; min-width: 22px; height: 22px; padding: 2px 4px 0; border-radius: 999px; background: var(--us);
+  border: 2px solid var(--gold); font-family: var(--display); font-size: 16px; line-height: 18px; text-align: center; color: #fff; }
+.kit-light .me-badge { color: #1A2330; }
 .me-name { display: block; font-family: var(--display); font-size: 24px; letter-spacing: 1px; line-height: 1; }
 .me-lv { display: block; font-family: var(--label); font-weight: 600; font-size: 15px; color: var(--muted); }
 .level { background: var(--panel); border: 2px solid var(--edge); border-radius: 14px; padding: 12px 18px 14px; }
@@ -149,7 +153,7 @@ button { cursor: pointer; }
 .pcard { width: 260px; flex: none; filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .5)); }
 .pcard .face { min-height: 370px; background: var(--gold-grad); padding-top: 40px; }
 .pc-num { font-family: var(--display); font-size: 64px; line-height: .9; align-self: flex-start; padding-left: 8px; }
-.pcard .shirt { width: 130px; height: 130px; margin-top: -24px; }
+.pcard .portrait { width: 170px; height: 174px; margin-top: -34px; }
 .pc-name { font-family: var(--display); font-size: 40px; letter-spacing: 1.5px; line-height: 1; text-align: center; overflow-wrap: anywhere; }
 .pc-lv { font-family: var(--label); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 15px; opacity: .8; }
 .make-form { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
@@ -254,11 +258,8 @@ button { cursor: pointer; }
 .home-sat p { font-size: 18px; }
 .link { appearance: none; background: none; border: 0; color: var(--gold-hi); font-family: var(--label); font-weight: 700; font-size: 18px; padding: 8px 2px; align-self: flex-start; }
 
-/* the shirt badge used on the home chip and the player card */
-.shirt text { font-family: var(--display); font-size: 40px; fill: #fff; text-anchor: middle; dominant-baseline: central;
-  paint-order: stroke; stroke: rgba(0, 0, 0, .35); stroke-width: 4px; }
+/* the collar line on his portrait */
 .kit-light { --shirt-edge: #1A2330; }
-.kit-light .shirt text { fill: #1A2330; stroke: rgba(255, 255, 255, .5); }
 
 /* ---------- 4b: academy, coach, sounds, confetti, card upgrade ---------- */
 .sound { position: fixed; z-index: 5; top: calc(env(safe-area-inset-top, 0px) + 16px); right: calc(max(16px, env(safe-area-inset-right, 0px)) + 66px); }
@@ -474,14 +475,25 @@ button { cursor: pointer; }
   .hero { gap: 12px; }
 }
 .fresh { color: var(--ok); }
+/* ---------- v14: your look ---------- */
+.look-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.look { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px 14px; border: 2px solid var(--edge); border-radius: 14px; background: rgba(0, 0, 0, .22); }
+.sublbl { font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.tones { display: flex; flex-wrap: wrap; gap: 10px; }
+.tone { appearance: none; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .35); }
+.tone[aria-checked="true"] { border-color: var(--gold-hi); box-shadow: 0 0 0 3px rgba(255, 227, 138, .55); }
+.hairs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (min-width: 1000px) { .hairs { grid-template-columns: repeat(7, minmax(0, 1fr)); } .hairpick svg { width: 50px; height: 50px; } }
+.hairpick { appearance: none; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px 8px; min-height: 44px; border-radius: 14px;
+  border: 2px solid var(--edge); background: rgba(0, 0, 0, .3); }
+.hairpick svg { width: 56px; height: 56px; border-radius: 50%; background: rgba(255, 255, 255, .1); }
+.hairpick[aria-checked="true"] { border-color: var(--gold-hi); background: rgba(227, 179, 65, .22); box-shadow: 0 0 0 3px rgba(255, 227, 138, .35); }
+.extras { display: flex; flex-wrap: wrap; gap: 8px; }
+/* the card stays in view while he scrolls through the form, so every tap shows on it */
+@media (min-width: 721px) { .pcard { position: sticky; top: 0; align-self: flex-start; } }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="shirt-shape" viewBox="0 0 100 100">
-    <path class="body" style="fill: var(--us); stroke: var(--shirt-edge); stroke-width: 3; stroke-linejoin: round" d="M34 10 L20 16 L6 34 L20 44 L26 38 L26 92 L74 92 L74 38 L80 44 L94 34 L80 16 L66 10 Q50 22 34 10 Z"/>
-  </symbol>
-</svg>
 <div class="app">
   <button class="round narrate" id="narrate" aria-pressed="false" aria-label="Read aloud" title="Read aloud" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
   <button class="round sound" id="sound" aria-pressed="true" aria-label="Sounds" title="Sounds"><svg viewBox="0 0 24 24" aria-hidden="true"><g class="note"><path d="M9 17V5l10-2v12"/><circle cx="6.5" cy="17" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></g><path class="slash" d="M3 3l18 18"/></svg></button>
@@ -492,7 +504,7 @@ button { cursor: pointer; }
       <div class="pcard" aria-hidden="true"><span class="face">
         <svg class="pc-crest" id="pc-crest" viewBox="0 0 100 100"></svg>
         <span class="pc-num" id="pc-num">8</span>
-        <svg class="shirt" viewBox="0 0 100 100"><use href="#shirt-shape"/><text x="50" y="58" id="pc-shirt-num">8</text></svg>
+        <svg class="portrait" id="pc-face" viewBox="2 4 96 96"></svg>
         <span class="pc-name" id="pc-name">Your name</span>
         <span class="pc-ac" id="pc-ac">Pick your academy</span>
         <span class="pc-lv" id="pc-lv">Rookie</span>
@@ -507,6 +519,18 @@ button { cursor: pointer; }
           <button class="round" type="button" id="num-down" aria-label="Lower number">−</button>
           <output id="p-num" aria-live="polite">8</output>
           <button class="round" type="button" id="num-up" aria-label="Higher number">+</button>
+        </div>
+        <div class="look-top"><span class="lbl" id="look-lbl">Your look</span>
+          <button class="chip" type="button" id="surprise"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>Surprise me</button></div>
+        <div class="look" role="group" aria-labelledby="look-lbl">
+          <span class="sublbl" id="skin-lbl">Skin</span>
+          <div class="tones" id="skins" role="radiogroup" aria-labelledby="skin-lbl"></div>
+          <span class="sublbl" id="hair-lbl">Hair</span>
+          <div class="hairs" id="hairs" role="radiogroup" aria-labelledby="hair-lbl"></div>
+          <span class="sublbl" id="hcol-lbl">Hair colour</span>
+          <div class="tones" id="hcols" role="radiogroup" aria-labelledby="hcol-lbl"></div>
+          <span class="sublbl" id="extra-lbl">Extras</span>
+          <div class="extras" id="extras" role="group" aria-labelledby="extra-lbl"></div>
         </div>
         <span class="lbl" id="age-lbl">Your age</span>
         <div class="agepick" id="ages" role="radiogroup" aria-labelledby="age-lbl"></div>
@@ -530,7 +554,7 @@ button { cursor: pointer; }
     <header class="top">
       <h1 class="logo">Find the <span>space</span></h1>
       <button class="me" id="me" aria-label="Change your player">
-        <svg class="me-crest" id="me-crest" viewBox="0 0 100 100" aria-hidden="true" hidden></svg><svg class="shirt" viewBox="0 0 100 100" aria-hidden="true"><use href="#shirt-shape"/><text x="50" y="58" id="me-num">8</text></svg>
+        <svg class="me-crest" id="me-crest" viewBox="0 0 100 100" aria-hidden="true" hidden></svg><span class="me-pic"><svg class="me-face" id="me-face" viewBox="12 6 76 76" aria-hidden="true"></svg><span class="me-badge" id="me-num">8</span></span>
         <span><span class="me-name" id="me-name">Player</span><span class="me-lv" id="me-lv">Rookie</span></span>
       </button>
     </header>
@@ -2137,6 +2161,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     youG = el('g', { class: 'tok you' }, L.players);
     el('circle', { class: 'halo', r: 2.1 }, youG);
     figure(youG, playerNum());
+    dressFigure(youG, player && player.look);
     el('text', { class: 'name you-name', y: 2.95 }, youG).textContent = 'You';
     el('circle', { class: 'hit', r: 3.2 }, youG);
     facePlayers();
@@ -3241,6 +3266,130 @@ if (typeof module !== 'undefined') module.exports = Engine;
     return `<circle cx="32" cy="36" r="20" fill="${c.skin}" stroke="${INK}" stroke-width="2.5"/>${c.beard || ''}${c.top}${eyes}${c.extra || ''}${mouth}`;
   }
 
+  // ---------- v14: his look. Free from the first screen and never earned: a child should look like himself on day one. ----------
+  // No religious items on purpose (Reuven's call). Nothing here is random unless he taps Surprise me.
+  const SKINS = ['#FBE0CC', '#F2C8A6', '#E3AE86', '#CB9066', '#AC744C', '#8C5838', '#6C4027', '#4B2B19'];
+  const HAIR_COLS = [
+    { id: 'black', name: 'Black', c: '#1E1A17', ln: 'rgba(255,255,255,.22)' },
+    { id: 'dark', name: 'Dark brown', c: '#40281A', ln: 'rgba(255,255,255,.2)' },
+    { id: 'brown', name: 'Brown', c: '#7A4B2C', ln: 'rgba(0,0,0,.3)' },
+    { id: 'red', name: 'Red', c: '#B4491D', ln: 'rgba(0,0,0,.28)' },
+    { id: 'blond', name: 'Blond', c: '#D6A044', ln: 'rgba(0,0,0,.25)' },
+    { id: 'light', name: 'Light blond', c: '#EFDCA4', ln: 'rgba(0,0,0,.22)' },
+  ];
+  const HAIRS = [
+    { id: 'buzz', name: 'Buzz' }, { id: 'short', name: 'Short' }, { id: 'curly', name: 'Curly' }, { id: 'afro', name: 'Afro' },
+    { id: 'rows', name: 'Cornrows' }, { id: 'locs', name: 'Locs' }, { id: 'pony', name: 'Ponytail' }, { id: 'long', name: 'Long' },
+    { id: 'quiff', name: 'Quiff' }, { id: 'swept', name: 'Swept back' }, { id: 'part', name: 'Side part' }, { id: 'crop', name: 'Crop' },
+    { id: 'hawk', name: 'Faux hawk' }, { id: 'curltop', name: 'Curls + fade' },
+  ];
+  const EXTRAS = [{ id: 'glasses', name: 'Glasses' }, { id: 'aid', name: 'Hearing aid' }, { id: 'freckles', name: 'Freckles' }, { id: 'band', name: 'Sweatband' }];
+  const DEFAULT_LOOK = { skin: 3, hair: 'short', col: 'dark', glasses: false, aid: false, freckles: false, band: false };
+  function cleanLook(l) {
+    const d = { ...DEFAULT_LOOK };
+    if (!l || typeof l !== 'object') return d;
+    if (Number.isInteger(l.skin) && l.skin >= 0 && l.skin < SKINS.length) d.skin = l.skin;
+    if (HAIRS.some((h) => h.id === l.hair)) d.hair = l.hair;
+    if (HAIR_COLS.some((h) => h.id === l.col)) d.col = l.col;
+    for (const x of EXTRAS) d[x.id] = l[x.id] === true;
+    return d;
+  }
+  const hairCol = (look) => HAIR_COLS.find((h) => h.id === look.col) || HAIR_COLS[1];
+  // Bumpy hair: an outline drawn under the bumps, so only the outside edge shows a line.
+  const bumps = (cs, fill) => cs.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r + 1.2}" fill="${INK}"/>`).join('')
+    + cs.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`).join('');
+  const ring = (cx, cy, rx, ry, a0, a1, n, r) => Array.from({ length: n }, (_, k) => {
+    const t = ((a0 + ((a1 - a0) * k) / (n - 1)) * Math.PI) / 180;
+    return [+(cx + Math.cos(t) * rx).toFixed(1), +(cy + Math.sin(t) * ry).toFixed(1), r];
+  });
+  // His face, front on, head and shoulders, in his academy shirt (viewBox 0 0 100 100).
+  function portraitArt(look) {
+    const L = cleanLook(look), skin = SKINS[L.skin], hc = hairCol(L), h = hc.c, S = `stroke="${INK}" stroke-linejoin="round"`;
+    let back = '', front = '';
+    const cap = `M29 44C29 27 38 21 50 21C62 21 71 27 71 44C67 36 60 32 50 32C40 32 33 36 29 44Z`;
+    if (L.hair === 'buzz') front = `<path d="M29.2 42C30 29 38.5 23.4 50 23.4C61.5 23.4 70 29 70.8 42C67 36 60 33 50 33C40 33 33 36 29.2 42Z" fill="${h}" opacity=".7"/><ellipse cx="50" cy="46" rx="21.5" ry="23" fill="none" ${S} stroke-width="2.5"/>`;
+    else if (L.hair === 'short') front = `<path d="M27 46C25 26 36 19 50 19C64 19 75 26 73 46C71 38 68 34 64 33C58 37 46 37 40 33C35 35 30 39 27 46Z" fill="${h}" ${S} stroke-width="2.2"/>`;
+    else if (L.hair === 'curly') front = bumps([...ring(50, 40, 21, 18, 185, 355, 9, 6.2), [50, 27, 12]], h);
+    else if (L.hair === 'afro') {
+      back = bumps([...ring(50, 41, 27, 24, 150, 390, 14, 8.5), [50, 41, 27]], h);
+      front = `<path d="${cap}" fill="${h}"/>`;
+    } else if (L.hair === 'rows') {
+      front = `<path d="${cap}" fill="${h}" ${S} stroke-width="2"/>`
+        + [36, 43, 50, 57, 64].map((x) => `<path d="M${x} ${33 + Math.abs(x - 50) * .18}Q${50 + (x - 50) * .9} 26 ${50 + (x - 50) * .55} 21.5" fill="none" stroke="${hc.ln}" stroke-width="2" stroke-linecap="round"/>`).join('');
+    } else if (L.hair === 'locs') {
+      back = [22, 28, 34, 66, 72, 78].map((x, k) => `<rect x="${x - 3}" y="${30 + (k % 3) * 2}" width="6" height="${44 - (k % 3) * 4}" rx="3" fill="${h}" ${S} stroke-width="1.8"/>`).join('');
+      front = `<path d="${cap}" fill="${h}" ${S} stroke-width="2"/>` + [41, 50, 59].map((x) => `<path d="M${x} 32.5V23" stroke="${hc.ln}" stroke-width="1.8" stroke-linecap="round"/>`).join('');
+    } else if (L.hair === 'pony') {
+      back = `<path d="M64 26C84 26 90 46 82 66C80 54 74 42 62 36Z" fill="${h}" ${S} stroke-width="2.2"/><circle cx="66" cy="27.5" r="3.4" fill="var(--us)" ${S} stroke-width="1.6"/>`;
+      front = `<path d="M28 46C26 25 37 20 50 20C63 20 74 25 72 46C70 34 62 29 50 29C38 29 30 34 28 46Z" fill="${h}" ${S} stroke-width="2.2"/>`;
+    } else if (L.hair === 'long') {
+      back = `<path d="M28 44C26 22 38 17 50 17C62 17 74 22 72 44L77 80C66 85 34 85 23 80Z" fill="${h}" ${S} stroke-width="2.2"/>`;
+      front = `<path d="M28 50C25 26 37 19 50 19C63 19 75 26 72 50C70 38 63 31 52 29L50 32L48 29C37 31 30 38 28 50Z" fill="${h}" ${S} stroke-width="2.2"/>`;
+    }
+    // Footballer cuts: short faded sides, the style is all on top.
+    const fade = `<path d="M29.3 46C29.3 33 35 27 41 25.5H59C65 27 70.7 33 70.7 46C68 40 64 37 59.5 36H40.5C36 37 32 40 29.3 46Z" fill="${h}" opacity=".45"/>`;
+    const tex = (ds) => ds.map((d) => `<path d="${d}" fill="none" stroke="${hc.ln}" stroke-width="1.6" stroke-linecap="round"/>`).join('');
+    if (L.hair === 'quiff') front = fade + `<path d="M33 36C31 24 35 13 46 9C54 6 64 9 68 16C71 22 70 30 67.5 35C63 30 56 28.5 49 29C42 29.5 37 32 33 36Z" fill="${h}" ${S} stroke-width="2.2"/>` + tex(['M40 30C39 22 42 15 48 12', 'M48 29C48 21 51 15 57 12', 'M57 29.5C58 23 61 18 65 16']);
+    else if (L.hair === 'swept') front = fade + `<path d="M30 39C28 26 35 15 49 13C61 11 72 17 73 30C73 35 71.5 39 70 41C68 33 62 28.5 53 27.5C44 27 35 31 30 39Z" fill="${h}" ${S} stroke-width="2.2"/><path d="M70 41C71 46 70 50 68 52C69 47 69 44 68 41Z" fill="${h}" ${S} stroke-width="1.6"/>` + tex(['M36 32C40 24 47 20 56 19', 'M44 28C50 22 58 20 66 22', 'M54 27.5C60 25 66 27 70 32']);
+    else if (L.hair === 'part') front = fade + `<path d="M30 40C29 27 36 18 49 17C62 16 72 23 72 35C67 29.5 58 27 48 27.5C46 26 44 24.5 43 22.5C42 25 41.5 27 41 29C36 31 32 35 30 40Z" fill="${h}" ${S} stroke-width="2.2"/>` + tex(['M47 26C53 22 61 22 67 26', 'M45 23C50 19.5 58 19 64 21']);
+    else if (L.hair === 'crop') front = fade + `<path d="M30 40C29 26 37 18 50 18C63 18 71 26 70 40C68 37 66 35.5 64 35L61 38L58 35L55 38.5L52 35.5L49 38.5L46 35.5L43 38L40 35L37 37.5C34 37 31.5 38 30 40Z" fill="${h}" ${S} stroke-width="2.2"/>` + tex(['M40 31L42 26', 'M48 31L50 25', 'M56 31L58 26']);
+    else if (L.hair === 'hawk') front = fade + `<path d="M39 33C38 22 40 12 46 6L49 12L52 5L55 12L59 7C62 15 62 25 61 33C57 31 54 30.5 50 30.5C46 30.5 42 31.5 39 33Z" fill="${h}" ${S} stroke-width="2.2"/>`;
+    else if (L.hair === 'curltop') front = fade + bumps([...ring(50, 31, 16, 11, 190, 350, 7, 5.6), [50, 24, 10]], h);
+    const brow = L.col === 'light' ? '#B8925A' : h;
+    const aid = L.aid ? `<g data-part="aid"><path d="M25.5 38C20 40 19.5 52 23.5 56C26 53.5 26 43 27.5 39.5Z" fill="#3BA4FF" ${S} stroke-width="1.8"/><path d="M27 40Q31.5 42 30.5 47.5" fill="none" stroke="${INK}" stroke-width="1.5" stroke-linecap="round"/></g>` : '';
+    const freckles = L.freckles ? `<g data-part="freckles" fill="rgba(70,28,10,.5)">${[[37, 54], [40.5, 56.2], [35.5, 57], [63, 54], [59.5, 56.2], [64.5, 57]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1"/>`).join('')}</g>` : '';
+    const glasses = L.glasses ? `<g data-part="glasses" fill="none" stroke="${INK}" stroke-width="2.2"><circle cx="42" cy="48.5" r="6" fill="rgba(255,255,255,.2)"/><circle cx="58" cy="48.5" r="6" fill="rgba(255,255,255,.2)"/><path d="M48 47.6Q50 46 52 47.6M36 47.5L29.5 45.5M64 47.5L70.5 45.5" stroke-linecap="round"/></g>` : '';
+    const band = L.band ? `<path data-part="band" d="M29 38C33 29 67 29 71 38L71.5 43C66 34 34 34 28.5 43Z" fill="var(--us)" ${S} stroke-width="2"/>` : '';
+    return `<g data-part="hair-back" data-hair="${L.hair}">${back}</g>`
+      + `<rect x="43" y="60" width="14" height="18" fill="${skin}" ${S} stroke-width="2.2"/>`
+      + `<path data-part="shirt" d="M10 101C12 85 26 77 42 75L50 84L58 75C74 77 88 85 90 101Z" fill="var(--us)" ${S} stroke-width="2.5"/>`
+      + `<path d="M42 75L50 84L58 75" fill="none" stroke="var(--shirt-edge, rgba(255,255,255,.6))" stroke-width="2"/>`
+      + aid
+      + `<circle cx="28.5" cy="49" r="5" fill="${skin}" ${S} stroke-width="2.2"/><circle cx="71.5" cy="49" r="5" fill="${skin}" ${S} stroke-width="2.2"/>`
+      + `<ellipse data-part="skin" cx="50" cy="46" rx="21.5" ry="23" fill="${skin}" ${S} stroke-width="2.5"/>`
+      + `<g data-part="hair" data-col="${L.col}">${front}</g>${band}`
+      + `<path d="M37.5 42Q41.5 39 45.5 41.5M54.5 41.5Q58.5 39 62.5 42" fill="none" stroke="${brow}" stroke-width="2.4" stroke-linecap="round"/>`
+      + `<circle cx="42" cy="48.5" r="2.5" fill="${INK}"/><circle cx="58" cy="48.5" r="2.5" fill="${INK}"/>`
+      + `<path d="M50 51.5Q48 54.5 50.5 55" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.6" stroke-linecap="round"/>`
+      + freckles + glasses
+      + `<path d="M43 58.5Q50 65.5 57 58.5Z" fill="#6A1E1E" ${S} stroke-width="1.8"/>`;
+  }
+  // The same hair and skin seen from above, for his figure on the pitch (facing +x, head at .12, 0).
+  function dressFigure(g, look) {
+    const L = cleanLook(look), skin = SKINS[L.skin], hc = hairCol(L), h = hc.c, a = g.querySelector('.anim'), head = a.querySelector('.head');
+    head.style.fill = skin;
+    a.querySelectorAll('.hand').forEach((x) => { x.style.fill = skin; });
+    const hair = el('g', { class: 'hair-top', 'data-hair': L.hair, 'data-col': L.col }, a);
+    const behind = (tag, at) => a.insertBefore(el(tag, at, a), head);
+    const on = (tag, at) => el(tag, at, hair);
+    const H = { fill: h, stroke: 'rgba(0,0,0,.35)', 'stroke-width': .06 };
+    if (['quiff', 'swept', 'part', 'crop', 'hawk', 'curltop'].includes(L.hair)) {
+      on('circle', { cx: .1, cy: 0, r: .5, fill: h, opacity: .55 });
+      const top = { quiff: [.18, .5, .3], swept: [-.05, .5, .3], part: [0, .44, .3], crop: [.12, .42, .3], hawk: [0, .55, .14], curltop: [.08, .38, .32] }[L.hair];
+      on('ellipse', { cx: top[0], cy: 0, rx: top[1], ry: top[2], ...H }); return;
+    }
+    if (L.hair === 'buzz') { on('circle', { cx: .1, cy: 0, r: .5, fill: h, opacity: .6 }); return; }
+    if (L.hair === 'afro') { on('circle', { cx: .02, cy: 0, r: .8, ...H }); return; }
+    if (L.hair === 'long') behind('ellipse', { cx: -.36, cy: 0, rx: .52, ry: .6, ...H });
+    if (L.hair === 'pony') behind('ellipse', { cx: -.66, cy: 0, rx: .36, ry: .17, ...H });
+    if (L.hair === 'locs') for (const d of [-60, -30, 0, 30, 60]) {
+      const t = ((180 + d) * Math.PI) / 180;
+      behind('ellipse', { cx: (.06 + Math.cos(t) * .6).toFixed(3), cy: (Math.sin(t) * .6).toFixed(3), rx: .24, ry: .11, transform: `rotate(${d} ${(.06 + Math.cos(t) * .6).toFixed(3)} ${(Math.sin(t) * .6).toFixed(3)})`, ...H });
+    }
+    on('circle', { cx: L.hair === 'curly' ? .08 : .05, cy: 0, r: L.hair === 'curly' ? .6 : .53, ...H });
+    if (L.hair === 'rows') for (const y of [-.26, 0, .26]) on('line', { x1: -.42, y1: y * .8, x2: .5, y2: y, stroke: hc.ln, 'stroke-width': .07, 'stroke-linecap': 'round' });
+  }
+  // Surprise me: a whole new look, never the same as the one he has.
+  function surpriseLook(cur) {
+    const r = (n) => Math.floor(Math.random() * n);
+    for (;;) {
+      const l = { skin: r(SKINS.length), hair: HAIRS[r(HAIRS.length)].id, col: HAIR_COLS[r(HAIR_COLS.length)].id };
+      for (const x of EXTRAS) l[x.id] = Math.random() < .3;
+      if (JSON.stringify(cleanLook(l)) !== JSON.stringify(cleanLook(cur))) return cleanLook(l);
+    }
+  }
+
+  Object.assign(window.FTS, { SKINS, HAIR_COLS, HAIRS, EXTRAS, portrait: (l) => portraitArt(l), look: () => player && player.look });
   let player = null, draft = null;
   try {
     const d = JSON.parse(localStorage.getItem(PLAYER_KEY) || 'null');
@@ -3249,7 +3398,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
         academy: academyOf(d.academy) ? d.academy : null,
         coach: COACHES.some((c) => c.id === d.coach) ? d.coach : null,
         age: Number.isInteger(d.age) && d.age >= 6 && d.age <= 12 ? d.age : null,
-        fav: typeof d.fav === 'string' ? d.fav.slice(0, 20) : '' };
+        fav: typeof d.fav === 'string' ? d.fav.slice(0, 20) : '', look: cleanLook(d.look) };
     }
   } catch (e) { player = null; }
   // An older save keeps what it has (name, number, academy, coach) and asks once for the rest, including his age.
@@ -3270,6 +3419,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function syncMe() {
     $('me-name').textContent = playerName();
     $('me-num').textContent = player ? player.num : 8;
+    $('me-face').innerHTML = portraitArt(player && player.look);
     const a = player && academyOf(player.academy);
     $('me-crest').innerHTML = a ? crestArt(a) : '';
     $('me-crest').toggleAttribute('hidden', !a);
@@ -3277,7 +3427,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
     $('me-lv').textContent = `${levelOf(total).name} · ★ ${total}`;
   }
   function syncCard() {
-    $('pc-num').textContent = draft.num; $('pc-shirt-num').textContent = draft.num; $('p-num').textContent = draft.num;
+    $('pc-num').textContent = draft.num; $('p-num').textContent = draft.num;
+    $('pc-face').innerHTML = portraitArt(draft.look);
+    syncLookPicks();
     $('pc-name').textContent = draft.name.trim() || 'Your name';
     $('pc-lv').textContent = levelOf(starsIn(E.PUZZLES.map((_, i) => i))).name;
     const a = academyOf(draft.academy), c = draft.coach ? coachOf(draft.coach) : null, fav = draft.fav.trim();
@@ -3296,7 +3448,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   function openMake() {
     if (anim) return;
     state = 'make';
-    draft = player ? { ...player } : { name: '', num: 8, academy: null, coach: null, age: null, fav: '' };
+    draft = player ? { ...player, look: { ...player.look } } : { name: '', num: 8, academy: null, coach: null, age: null, fav: '', look: { ...DEFAULT_LOOK } };
     $('p-name').value = draft.name; $('p-fav').value = draft.fav;
     $('make-cancel').hidden = needsSetup();
     show('make'); syncCard();
@@ -3325,6 +3477,42 @@ if (typeof module !== 'undefined') module.exports = Engine;
     b.addEventListener('click', () => { draft.coach = c.id; syncCard(); unlockSpeech(); say(`${c.name}. ${c.hello}`); });
     $('coaches').appendChild(b);
   }
+  // Your look: skin, hair, hair colour and extras. Each tap changes the card straight away.
+  const lookBtn = (cls, label, parent, onTap) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.setAttribute('aria-label', label);
+    b.addEventListener('click', () => { onTap(); syncCard(); });
+    parent.appendChild(b); return b;
+  };
+  SKINS.forEach((c, k) => {
+    const b = lookBtn('tone', `Skin ${k + 1} of ${SKINS.length}`, $('skins'), () => { draft.look.skin = k; });
+    b.setAttribute('role', 'radio'); b.dataset.skin = String(k); b.style.background = c;
+  });
+  HAIRS.forEach((h) => {
+    const b = lookBtn('hairpick', h.name, $('hairs'), () => { draft.look.hair = h.id; });
+    b.setAttribute('role', 'radio'); b.dataset.hair = h.id;
+    b.innerHTML = '<svg viewBox="10 4 80 80" aria-hidden="true"></svg><span class="pick-name"></span>';
+    b.querySelector('.pick-name').textContent = h.name;
+  });
+  HAIR_COLS.forEach((h) => {
+    const b = lookBtn('tone', `${h.name} hair`, $('hcols'), () => { draft.look.col = h.id; });
+    b.setAttribute('role', 'radio'); b.dataset.col = h.id; b.style.background = h.c;
+  });
+  EXTRAS.forEach((x) => {
+    const b = lookBtn('chip extra', x.name, $('extras'), () => { draft.look[x.id] = !draft.look[x.id]; });
+    b.dataset.extra = x.id; b.textContent = x.name; b.removeAttribute('aria-label');
+  });
+  $('surprise').addEventListener('click', () => { draft.look = surpriseLook(draft.look); syncCard(); sfx('star', 1); });
+  function syncLookPicks() {
+    const L = draft.look;
+    $('skins').querySelectorAll('.tone').forEach((b) => b.setAttribute('aria-checked', String(+b.dataset.skin === L.skin)));
+    $('hcols').querySelectorAll('.tone').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.col === L.col)));
+    $('hairs').querySelectorAll('.hairpick').forEach((b) => {
+      b.setAttribute('aria-checked', String(b.dataset.hair === L.hair));
+      b.querySelector('svg').innerHTML = portraitArt({ skin: L.skin, col: L.col, hair: b.dataset.hair });
+    });
+    $('extras').querySelectorAll('.extra').forEach((b) => b.setAttribute('aria-pressed', String(L[b.dataset.extra])));
+  }
   $('p-name').addEventListener('input', () => { draft.name = $('p-name').value.slice(0, 12); syncCard(); });
   $('p-fav').addEventListener('input', () => { draft.fav = $('p-fav').value.slice(0, 20); syncCard(); });
   $('num-down').addEventListener('click', () => { draft.num = draft.num <= 1 ? 99 : draft.num - 1; syncCard(); });
@@ -3332,7 +3520,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   $('make-form').addEventListener('submit', (e) => {
     e.preventDefault();
     if (!draft.academy || !draft.coach || !draft.age) return;
-    player = { name: draft.name.trim().slice(0, 12), num: draft.num, academy: draft.academy, coach: draft.coach, age: draft.age, fav: draft.fav.trim().slice(0, 20) };
+    player = { name: draft.name.trim().slice(0, 12), num: draft.num, academy: draft.academy, coach: draft.coach, age: draft.age, fav: draft.fav.trim().slice(0, 20), look: cleanLook(draft.look) };
     try { localStorage.setItem(PLAYER_KEY, JSON.stringify(player)); } catch (err) { /* private mode: keep it for this visit */ }
     // Read-aloud is on for 6 and 7 year olds unless someone has switched it on or off with the button.
     if (narratePref() === null) { narrate = canSpeak && player.age <= 7; syncNarrate(); if (narrate) unlocked = true; }
@@ -3543,7 +3731,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Get ready for the game: ${sc.challenge}`;
   }
   const homeSpeech = () => `${$('home-sub').textContent} ${E.SECTIONS.map((x) => x.title).join('. ')}.`;
-  const makeSpeech = () => 'Make your player. Type your name, pick your shirt number, your age, your academy and your coach.';
+  const makeSpeech = () => 'Make your player. Type your name, pick your shirt number, make your look, then pick your age, your academy and your coach.';
   const currentSpeech = () => (state === 'make' ? makeSpeech() : state === 'home' ? homeSpeech() : state === 'end' && sec !== 'match' ? endSpeech() : state === 'end' ? 'Full time!' : state === 'result' ? resultSpeech() : setupSpeech());
   const nb = $('narrate');
   if (canSpeak) {
@@ -3575,7 +3763,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
 
   // ---------- version: shown on home, and the app fetches itself once at start to pick up a newer version ----------
-  const APP_VERSION = 13;
+  const APP_VERSION = 14;
   $('ver').textContent = `Version ${APP_VERSION}`;
   (async () => {
     if (!/^https?:$/.test(location.protocol)) return;
