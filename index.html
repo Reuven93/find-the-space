@@ -429,6 +429,38 @@ button { cursor: pointer; }
   .tier-gold .face::after { animation: none; }
   .skill, .cta { transition: none; }
 }
+/* ---------- v11: calmer layout on big screens, one clear next step on home ---------- */
+:root { --maxw: 1148px; }
+.home > * { width: 100%; max-width: var(--maxw); margin-inline: auto; flex: none; }
+.home > .reset { width: auto; }
+.hud, .main { width: 100%; max-width: var(--maxw); margin-inline: auto; }
+/* the round buttons line up with the right edge of the content, not the far edge of a wide screen */
+.narrate { right: max(16px, env(safe-area-inset-right, 0px), calc((100vw - var(--maxw)) / 2)); }
+.sound { right: calc(max(16px, env(safe-area-inset-right, 0px), calc((100vw - var(--maxw)) / 2)) + 66px); }
+/* cards keep a portrait card shape: at most 370px wide, always taller than wide */
+.skills { grid-template-columns: repeat(3, minmax(0, 370px)); justify-content: center; }
+.skills .face { aspect-ratio: 4 / 5; }
+.hero { display: flex; gap: 16px; align-items: center; background: var(--panel); border: 2px solid var(--edge); border-radius: 18px; padding: 16px 18px; }
+.hero .coach-face { width: 76px; height: 76px; }
+.hero-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.hero-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.hero-next { margin: 0; flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 2px; }
+.hero-k { font-family: var(--label); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-hi); }
+.hero-what { font-family: var(--display); font-size: 28px; letter-spacing: 1px; line-height: 1.05; text-wrap: balance; }
+.hero-go { width: auto; min-width: 240px; min-height: 64px; font-size: 32px; padding-inline: 28px; }
+.sec-h { margin-top: 4px; margin-bottom: 0; font-family: var(--label); font-weight: 700; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.ver { margin: 0; text-align: center; font-family: var(--label); font-size: 13px; color: var(--muted); opacity: .7; }
+@media (max-width: 1000px) { .skills { grid-template-columns: repeat(2, minmax(0, 370px)); } }
+@media (max-width: 560px) {
+  .skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { align-items: flex-start; padding: 14px; }
+  .hero .coach-face { width: 52px; height: 52px; }
+  .hero-go { width: 100%; min-width: 0; font-size: 26px; white-space: nowrap; }
+  .hero-what { font-size: 22px; }
+  .hero .coach-tag { display: none; }
+  .hero { gap: 12px; }
+}
+.fresh { color: var(--ok); }
 </style>
 </head>
 <body>
@@ -492,17 +524,25 @@ button { cursor: pointer; }
       <div class="lv-steps" id="lv-steps"></div>
       <div class="lv-labels" id="lv-labels"></div>
     </section>
-    <div class="coach-row"><span class="coach-who"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><span class="coach-tag" id="coach-tag"></span></span><p class="bubble" id="home-sub"></p></div>
+    <section class="hero" aria-label="Next up">
+      <span class="coach-who"><svg class="coach-face" viewBox="3 8 58 52" aria-hidden="true"></svg><span class="coach-tag" id="coach-tag"></span></span>
+      <div class="hero-body">
+        <p class="bubble" id="home-sub"></p>
+        <div class="hero-row"><p class="hero-next"><span class="hero-k" id="hero-k">Next up</span><span class="hero-what" id="hero-what"></span></p><button class="cta hero-go" id="hero-go">Let’s play</button></div>
+      </div>
+    </section>
     <div class="sat home-sat" id="home-sat" hidden><span class="sat-k">Your challenge for the next game · <span id="home-sat-skill"></span></span><p id="home-sat-text"></p></div>
+    <h2 class="sec-h">Your skill cards</h2>
     <div class="skills" id="skills"></div>
     <button class="match" id="match"><span class="match-k">Match mode</span><span class="match-sub">5 puzzles mixed from every skill. The ones you missed come back first.</span></button>
     <button class="reset" id="reset" hidden>Clear my stars</button>
+    <p class="ver" id="ver"></p>
   </section>
 
   <section class="screen game" id="game" hidden>
     <header class="hud">
       <button class="round" id="back" aria-label="All skills"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="hud-title"><span class="sec-name"><span id="sec-name"></span> · <span id="age"></span></span><h1 id="title"></h1></div>
+      <div class="hud-title"><span class="sec-name"><span id="sec-name"></span> · <span id="age"></span><span class="fresh" id="fresh" hidden> · New picture</span></span><h1 id="title"></h1></div>
       <ol class="nums" id="progress" aria-label="Puzzles in this skill"></ol>
       <div class="total" aria-label="Stars in this skill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><span id="total">0</span></div>
     </header>
@@ -956,6 +996,197 @@ const Engine = (() => {
       checks = [c1, c2, c3];
     }
     return { checks, stars: checks.filter((c) => c.ok).length, follow: f, end };
+  }
+
+  // ---------- endless training: the same situation, a new picture ----------
+  // Every player moves a little, and the pitch may flip top-to-bottom. Points that belong to someone
+  // (a worked run starts at you, a pass goes to their #10) move with that player. A new picture is only
+  // used if it passes every rule the hand-made one passes, so there is always a right answer.
+  function rng(seed) {
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const hashId = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const NO_MIRROR = ['crowd', 'support', 'pass-switch', 'drive-side'];  // their words name a side of the pitch
+  function depPoints(pz) {
+    const out = [], add = (p, f) => { if (p) out.push([p, f]); }, arr = (a, f) => (a || []).forEach((p) => add(p, f));
+    if (pz.solution) { if (Array.isArray(pz.solution)) arr(pz.solution, 'you'); else add(pz.solution, 'you'); }
+    arr(pz.naive, 'you'); add(pz.open, 'you');
+    if (pz.threat) { add(pz.threat.to, pz.threat.kind === 'pass' ? 'o' + pz.danger : 'o' + pz.ball); add(pz.threat.out, 'o' + pz.ball); }
+    for (const o of pz.options || []) { arr(o.path, 'you'); add(o.to, null); add(o.passTo, 'o' + pz.oppBall); }
+    return out;
+  }
+  function vary(base, seed) {
+    const r = rng(seed), pz = JSON.parse(JSON.stringify(base)), deps = depPoints(pz);
+    const mirror = !NO_MIRROR.includes(base.id) && r() < 0.5;
+    if (mirror) {
+      for (const p of [...pz.mates, ...pz.opps, pz.you]) p.y = W - p.y;
+      for (const [p] of deps) p.y = W - p.y;
+      for (const z of [pz.goal, pz.zone]) if (z && z.y0 !== undefined) { const a = z.y0; z.y0 = W - z.y1; z.y1 = W - a; }
+    }
+    const J = base.jitter || (base.type === 'dribble' || base.type === 'move' ? 1.2 : 1.8);
+    const d = (k) => { const a = r() * Math.PI * 2, m = Math.sqrt(r()) * J * k; return { x: Math.cos(a) * m, y: Math.sin(a) * m }; };
+    const sh = { you: d(1) };
+    for (const m of pz.mates) sh['m' + m.n] = d(m.n === 1 ? 0.3 : 1);   // keepers barely move
+    for (const o of pz.opps) sh['o' + o.n] = d(o.n === 1 ? 0.3 : 1);
+    const shift = (p, s) => {
+      if (!s) return;
+      p.x = Math.max(1, Math.min(L - 1, p.x + s.x));
+      if (p.y > 1.5 && p.y < W - 1.5) p.y = Math.max(1, Math.min(W - 1, p.y + s.y));  // someone on the line stays on it
+    };
+    for (const [p, f] of deps) shift(p, f && sh[f]);
+    shift(pz.you, sh.you);
+    for (const m of pz.mates) shift(m, sh['m' + m.n]);
+    for (const o of pz.opps) shift(o, sh['o' + o.n]);
+    if (pz.type === 'pass') {
+      pz.alsoGood = pz.mates.filter((m) => m.n !== pz.best && evaluatePass(pz, m.n).stars === 3).map((m) => m.n);
+    }
+    if (pz.type === 'defend') {
+      // The best spot moves with the attackers, so look for the 3-star spot nearest the old one.
+      let best = null, bd = Infinity;
+      for (let x = pz.you.x - pz.run; x <= pz.you.x + pz.run; x += 0.5) {
+        for (let y = pz.you.y - pz.run; y <= pz.you.y + pz.run; y += 0.5) {
+          const p = { x, y };
+          if (dist(p, pz.you) > pz.run || x < 1 || x > L - 1 || y < 1 || y > W - 1) continue;
+          if (Math.min(...[...pz.mates, ...pz.opps].map((q) => dist(q, p))) < 2.6) continue;
+          const e = evaluateDefend(pz, p);
+          if (e.stars === 3 && e.stopped && dist(p, pz.solution) < bd) { bd = dist(p, pz.solution); best = p; }
+        }
+      }
+      if (!best) return null;
+      pz.solution = best;
+    }
+    pz.mirrored = mirror;
+    return pz;
+  }
+
+  // Every rule a puzzle must keep. The tests run this on the hand-made puzzles too.
+  // With `base`, it also checks the new picture still tells the same story as the original.
+  function problems(pz, base) {
+    const out = [], need = (c, m) => { if (!c) out.push(`${pz.id}: ${m}`); };
+    const all = [...pz.mates, ...pz.opps, pz.you];
+    for (const p of all) need(p.x > 0 && p.x < L && p.y > 0 && p.y < W, `player off the pitch at ${p.x.toFixed(1)},${p.y.toFixed(1)}`);
+    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) need(dist(all[i], all[j]) >= 2.5, 'two players overlap');
+    const reachPct = (score) => {
+      let reach = 0, three = 0;
+      for (let x = 0; x <= L; x += 0.5) for (let y = 0; y <= W; y += 0.5) {
+        if (Math.hypot(x - pz.you.x, y - pz.you.y) > pz.run || x < EDGE || x > L - EDGE || y < EDGE || y > W - EDGE) continue;
+        reach++; if (score({ x, y }) === 3) three++;
+      }
+      return (100 * three) / Math.max(1, reach);
+    };
+    const t = pz.type;
+    if (t === 'space') {
+      const start = evaluate(pz, pz.you);
+      need(start.stars < 3, 'the start spot is already the answer');
+      need(!start.checks[['shadow', 'crowd', 'support'].includes(pz.id) ? 0 : 2].ok, 'the start passes the lesson check');
+      const pct = reachPct((p) => evaluate(pz, p).stars);
+      need(pct >= 4 && pct <= 40, `perfect area ${pct.toFixed(1)}% (needs 4–40%)`);
+    }
+    if (t === 'pass') {
+      const rows = pz.mates.map((m) => ({ m, r: evaluatePass(pz, m.n) })), top = rows.filter(({ r }) => r.stars === 3);
+      need(top.some(({ m }) => m.n === pz.best), 'the intended pass is not a 3-star pass');
+      need(top.length === 1 + (pz.alsoGood || []).length && (pz.alsoGood || []).every((n) => top.some(({ m }) => m.n === n)), 'the 3-star passes are not the intended ones');
+      need(rows.some(({ r }) => r.stars <= 1), 'no bad option');
+      need(rows.some(({ r }) => !r.checks[0].ok && r.blocker), 'no blocked lane to learn from');
+    }
+    if (t === 'scan') {
+      need(pz.opps.some((o) => fogged(pz, o)), 'nothing hidden behind you');
+      need(!fogged(pz, passer(pz)), 'the passer is hidden');
+      need(!blockerOn(passer(pz), pz.you, pz.opps), 'the pass to you is blocked');
+      const bests = Object.keys(pz.stances).filter((k) => pz.stances[k].grade === 'best');
+      need(bests.length === 1 && bests[0] === pz.best, 'not exactly one best stance');
+      need(evaluateScan(pz, true, pz.best).stars === 3 && evaluateScan(pz, false, pz.best).stars === 2, 'scan scoring');
+      for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) {
+        const a = stanceDir(pz, STANCES[i]), b = stanceDir(pz, STANCES[j]);
+        need(Math.acos(Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y))) * 180 / Math.PI >= 25, 'two stances face almost the same way');
+      }
+      for (const k of STANCES) {
+        const o = scanOutcome(pz, k), g = pz.stances[k].grade, dk = stanceDir(pz, k);
+        need(nearestStance(pz, { x: pz.you.x + dk.x * 6, y: pz.you.y + dk.y * 6 }) === k, `tapping out along ${k} picks another stance`);
+        if (g === 'bad') { need(o.kind === 'lost', `${k} is bad but he keeps it`); continue; }
+        need(Math.min(...samplePath([pz.you, o.you]).map((p) => Math.min(...pz.opps.map((q) => dist(q, p))))) >= TACKLE, `${k} ending runs into a defender`);
+        need(o.kind === { half: 'turn', back: 'layoff', face: 'hold' }[k], `${k} ends the wrong way`);
+      }
+      need(canSee(pz, 'half', passer(pz)) && canSee(pz, 'half', pz.open), 'half-turn cannot see ball and space');
+      need(!canSee(pz, 'face', pz.open), 'square-on sees the space');
+    }
+    if (t === 'dribble') {
+      const sol = evaluateDribble(pz, pz.solution);
+      need(sol.stars === 3, 'the worked run does not score 3');
+      need(pathLength(pz.solution) <= pz.maxRun + 1e-9, 'the worked run is too long');
+      need(dist(nearestOpp(pz, pz.you), pz.you) >= TACKLE, 'the start is in tackling range');
+      need(evaluateDribble(pz, [pz.you]).stars < 3, 'standing still is an answer');
+    }
+    if (t === 'defend') {
+      const start = evaluateDefend(pz, pz.you), sol = evaluateDefend(pz, pz.solution);
+      need(start.stars < 3 && !start.stopped, 'standing still stops the attack');
+      need(sol.stars === 3 && sol.stopped, 'the worked spot does not score 3');
+      need(dist(pz.you, pz.solution) <= pz.run, 'the worked spot is out of reach');
+      need(Math.min(...[...pz.mates, ...pz.opps].map((q) => dist(q, pz.solution))) >= 2.6, 'the worked spot is on top of someone');
+      const pct = reachPct((p) => evaluateDefend(pz, p).stars);
+      need(pct >= 2 && pct <= 40, `perfect area ${pct.toFixed(1)}% (needs 2–40%)`);
+      const to = pz.threat.to;
+      need(to.x > 0 && to.x < L && to.y > 0 && to.y < W, 'the attack leaves the pitch');
+      if (pz.threat.kind === 'pass') need(!blockerOn(carrier(pz), to, pz.mates), 'a teammate already cuts out their pass');
+      else for (const m of pz.mates.filter((q) => q.n !== pz.presser)) need(Math.min(...samplePath([carrier(pz), to]).map((q) => dist(q, m))) >= TACKLE, `${m.name} is already in his way`);
+    }
+    if (t === 'choice') {
+      const rows = pz.options.map((o) => ({ o, r: evaluateChoice(pz, o.key) })), top = rows.filter(({ r }) => r.stars === 3);
+      need(top.length === 1 && top[0].o.key === pz.best, 'not only the best move scores 3');
+      need(rows.some(({ r }) => r.stars <= 1), 'no poor choice');
+      for (const { o } of rows) {
+        if (o.kind === 'pass') need(pz.mates.some((m) => m.n === o.n), `${o.key} passes to nobody`);
+        for (const q of [...(o.path || []), ...(o.to ? [o.to] : [])]) need(q.x > 0 && q.x < 61 && q.y > 0 && q.y < W, `${o.key} leaves the pitch`);
+        if (o.risky) need(o.kind === 'dribble' && optSafe(pz, o), `${o.key} is a risk that is not physically clear`);
+        if (/in the way|ran straight into|lost it/.test(o.why)) need(!optSafe(pz, o), `${o.key} says it fails but the picture says it is clear`);
+      }
+      need(!pz.riskOk || pz.you.x > 40, 'a risk is fine away from their goal');
+    }
+    if (t === 'move') {
+      const sol = evaluateMove(pz, pz.solution);
+      need(sol.stars === 3, 'the worked run does not score 3');
+      need(pathLength(pz.solution) <= pz.maxRun + 1e-9, 'the worked run is too long');
+      need(evaluateMove(pz, pz.naive).stars < 3 && evaluateMove(pz, [pz.you]).stars < 3, 'the obvious run or standing still works');
+      if (pz.goal.type === 'zone') {
+        let bad = 0;
+        for (let a = 0; a < 360; a += 15) for (const len of [4, 7, 10]) {
+          const e = { x: pz.you.x + Math.cos(a * Math.PI / 180) * len, y: pz.you.y + Math.sin(a * Math.PI / 180) * len };
+          if (e.x < 1 || e.x > L - 1 || e.y < 1 || e.y > W - 1) continue;
+          if (evaluateMove(pz, [pz.you, e]).stars === 3) bad++;
+        }
+        need(bad === 0, `${bad} straight runs lose the marker`);
+        need(sol.follow.turns >= 1, 'the worked run never changes direction');
+      } else need(dist(sol.follow.marker, pz.opps.find((o) => o.n === pz.marker)) >= 4, 'the decoy does not drag the marker');
+    }
+    if (base) {
+      // The same story as the original: what the words say must still be true of the picture.
+      if (t === 'scan') {
+        const n0 = nearestOpp(base, base.you), n1 = nearestOpp(pz, pz.you);
+        need(n0.n === n1.n && Math.abs(dist(n0, base.you) - dist(n1, pz.you)) <= 1.2 && fogged(base, n0) === fogged(pz, n1), 'the nearest defender changed');
+      }
+      if (t === 'choice') for (const o of pz.options) need(optSafe(pz, o) === optSafe(base, base.options.find((q) => q.key === o.key)), `${o.key} changed from safe to unsafe or back`);
+      if (t === 'dribble') {
+        const ahead = (z) => !!evaluateDribble(z, [z.you, { x: z.you.x + 14, y: z.you.y }]).tackle;
+        need(ahead(pz) === ahead(base), 'running straight ahead changed outcome');
+      }
+    }
+    return out;
+  }
+  const isValid = (pz, base) => problems(pz, base).length === 0;
+  // A new picture of this puzzle for this seed, or the original if none passes.
+  function variant(base, seed) {
+    for (let k = 0; k < 30; k++) {
+      const v = vary(base, (hashId(base.id) + seed * 7919 + k * 104729) >>> 0);
+      if (v && isValid(v, base)) { v.varied = true; return v; }
+    }
+    return base;
   }
 
   // Skills, in the order they appear on the home screen. Each puzzle names its section.
@@ -1505,7 +1736,7 @@ const Engine = (() => {
     },
   ];
 
-  return { follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
+  return { rng, vary, problems, isValid, variant, NO_MIRROR, follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
     evaluate, clamp, openSpace, shadows, passSafe, evaluatePass, fogged, stanceDir, canSee, STANCES, nearestStance, scanOutcome, evaluateScan, pathLength, samplePath, evaluateDribble, SECTIONS, PUZZLES };
 })();
 if (typeof module !== 'undefined') module.exports = Engine;
@@ -2478,6 +2709,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     const t = T();
     $('title').textContent = pz.title;
     $('age').textContent = `Ages ${pz.age.replace('-', '–')}`;
+    $('fresh').hidden = !pz.varied;
     $('prompt').textContent = pz.prompt;
     $('how').textContent = typeof t.how === 'function' ? t.how() : t.how;
     $('check').textContent = t.primary;
@@ -2673,8 +2905,14 @@ if (typeof module !== 'undefined') module.exports = Engine;
     resetArmed = false; clearTimeout(resetTimer);
     $('reset').textContent = 'Clear my stars';
     $('reset').hidden = total === 0 && !tried.some(Boolean);
+    // One obvious next step: carry on where he left off, or a mixed match once every card is gold.
     const nextSec = E.SECTIONS.find((sc) => listOf(sc.id).some((i) => best[i] < 3)) || E.SECTIONS[0];
-    prep(continueIndex(nextSec.id));
+    const nextI = continueIndex(nextSec.id), nl = listOf(nextSec.id), fresh = !tried.some(Boolean);
+    $('hero-k').textContent = allGold ? 'Every card is gold' : `${fresh ? 'Your first puzzle' : 'Next up'} · ${nl.indexOf(nextI) + 1} of ${nl.length}`;
+    $('hero-what').textContent = allGold ? 'Stay sharp with a mixed match' : `${nextSec.title} · ${E.PUZZLES[nextI].title}`;
+    $('hero-go').textContent = allGold ? 'Play Match mode' : fresh ? 'Start training' : 'Let’s play';
+    $('hero-go').dataset.go = allGold ? 'match' : String(nextI);
+    prep(nextI);
   }
 
   function showSectionEnd() {
@@ -2792,7 +3030,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       miss: ['Back to it. Every great player misses.', 'Go again. That’s how you learn.'],
       late: 'Too slow: the ball arrived. Be ready before it comes.', yes: 'Yes, that’s the one.', no: 'Not quite.' },
   ];
-  window.FTS = { ACADEMIES, COACHES };  // the browser tests read these
+  window.FTS = { ACADEMIES, COACHES, current: () => ({ i: idx, pz }) };  // the browser tests read these
   const academyOf = (id) => ACADEMIES.find((a) => a.id === id) || null;
   const coachOf = (id) => COACHES.find((c) => c.id === id) || COACHES[0];
 
@@ -2923,10 +3161,18 @@ if (typeof module !== 'undefined') module.exports = Engine;
     pick = null; scanned = false; stance = null; path = [];
     svg.classList.remove('cheer');
   }
+  // How many times he has played each puzzle: picks the next new picture.
+  const PLAYS_KEY = 'fts-plays-v1';
+  const plays = {};
+  try { Object.assign(plays, JSON.parse(localStorage.getItem(PLAYS_KEY) || '{}') || {}); } catch (e) { /* start fresh */ }
+  function savePlays() { try { localStorage.setItem(PLAYS_KEY, JSON.stringify(plays)); } catch (e) { /* private mode */ } }
   function load(i, mode) {
     if (anim) return;
     stopClock();
     prep(i);
+    // Endless training: the first time he sees the hand-made picture; after that (and in Match mode)
+    // a new picture of the same situation, a different one each time he plays it.
+    if (mode === 'match' || tried[i]) { pz = E.variant(E.PUZZLES[i], (plays[pz.id] || 0) + 1); you = { ...pz.you }; }
     sec = mode || pz.section; state = 'setup';
     drawPlayers(); render(); showSetup();
     say(setupSpeech());
@@ -2941,6 +3187,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
     T().submit();
     if (late) res.late = true;
     state = 'playing'; tried[idx] = true;
+    plays[pz.id] = (plays[pz.id] || 0) + 1; savePlays();
     best[idx] = Math.max(best[idx], res.stars);
     if (sec === 'match') matchStars[idx] = res.stars;
     saveProgress(); markSeen(pz.id);
@@ -3022,6 +3269,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   $('replay-pass').addEventListener('click', replayResult);
   $('replay').addEventListener('click', () => (sec === 'match' ? startMatch() : load(listOf(sec)[0])));
   $('match').addEventListener('click', startMatch);
+  $('hero-go').addEventListener('click', () => { const g = $('hero-go').dataset.go; if (g === 'match') startMatch(); else load(+g); });
   $('back').addEventListener('click', () => { showHome(); say(homeSpeech()); });
   $('to-home').addEventListener('click', () => { showHome(); say(homeSpeech()); });
   $('next-skill').addEventListener('click', () => {
@@ -3038,6 +3286,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       return;
     }
     best.fill(0); tried.fill(false); saveProgress(); initTiers(true);
+    for (const k in plays) delete plays[k]; savePlays();
     try { localStorage.removeItem(CHALLENGE_KEY); } catch (e) { /* nothing saved */ }
     showHome();
   });
@@ -3117,6 +3366,23 @@ if (typeof module !== 'undefined') module.exports = Engine;
   });
   // iPad only lets a page make sound after a tap, so every tap wakes the audio up.
   document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
+
+  // ---------- version: shown on home, and the app fetches itself once at start to pick up a newer version ----------
+  const APP_VERSION = 12;
+  $('ver').textContent = `Version ${APP_VERSION}`;
+  (async () => {
+    if (!/^https?:$/.test(location.protocol)) return;
+    try {
+      const page = await (await fetch(location.href.split('#')[0], { cache: 'reload' })).text();
+      const m = page.match(/const APP_VERSION = (\d+);/);
+      if (!m || +m[1] <= APP_VERSION || (state !== 'home' && state !== 'make')) return;
+      let tried2 = null;
+      try { tried2 = sessionStorage.getItem('fts-updated-to'); } catch (e) { tried2 = null; }
+      if (tried2 === m[1]) return;  // reload at most once per new version
+      try { sessionStorage.setItem('fts-updated-to', m[1]); } catch (e) { /* private mode */ }
+      location.reload();
+    } catch (e) { /* offline: keep playing this version */ }
+  })();
 
   loadProgress();
   initTiers();
