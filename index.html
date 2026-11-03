@@ -529,6 +529,38 @@ button { cursor: pointer; }
 .extras { display: flex; flex-wrap: wrap; gap: 8px; }
 /* the card stays in view while he scrolls through the form, so every tap shows on it */
 @media (min-width: 721px) { .pcard { position: sticky; top: 0; align-self: flex-start; } }
+/* v17: the coach reads any part out loud. Speakers sit beside each part; "Hear it again" says the whole question. */
+.spk { appearance: none; flex: none; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--edge); background: rgba(0, 0, 0, .35);
+  color: var(--gold-hi); display: inline-grid; place-items: center; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+.spk svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.spk .waves, .hear .waves { opacity: .5; }
+.spk.talking, .hear.talking { background: var(--gold); border-color: var(--gold); color: var(--card-ink); animation: talk 1s ease-in-out infinite; }
+.spk.talking .waves, .hear.talking .waves { opacity: 1; }
+@keyframes talk { 50% { box-shadow: 0 0 0 6px rgba(227, 179, 65, .35); } }
+@media (prefers-reduced-motion: reduce) { .spk.talking, .hear.talking { animation: none; } }
+.spk[hidden], .hear[hidden] { display: none; }
+.says { display: flex; align-items: flex-start; gap: 8px; }
+.says > :first-child { flex: 1; min-width: 0; }
+.says:has(> [hidden]:first-child) { display: none; }
+.bubble-row > .spk { margin-top: 4px; }
+.coach-talk .says .bubble { position: relative; }
+.lbl-row { align-items: center; }
+.lbl-row > .spk { width: 44px; height: 44px; }
+.opt-row { display: flex; align-items: center; gap: 8px; }
+.opt-row > :first-child { flex: 1; min-width: 0; }
+.checks li { grid-template-columns: 30px 1fr 44px; }
+.lessons li { align-items: center; }
+.hero-next { position: relative; padding-right: 52px; }
+.hero-next > .spk { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+.skill-wrap { position: relative; display: flex; min-width: 0; }
+.skill-wrap > .skill { flex: 1; min-width: 0; }
+.skill-wrap > .spk { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%); background: #10251A; z-index: 2; }
+.skills { row-gap: 30px; }
+#match + .spk { align-self: flex-start; margin-top: -6px; }
+.hear { appearance: none; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 18px 6px 12px;
+  border-radius: 999px; border: 2px solid var(--gold); background: rgba(227, 179, 65, .14); color: var(--gold-hi); cursor: pointer;
+  font-family: var(--label); font-weight: 700; font-size: 17px; letter-spacing: 1px; text-transform: uppercase; -webkit-tap-highlight-color: transparent; }
+.hear svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 </style>
 </head>
 <body>
@@ -678,6 +710,9 @@ button { cursor: pointer; }
   </section>
 </div>
 
+<script>
+window.FTS_VOICE = { dir: "audio/", keys: "005e9daaa792 009854d74e4d 009a936e4ef4 009cd2054f17 00a1127b4edf 00a99df84f36 00c5fb4bc3ab 00c69a25e24f 00e7903e7cc8 0198566a4e50 019a95014ef5 019cd3984f16 01a99f8b4f37 01b4e3c89e36 01c02296da12 01c0f8e691c0 0214fc640ad4 0230cb22a95e 024d6f2b6777 025069e26f8e 02852aff1871 029857fd4e4f 029a96944eee 029cd52b4f15 02a9a11e4f34 02b398b03668 02bda7ea0f0c 02d8c5627430 02e85d249fd8 02f688d1df67 0338a9f5785f 0382a4a17e4b 039a98274eef 039cd6be4f14 03a9a2b14f35 03ca97c26f20 03d5ac8f6fa5 0420863a277c 0440d054c1d6 049a99ba4ef0 049cd8514f13 04a9a4444f32 059a9b4d4ef1 059cd9e44f12 059f5315b411 05a9a5d74f33 05c875606efa 05e7bdc37dfd 063b1be7a7f5 0662faa5eea1 0689de6c37c4 069cdb774f11 06a5ce3f7365 06a9a76a4f30 06c876f36efb 06e83c9321ff 06ec7c2df331 06ee24a61bcc 071a0630e810 074ba45f50e7 07753989350d 079cdd0a4f10 079ebae881e6 07a19a7c4fde 07a9a8fd4f31 07b56d86c374 07ba6aa1fae1 081b2098312c 084f2d4ba1f1 0850b0138e99 086dc85439d6 089cde9d4f0f 08ad0a9a7064 08c87a196ef9 08eed58a6410 08f04d0c3010 08f645eaca48 094c0752512a 096cc562593e 09894781eabb 098d0c5c348e 09c08735836d 09c87bac6efe 0a3c09933cb3 0aa7de703a66 0ac87d3f6eff 0ad7182ee792 0b48c4f2da1a 0b521bed23d1 0b5e1e8181f7 0bc72521addd 0bc87ed26efc 0bf0b26ed4a6 0c034e4e3ae2 0c26d45b0d0d 0c528efb24a7 0c8b760ca46e 0c9f5c4a7d64 0cc880656efd 0cd922f9b8ad 0cf6a8530d69 0cfd0e7d7e4b 0d6d18204c1c 0d8f783022b0 0d9e9c1e022e 0db30176882c 0dc5b52bde3b 0de386656fe9 0e10239ea2e4 0e50944c2434 0e6c5e447b92 0e8d48691bcd 0ecfc7d1014d 0f29c2a65e18 0f2f47b43c7c 0f5da9fc2c4e 0f63a881a685 0f9c29f7b7df 0fbda3dbb439 0fc8851e6f00 0fd3343f0867 0fde068daaf1 10406fbb73df 105493379f4f 106dd01582e1 1072390610ca 1088eb9f4bb9 10c886b16f01 10c8f622dbd4 10e3ff04e71c 11216feef696 113e3af82276 121199e77d8f 124ea062ae9e 126766a165e7 129defc07fc4 12f868e519d9 13041e6eee02 13786384e75a 138bb53b81bb 13eb1dac70ce 1403c905b437 140d577c9edc 14628455bae5 14834fb97f41 14998850b1ec 14b4edf159ab 14d3a194d2aa 14eb1f3f70cf 159cb3fd6ee1 15cb65b148f3 15e8e23b716b 15fc5c41b8a1 160494323fdc 163e44f98bcf 165d45fd6253 165e81d19a21 166f68766fa8 16881bdce306 16a74bdeb69a 16f9673223c0 1747ab927164 175cb5e27864 17c3aa190bdb 17eb23f870ca 17ec4a8f6963 181e4e964a50 181e6036a5ec 1847e0769654 18805535c0f7 1896f2051937 18dd33d2d294 18eb258b70cb 1900e4237a6b 19217c0e41aa 1949bdb540ab 1993e56f5a15 19eb271e70cc 1a3d450affbe 1a54f3b2af4a 1a7a32209526 1aa7bbebd60b 1aeb28b170cd 1afd7aa68148 1b3509bf9d19 1bbac19450b0 1bda2897d885 1beb2a4470c6 1c147e6ba065 1c1754345422 1c1cbb3029c6 1c5d7bc104df 1ceb2bd770c7 1cf98f98e76e 1d0f90ac33d0 1d26c38a9116 1d6528fb5aff 1d779c2e8a32 1d79ff143bae 1da2479724a1 1dd15db8aa9a 1deb2d6a70c8 1decf446ab86 1e6cf9d902a9 1e879445df7f 1e9293053a6d 1e9fca0e3358 1ea25f3c9456 1ea4a577b265 1edfb99cff2c 1eeb2efd70c9 1f37bfb7741b 1f483bf7ed63 1f58e75e9218 1f9a7239bb49 200aab04d6a8 208a189b0bd5 20db61084658 21397edd63db 21522b4ea3ba 218440ed09c9 219901ae41d6 21a5ec5a2e82 21f4beda642a 21fe7d6b1bb3 222be3c8d32e 22300c01cc7d 22393bc1730f 224e6e195a4b 22605cccbb0a 2275621e4148 22e8e504bbe2 22f0979028b8 23092b361c12 230ffb5ee750 234d4aea7150 23f71d290fa1 24003c103d52 242f532461de 24871dff2e6d 24b7d3786e4a 24c70e76fa84 24e8f3b90565 25c2afb1bcf3 261f315213e2 26414c8f09ed 264c0e27b5b7 2676a1845e52 26a008ec379c 26b0b68bb465 26b1067a61cc 26f38071cc2b 2797d1caac56 27cb3b239a5b 28064af2d334 2817bff781a5 28191d08b97c 281ed9d4aeb8 288df0cbbbf9 2894f1915fdd 28999611944f 28b2ff9eab0a 28f62925cfc9 291b5e759977 29fb556ada58 2a0b16619e4f 2a95530a711e 2aae08b2c7ac 2ac15e0b8b19 2b127574b28a 2b57aaf9eca7 2bdfcc52fd5e 2c2868a3c8af 2c2d342711f1 2c99c3006292 2cc6ca0427d2 2ce11162f7a6 2d0ebb0c4f7a 2d2278973865 2d8f9e2808a6 2dc836f89e28 2dd599431f07 2e1b159eb11c 2e51e4519455 2e9b86c77423 2ecf6f515a55 2ef3e1161ffc 2f546781bde1 2f5f6916457e 2f9cf5305788 2fd30a98f2c4 2febbdf69a02 300ca0d0b5da 3010be94bf6e 303ef8d9873b 3077ab77357f 30be372fccad 30d7cc33ec27 30ec8c981eda 310ca263b5d9 313c1e36e6e4 316c946fbf4f 317e2970f012 3180a1ba3074 3181ddb8d810 31e60bde8704 31f3780f5ab3 31ff788c229e 320ca3f6b5dc 321cd7b66a36 328931f8bf4c 32d57de37e9b 32f853956e4d 330ca589b5db 33107c8e6298 335f3b7ed1a2 336b65b8f43a 33738884c392 33d88a0824f2 33dfcbb35da9 340ca71cb5d6 34661832a2f8 3470c4b2146e 350a61fb8e51 350ca8afb5d5 35257ca17bbd 357461180776 358e60e88a64 35d2a73ddbd5 35ebcc6d19cd 35f50cc03ff0 360caa42b5d8 36140d0e2de6 36a1ddad69af 36eae700bb2c 36ec15da9566 36f70c2025ca 370cabd5b5d7 37122d73a695 37128a95aa01 371aedf1ef97 373eddc4383e 3754e3e1e925 3775e11097fa 37972169c2bd 3844417c8092 385daa09aca1 388156a226c6 388b2b8f8b05 38a4cefd7bd9 38b1464169a9 38c0715f16b9 38d6922ec778 38da2aa5d8e1 39180e1c9a84 3923ae488390 3936f1b88c6a 39627e0b9c5d 39822a8646e2 3aa79fd5ded1 3ae0034c5478 3ae9d70a858c 3aed94a613bc 3b3d323ce6d2 3b53808fe427 3b5d65f9c9e3 3ba3b3f4e968 3ba788b0646a 3c0cb3b4b5de 3c8ad71c3568 3cbc8b1696b6 3cdf049d9e8b 3ceb2b812267 3cfe29cda37d 3d0cb547b5dd 3d21177def21 3d21a6630b9b 3d78064b19ed 3d7ab6e499b6 3d9093a0ad36 3da6b382fc44 3e130ec45c58 3e7c3b903b40 3ea09aeec022 3eade7995877 3ef6d236e09a 3f4032dabe1c 3fd25537fd5b 3fd7d24cbac2 3fd901c57fbf 3fd9fea47086 401e55c69fa6 40592b2ed1d4 40ac9a144c7c 40f480dca540 411ef4d172cd 415fc8098ad9 416cc09e8a4e 41b2e446a5bc 42135d2fb8df 421db1e634ca 4220774b77fb 42462033cadb 42565ac07974 42a7cea49eb0 42be39189b3e 42ef5b8168b3 42fb2c155267 437eeafb45c3 4384a066a156 4392fa58d654 43b13e6a7900 43eda96c9f6e 43f8db7a9806 4401fdba55f0 44403d816c73 448706066c22 44f697329342 4515dafab04c 451af9a410a4 45219eb38923 454cd40019dc 455844dbb629 46430fd979cd 465d7967afc7 465d8112a0e0 4671ae976c4b 4673c292cc62 4675f42cb45e 46b72771a3cd 47089ed05b2e 4719a28f94b1 47349fc43000 477110fa612a 47a6651d87bf 47cd9c1088b0 47d7dac8a158 47dfc0859b5b 48672284cb00 4891efd53fb1 48d79ee1341f 48fd342ff4d5 496ed5edc2b9 49bb262f8d0d 4a259ce512d9 4a94e61f4d99 4b286a05b461 4b74a71ac350 4ba749f3aa13 4bdc56156bcf 4be7e9c180c1 4c343f2e5444 4c8f0e169e82 4cec51eed5dc 4d55960511bf 4d70acec8588 4d96cd0e486e 4db363d9c6a9 4e1c9d9624aa 4e4693433f6d 4e7253fafb20 4e9f3590c316 4eaee7a6e928 4efcad215cfd 4f5585c9fc9b 4f7315ab7487 4f9f2cab3099 4fe75ee234c8 4fed19c1396b 5016871e3732 5034b2a39d33 5051959ce3a2 507ac1589e76 50b8d09cc462 50ed2f6f13e3 50f87aff72b1 512415738173 513e3e3eb1a0 519095f6377a 51909d5111ad 51cc1975962f 525c40e1146f 52751257a123 537d23eab48a 53a416aa6600 53e0f6987376 542ca3df2147 542ffaf161c1 544a78f2b154 5472d006bc8c 548c548f7d65 54ab1994adc2 54f78600d956 550c8c7519bd 5518b327f4ff 55258a5fd299 5526bca33f3f 5559e4828372 5569785ac524 557c0460b57a 559f24d03658 55ceb04cf490 55e153d6fd8c 568dc8ccf6c2 568f4ba44442 56a92dfa5d1a 56e2b480bd62 57205dac5a88 57485b9ae2e6 57a18b1def57 57cf86bb648b 57d1c3ea563a 57d7dd4c2726 57daba9d028f 58677c3a3bda 5883517ddf2f 58fc3ac7a939 5901c90cfdc4 591079a5e751 591f3392c724 592c64f0743e 598669d8b41a 59af043952bd 5a0ce543910b 5a6081b82c58 5aaa16e2a188 5adab9d23f70 5b17f8f07c8a 5b578e1acc7a 5b5b171dd21b 5b7fc61300b3 5b9902c6d3a4 5bb421a27676 5bdbe053119d 5bf1bb207404 5c51b5097799 5c6905203bb0 5cb68de81ec4 5cd6ed31169b 5d95ea902bf6 5dae3b0b8db7 5daed4430e57 5df686afce87 5e0e4b67384d 5e1c0b52487e 5e93ad9ce816 5ea2318785d5 5ea5b0cbeb9d 5f17943b28ef 5f17b874c30e 5f565a387fbc 5f7095ca6942 5f9a6f4d4201 5fb5fb7afae6 5fb7b2288f7c 5fbec7b51a67 5fc9c24cbfa6 5fd7ff35aa0f 5ffe2a8e6ad0 601b88f40f5e 604acc662642 604cd52022b4 60602a486874 60723ac9be37 6092f388412c 60fe57e72d15 610b827009be 61207598ce2a 6126d2b37941 6147cd3da70f 614845396981 617107a4917a 61a1d2883414 61a69aeb7053 61c8beb35ee7 61ca7595397b 61fb3e313df5 62029c05b9c9 622b002649d2 622ee1b54aa7 623660a2cfd4 626c11cf1a6f 6295ba26cca0 62a9eef0b488 62bd0612185a 62be3e0c3dfe 62e0c61d7b09 635353bcb298 635cf0b3d3b7 6387b7598ad7 63b0079aec6c 63b7d4b4c12a 643ff856e5f8 644b23b6d292 646097a910d7 64668acbdacb 647315cebbae 64aaa8b0cc34 64e03a4251f4 650e339c2fea 652b04df49d3 656be74064e8 65cd41a0c4b4 660cb7ccce90 661be06d6209 66831cfb3779 669b4e35274f 66a43de0061e 66b6cdea28d4 66da3eac590c 66e19a962a6a 66e9e7a2c0ca 66ea68dee17e 66efd503a76f 677c0604cb48 67b7b76a5ab4 67bd51857597 67c3d03db87b 67e72bc6e074 68298ef8a264 683af69a7816 6874e9d7e4dd 6886bfe20284 68d7de3a17a2 690e1269e84f 6920f5cb9841 69343c6878fa 6957eae59ab5 6964b20a2fa8 696bc106ad32 69816c133f49 699e47d7e7e7 69a4a140035c 69f5324d297f 6a11228d1d11 6a90acf04e6a 6ac16f2ec196 6ad8815f4155 6b1aa69f67bf 6b3155408a90 6b5347c86e64 6b73887064fc 6b90ae834e6b 6b90f1eb1ab7 6b9c2cb24246 6bca202de9b9 6c11cd9ff0d1 6c1b67f00266 6c3063760346 6c64223bbef3 6c90b0164e6c 6c9fbaa04eae 6ca184504cc8 6ce15e21ce27 6ce1fb42b7f4 6d651162d41c 6d90b1a94e6d 6d92f0404e8e 6d9d33dc0ce8 6d9fbc334eaf 6dbadc33dd4f 6e75a870954a 6e79deb9a4b5 6e8ca2dca398 6e90b33c4e6e 6e92f1d34e8d 6e9fbdc64eac 6eabd1157737 6ed174e1a1a5 6eecff241ce6 6f47b80def73 6f62b6ce0a4a 6f90b4cf4e6f 6f92f3664e8c 6f9fbf594ead 6fa05ebca5f4 6fa1fdf04ed2 7025eeab3173 7090b6624e70 7092f4f94e8b 709fc0ec4eb2 70a1ff834ed1 70d7c1042bb4 711cc43da21f 71774a859657 7190b7f54e71 7192f68c4e92 719fc27f4eb3 71a201164ed4 723d50ee501a 7290b9884e72 7292f81f4e91 729fc4124eb0 72a202a94ed3 72ba176f6cf5 72edaf4575c1 72fe412885f6 735da4a42cd6 738b7fff3c0f 7390bb1b4e73 7392f9b24e90 739fc5a54eb1 73a2043c4ece 73b5642e446e 73d6e66c1232 744f28c30fbf 7459deaecc4e 7492fb454e8f 74a205cf4ecd 74b6a562f712 74b87cc8b9e4 74e583f8521e 7520c2e9ac97 753f29e1be1f 7582ac04a4bc 75a207624ed0 75bc38434f01 75cf8e555bc3 765a571df08b 76722531e237 7679b2d6c5e0 769fca5e4eb4 76a208f54ecf 76c03bc847f4 76c91b9bc42b 76e587620338 773243f0b844 7792fffe4e94 779fcbf14eb5 77be524e9460 77c29beab162 77f29cfab85a 780078eafd08 789301914e93 78bed586fbea 78c2bbffdb4d 78e6b3772909 78fda26a5990 7951f99f7265 79b178796915 79c12d9d2a75 79e8edd648d8 7a41e7a1af6b 7a76ca3c6044 7ad078c1ab03 7ad24cd83dc6 7b2790aef920 7b56a119dc7d 7b630d138afb 7b7a731825dc 7b8047397211 7b80788ab9b6 7b9688ecc7ec 7b968e23ed11 7b97e318bc58 7ba210d44ed6 7ba61a0d6827 7bb5e8fb8b6f 7bd98709758f 7beefaf97b19 7bfec53d0f7d 7c3f6930d30c 7c57360a49fe 7c801e7f735b 7ca212674ed5 7d0187007c82 7d1dad45588d 7d3278d1db09 7d3c2a08f628 7d6c790537f3 7d6cac0fe585 7d7f1870fe7e 7dcd54e4948a 7de538912d67 7ded918ac242 7df38d4b27a1 7e705b069384 7ec333ac580c 7ec7eda96537 7eeb5f6f437b 7f2cfd5abc48 7f3022e5fec3 7f499e8e8b0a 7f66b3dbec51 7fab971b8025 7fc9de878d0d 7fefd8fa5558 8001860ca536 802b0da3c7df 802f84f77587 8090e1972a49 80dfb371e7d5 816f8d4695b4 81a34f8cce4e 81d808c477f6 81ec72c3a977 820a30a8ea46 821e3548cf42 825f58bf5221 829a59b929b7 82b133cd8f85 82ed5bdf178b 82f94d9d1821 830eb54c4fc8 8315b2029820 835b6254bc50 838cd678388a 83933b0898bc 83943072766c 83b1600438a6 83c7f1e54631 83e140a0714a 8417cc80d99a 84a0a33ad3a4 84dc0560e5f2 84e14233714b 8504d0f9ab63 851648fe0c00 8518c2b90b87 8538b6c7917f 85c7d4ca68a8 85e143c6714c 85f04e50710a 868f6f2ca96a 869a59113279 86afc4c09632 86cd359a893c 86da28e780db 86e14559714d 86e383f0712c 86e598b5b571 86ecd204fe0a 86f04fe3710b 877fa2cb5c13 879fa9359af5 87a3fe468554 87ab6e8ce0f8 87aef4c9d421 87c821fe069a 87e146ec714e 87e38583712b 87e57abc6fac 87f051767108 8803e2422b94 880ac43f918b 8827595f04bf 882a747ed54c 88778159226f 88dbbe595c5f 88e1487f714f 88e38716712a 88f053097109 88f291a070ec 8903a773f11d 89e14a127150 89e388a97129 89f0549c710e 89f2933370eb 89f4cf7ae2ba 89ff5149347d 8a018a95e725 8a0706d1c355 8a62ece8d04a 8ae14ba57151 8ae38a3c7130 8af0562f710f 8af294c670ee 8b1b73dcd6f6 8b6be06c7a34 8be14d387152 8be250f08478 8be38bcf712f 8be8d3b9f2f9 8bef06895a9d 8bf057c2710c 8bf2965970ed 8c9c651280ba 8cbf64417e5b 8ccd6faa60ec 8ce14ecb7153 8ce38d62712e 8cef3074d0be 8cf05955710d 8cf297ec70e8 8d08e3a2f2f4 8d267e1eae34 8db09086d780 8de11c4d784f 8de18bd98c7b 8de38ef5712d 8df2997f70e7 8e0946061e2e 8e2245354d89 8e337d58b87c 8e5182a6d974 8e6ec40111f5 8ea55b428148 8eb836ec46e2 8ededa72022c 8ef29b1270ea 8f0b40ccb55a 8f586b4ac938 8f9ddbb2f3d6 8faee965243b 8fd5f5f49480 8fdb2101018f 8ff05e0e7110 8ff29ca570e9 9012e498948e 9040e24bb919 908e1461ad3d 90abc8b39fa5 90c411436763 90c849401772 90c8afab46d3 90da9bc7ca33 90e393ae7132 90f05fa17111 914bd27aac4e 915147b7f3db 9198398dc253 91b4627dd43d 91e395417131 91e6acf30b4b 920dda77946f 922512865812 92407df8888c 9280f74c1bc8 928dee007898 92a933af2fe9 930e210e590c 932cf0d99e2b 9337feb80c18 9394423243d2 93da2fec2a12 9408a16aa74a 9443efcc8564 946e6567d56f 949d1301e821 94f2a48470f0 94f54f75b913 9523efff19e9 9535e645f9ab 9550d0a143ff 9584f950dbc8 95f2a61770ef 961aa4a9ebd7 962a5ae6b768 96444db6b58c 966310174cb9 966d19641ca6 96c419a13a27 96ebb82a1f02 976a3a78fccc 97eb90afbe71 982fdf5cf2ba 9872f8c73cb7 98ba7dd1d151 9948402e9014 99550a30fafa 99a45be977d3 99c7633d03e5 99ee9ee56b59 9a41e622dff2 9a5130ed8efd 9a7a27349f52 9a7b0e42b93c 9aa2a7fb73db 9acac7b1bea9 9b0bcecfbe65 9b1a030581b7 9b86663a3796 9b915a567b6a 9c4edc548fa0 9c655e4c843e 9c7c06fac5ac 9cafa556c920 9ce43d94e33c 9cf10abb128f 9cf51de86d54 9cf7d08b1b5f 9d0ad84b1055 9d257733ab19 9d3602f46568 9db23e88580a 9dc56ddd5df1 9e10ce11af17 9e493aa006ce 9eb8fc59dd2f 9ec7e00b583b 9ee659b01f96 9f90d3b36173 9fe7a13b5547 a004a33fa5cf a02a9283e9af a08150857fc1 a09f50789f42 a11775f6d0f4 a17597d4d822 a1914cf52f1d a1b005fab080 a1d25d7b7423 a1f6890106b5 a212c7b2f86e a255d760cd68 a25ddd9cd562 a263d022f162 a2e31bac9fd2 a2e58027fac1 a2fbe6123b36 a2fe3d849a2e a391f94b0817 a3c5e3629844 a4114867a9b9 a422c452897a a485312796a9 a4a7b9d5681b a4b2cbea48a2 a4cd2351c4d3 a4eded09edfd a5014c1575fd a5226ab0e13a a5256ac9c043 a585822a1ef4 a59dce42efa2 a5aa4d6a17c8 a5d6ae78ad90 a6246a1acd60 a632edc9ca3d a6406da16d07 a6b1d660fe80 a6fbb3373747 a7088a70bf62 a725dffe5208 a747b059bba5 a773e1f0331a a7932dc80bd4 a79e8052014c a82279e1033d a827f6a8fa6a a83cd923fe25 a866f4aa56d8 a871a25f33f3 a8d25d057905 a922793366db a9be10433973 a9c9265517bf aa2ae972db38 aaa623718bbd aabfa1f9926f aafb173c8c72 ab8d44ef89c7 abff16680e26 ac010353a1cf ac4ad2dacc38 ac8511edb8ed acc5be6f2ced acc7eb556339 add4af0882be ade68de75efb adfb70a725e1 ae252ec7a647 aea19dfa3806 aec23eb310cd aedcb201df15 af04b2f1b2ef af1c20b2a0c2 af3b03d2ae5e af49eee331fb af5585e5a9c1 af78c2ee3a7c b0353c802eee b059921110b3 b06d67c877f6 b0b68fa88248 b0b86f894ea1 b1466c41639f b151ce4c52a4 b16ec4e788a9 b1727e44fb8a b174e055ca7d b1777e46fe90 b196d78dfb51 b19ed45f77e7 b203b5b4afd4 b21e229c0ece b22f0adb1ee1 b2703082597e b2b788e6ce18 b2c8eb724abe b2f0cc3f5bc1 b33fe54f6ea5 b357947a0280 b38a239f43a5 b3ab5ef47404 b3ed957a4936 b3efc6cc3d2a b405942961e3 b4159670f072 b4206f467680 b4558e3ef93a b455d8aa314a b45832f1663b b45fa81a465a b4c6b48e87ae b4edfcb98101 b502100c3da4 b554f9208e5a b5bd45f886c2 b5f6f38eaa6a b611a696a316 b621aaefc297 b638b8dacb12 b6395d7b7745 b644ad0bd677 b6833daf2be5 b71a16fb58f3 b7523e2b861f b7aff4edd0b1 b827a877dca5 b8b0ec300e04 b8c0e12a3888 b91bfe4aa080 b94e474f8389 b956e6512481 b96ccb48dcea ba226bd5f0d5 ba6d1f71ac35 ba98abae9f36 ba9dc555f11b bad27b4f46d9 bae54d0693b0 bb3810db56a5 bb46a6e39fb7 bb91b31e457c bb9f8b9e06ba bc0450a14e0f bc9a8513dde9 bc9dd6b378ef bcaccf37c933 bcd1fd0d7eff bd12d09ca04c bd324ab146fd bd3e02be2b0c bd9105852ca9 bdf0ef697f5d bdfe502bd0d7 bdfe9c481f6c bdff576124eb be07a2377665 be0a29d98a71 be6993191869 be9168ae25b8 bed07ebd1c4f bedba0fdbbcf bef33d84786a bf0368a903b5 bfec26068134 bffd88fac2fa c09c6fb99389 c14d0bb3e70b c1a63c0d8a95 c1b3dc54bf1c c22023deb70c c2386f5efc00 c2d8738df9af c2ecdf532f35 c328494644fc c35f2a4886dc c36a019f562f c38b8df3cc69 c3a98e6823fc c3c58b0a28d2 c3dd0d67c4b3 c3f29a2aa1dc c4b8daf46d5c c4ec50042196 c519678c6fc4 c58034f1cfcb c5dea91acf1c c63b1e201986 c64af7b199d5 c650a11b9731 c693fe6eb41c c6d45e8f9e77 c6dd0e17fe49 c6e11a128f74 c6e98a588d32 c6edb5d17707 c70c49e7a9eb c7233293122b c73f2a1714d5 c7432bf6a6ac c7441a0f1a01 c7766e1066e2 c79493aab392 c7efbc8cd98e c7f9e4749a2e c862167b4c77 c87dc107052b c8b3b583b83f c8caeb18d016 c9307a2b8761 c95a92f72d53 c963215dbd53 c97be48ec846 ca0b4baf0017 ca299dc7e437 ca2cb0f2c5a0 ca6b5327289f ca740b1e99b8 ca9183d005cc caaf3b56703e cac06136eaa2 cac7d97f03a1 cb0943c560c7 cb6906f32ccf cb7a911602b4 cbd63b78ce7a cbec419623c2 cbfd3c67dda1 cc151f337921 cc33e2599e3b cc3813b8fcde cc3919362cc2 cc4e06ac2eb4 cc798226b924 cca5bc548768 ccb0fc84b7d6 ccc089f2996a ccd1961e147c ccd5eeddb083 ccf4ed6c4a04 cd4c1b0c7be8 cd546497b621 cd5a9fbbfddd cd86455788a7 cdfe37545a82 ce28b604afe8 ce6b56dc09bc cf19a0976383 cf269e93a5b3 cf2f8264d86e cf729d613b37 cfbaef87b66f cff4e89c7b86 cffdc9556345 d035a2698687 d0e8fc4d2cc3 d10dc2fbdcb9 d13b2f71197f d14dcd98c9e0 d14e2c9dbcd1 d16fe4ffce5d d17df44435ca d256163f4791 d295fb6a9e16 d2e54ddda1e3 d2e8bae3e3e3 d38abfb0c97e d3c3251a746a d3cb5d9c692c d3e72c76baac d3eac7c3e7a9 d43b969bf009 d44fb948414c d4719b0ecbb6 d479db8ec8c4 d47c26baeeec d4b3a501e9f3 d4b676b9c189 d4caf40e496c d4d646c2c78a d5a2298fbb5b d5a41d75daef d5f1d9fffda7 d5fb28e410d8 d61228e3dd2f d67b79277f03 d68a624c719e d6d89b06f9a4 d6e236c1b42d d701727a00d0 d709a44cce96 d738a8b6c450 d763a87db7d7 d7994f268d12 d7999dd8a92a d79d4fb49a64 d7a4a3521616 d7cb823b8217 d819c86e0318 d858a29f5b93 d8878968842e d8c5cb744b0e d8ecefa948bf d9296e38e9b4 d943b19519f3 d993a9ece74e d9c065556dc3 d9ddb5a68e5c da08542d3daf da1c3e83bf35 da371c600fc4 da5224ade96b dabff54cf1ae dadf228f3e27 db3cf6da14bc dbcf13c9643d dc59ac1fe259 dc6ca67bcc89 dce2786457f6 dd20e9c5e685 dd99e52b9915 dd9c2e3d3707 ddac83c501d3 ddf839d595c7 ddfde10df7a3 de17aa15a235 de1ef4bbb3bb de3fa5db6443 de8d53a3f551 de9b1acc67fa def344d4cdf0 df90a6cc5af8 dfeb5380ac0a e016a2e1f181 e05e781808de e070167962db e080793f0981 e08a02284846 e132e8a8614e e1597de7e863 e1f1931c6c24 e204cbbb14a7 e2264f4100eb e2339f443638 e2603a7401b0 e2e40b0d1921 e2fc78429dd0 e3acb39cedd0 e3d80e3d8cef e3f46c465568 e4167984ee7a e422e7e37353 e42960781b48 e4519566cde4 e4862ceb53e7 e4a3cba67794 e4b9664dbfc1 e4c5831abd38 e538286e8bc0 e5392f415c2d e5518303095f e574e1a74a99 e59c0927b8c7 e5b888880a14 e5c5cc558e3f e60265c5a569 e62f6d63f73d e6395b8b4c6f e6bc568ed8ec e6eee551dcdd e70cf8effd55 e70d6baa2dd6 e79443129a7a e7b05fed2edb e7e2f50fe10f e80532e6af36 e832ad7696d6 e83caa31da35 e8b8bf7f15a5 e8bf534df0ff e8cf8d19425d e8ec0c9dbe47 e8edf317eaf9 e909720f3ad5 e93565ca32c6 e96341f7a915 e982211eff02 e9bd81a8adca e9e30da5ab71 ea0654f57317 ea0eaa2551dd ea4ef0b59477 ea723d5a83ea ea7539bc411a ea7f3023d3f3 ea8814eaa872 eaf7c42b16d5 eb159f775535 eb1ca348bc04 eb5b29f1bd6d eb5d840818e8 eb93a85b62dd ebabbb804f52 ebfad46b731b ec077b62af5c ec23116160a3 ec4ef0b1bef9 ec66d793710b ec76bff57cc7 ec772c59aaed ec7865a75d23 ecabbd134f51 ecde4acd4615 ece16549bef5 ed0769e6746a edabbea64f54 ee341249ca41 ee37ba8130f9 ee81b1d11649 eeabc0394f53 eec70a6c1174 eed70fa2f33a eee4077a9284 efabc1cc4f56 f00313aa0184 f03f2f8f395b f061c22227b8 f07f14f2f054 f0abc35f4f55 f0f69c4ecd94 f132ba060e92 f1abc4f24f58 f1b8fe5afdc6 f1d41ddd721f f212bb0bed3b f21dcd8214a6 f24cbbf4a1cc f2ab9ab321ab f2abc6854f57 f2cf5eb276de f303f6a8a9b2 f30cee624e8c f33c0d0de015 f34d2472b2be f3593c8af7f4 f37273fc250a f378bd25a76d f39840604e52 f3a3fcda3960 f3abc8184f5a f415ed11707f f45475046230 f47eef320fd2 f485489483b6 f49841f34e51 f4abc9ab4f59 f4d5d108780a f4de996e169c f50ec4210d61 f5454234231c f572c6ea337e f58d7bd48a7a f5c29b43b023 f5ce7c15749f f5eb5a0d9f35 f63068a1888f f641ca0fa251 f644a8d88af2 f6a408f6dc10 f6bbbc2f5625 f6f0ed167bf0 f6fa5235147d f723cdea1c8e f724d5afbe33 f739abe048f0 f7572c87bd03 f75faea6260a f78cb6aa7f22 f7b3d26a750e f7cf5d669fda f7f4ecd51303 f7f7645a8d64 f802a99a9496 f8649c12e7a0 f871014c2ef4 f9622327d42b f9a51baed634 fa2cdfd8d33c fa576df9ab1d fa874f823d34 fa9a89fc4ef6 fae9ba9b7bd5 fb0c2ce65b1e fb984cf84e4a fb9a8b8f4ef7 fbb3dd820b02 fbc0a05c2898 fbd1f479f9c7 fc26ca0d7e0f fc85de29f2eb fc984e8b4e49 fcc199adb2db fcff27d2709e fd2b11c295ce fd5b059cb87e fd98501e4e4c fdf23b0dd863 fe1990585fb6 fe4061d2db1a fe6dcbff344d fe931f0aca42 fe9851b14e4b fe9a90484ef2 fea99ad24f38 fee06eeb0ebf ff2ce8600db2 ff6598649446 ff6763bf8657 ff84e8c5ac81 ff9853444e4e ff9a91db4ef3 ff9cd0724f18 ff9d8c275869 ffa99c654f39 ffb99cbb87a1 ffca469ca01c" };
+</script>
 <script>
 const Engine = (() => {
   const L = 60, W = 40;               // 7v7 pitch in metres, we attack to the right
@@ -2235,7 +2270,32 @@ const Engine = (() => {
     },
   ];
 
-  return { finishShot, GOAL_Y0, GOAL_Y1, BAR, LOW, KEEPER_REACH, keeper, keeperView, shotOutcome, evaluateShot, bestAim, composeStep, chainSteps, stepKept, stepEnd, chainStars, CHAIN_STEPS,
+  // ---------- the coach's voice: every line is recorded, and found again by its words ----------
+  // A text is said a sentence (or a short "Coach asks:" clause) at a time. Each piece has a key from its
+  // words, ignoring capitals, quote styles and the full stop at the end, so the same words find the same recording.
+  function speechSplit(text) {
+    const out = [];
+    for (const s of String(text || '').replace(/\s+/g, ' ').match(/[^.!?]+[.!?]+["”’)]*|[^.!?]+$/g) || []) {
+      // "Coach asks: Where do you run?" is two pieces, so "Coach asks" is recorded once.
+      for (const q of s.split(/:\s+(?=[A-Z0-9“"#])/)) if (/[A-Za-z0-9]/.test(q)) out.push(q.trim());
+    }
+    return out;
+  }
+  const speechNorm = (s) => String(s).toLowerCase().replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/[–—]/g, '-')
+    .replace(/\s+/g, ' ').replace(/[\s.!?:,;"'-]+$/, '').replace(/^[\s"'-]+/, '').trim();
+  function speechKey(s) {
+    const t = speechNorm(s);
+    let a = 2166136261, b = 5381;
+    for (let i = 0; i < t.length; i++) { const c = t.charCodeAt(i); a = Math.imul(a ^ c, 16777619) >>> 0; b = (Math.imul(b, 33) + c) >>> 0; }
+    return a.toString(16).padStart(8, '0') + (b & 0xffff).toString(16).padStart(4, '0');
+  }
+  // A sentence with a number in it that wasn't recorded whole: the words between the numbers, and the numbers.
+  const speechBits = (s) => String(s).split(/(#?\d+)/).map((x) => x.trim()).filter((x) => /[A-Za-z0-9]/.test(x));
+  // What the voice is given to read: shirt numbers as "number 5", ages as "6 to 8", no symbols.
+  const speechTts = (s) => String(s).replace(/\b50\/50\b/g, 'fifty-fifty').replace(/\b([A-Z][A-Z’']{2,})\b/g, (w) => w.charAt(0) + w.slice(1).toLowerCase()).replace(/#(\d+)/g, 'number $1').replace(/(\d+)\s*[–-]\s*(\d+)/g, '$1 to $2').replace(/\s*\+\s*/g, ' plus ')
+    .replace(/[★✓✕·]/g, ' ').replace(/\s+/g, ' ').trim();
+
+  return { finishShot, GOAL_Y0, speechSplit, speechNorm, speechKey, speechBits, speechTts, GOAL_Y1, BAR, LOW, KEEPER_REACH, keeper, keeperView, shotOutcome, evaluateShot, bestAim, composeStep, chainSteps, stepKept, stepEnd, chainStars, CHAIN_STEPS,
     pro, solutionFor, evaluateSpot, defendSpot, STILL, STILL_RUN, rng, vary, problems, isValid, variant, NO_MIRROR, follow, evaluateMove, REACT_TURN, MARKER_SPEED, ballHolder, optEnd, optSafe, evaluateChoice, OUR_GOAL, carrier, dangerMan, presser, DEFEND_RULES, evaluateDefend, defendOutcome, BEST_SLACK, L, W, R_INTERCEPT, SPACE_OPP, PASS_MIN, PASS_MAX, TACKLE, VISION, EDGE, dist, segInfo, unit, passer, nearestOpp, blockerOn, laneBlocker,
     evaluate, clamp, openSpace, shadows, passSafe, evaluatePass, fogged, stanceDir, canSee, STANCES, nearestStance, scanOutcome, evaluateScan, pathLength, samplePath, evaluateDribble, SECTIONS, PUZZLES };
 })();
@@ -2825,7 +2885,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
             pick = o.key; render(); updatePrimary();
             box.querySelectorAll('.opt-btn').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.key === pick)));
           });
-          box.appendChild(b);
+          const row = document.createElement('div');
+          row.className = 'opt-row'; row.append(b, spk(() => o.label, `Read “${o.label}”`));
+          box.appendChild(row);
         }
       },
       draw() {
@@ -3384,6 +3446,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   const EXTRA_CHIP = { space: 'Open space', pass: 'All my passes' };
 
   function showSetup() {
+    if (typeof stopTalk === 'function') stopTalk();
     show('game'); $('play').hidden = false; $('end').hidden = true; setCoach('neutral');
     $('setup').hidden = false; $('result').hidden = true;
     const t = T();
@@ -3497,6 +3560,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       li.className = 'still';
       li.innerHTML = '<span class="mark bad" aria-hidden="true">✕</span><div><strong><span class="sr">Not yet: </span>You moved to a new spot</strong><span class="why"></span></div>';
       li.querySelector('.why').textContent = 'You stayed where you started, so it’s 1 star at most. Find a better spot and move into it.';
+      li.appendChild(spk(() => 'Not yet: You moved to a new spot. You stayed where you started, so it’s 1 star at most. Find a better spot and move into it.'));
       list.appendChild(li);
     }
     res.checks.forEach((c, i) => {
@@ -3505,6 +3569,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       li.querySelector('strong').append(c.label);
       if (i === 2 && (pz.type === 'space' || pz.type === 'dribble')) li.querySelector('strong').insertAdjacentHTML('beforeend', ' <span class="swatch" title="Gold area on the pitch"></span>');
       li.querySelector('.why').textContent = c.why;
+      li.appendChild(spk(() => `${c.ok ? 'Done' : 'Not yet'}: ${c.label}. ${c.why}`));
       list.appendChild(li);
     });
   }
@@ -3595,15 +3660,18 @@ if (typeof module !== 'undefined') module.exports = Engine;
         setCoach(o.ok ? 'happy' : 'think');
         $('coach-talk').hidden = false;
         $('next').scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' });  // bring the lesson and the buttons into view
-        say(`${o.ok ? c.yes : `${c.no} It’s ${right}.`} ${pz.teach}`);
+        say(wordsOf($('coach')));
       });
-      box.appendChild(b);
+      const row = document.createElement('div');
+      row.className = 'opt-row'; row.append(b, spk(() => o.t, `Read “${o.t}”`));
+      box.appendChild(row);
     }
   }
 
   let resetArmed = false, resetTimer = null;
   function showHome() {
     if (anim) return;
+    if (typeof stopTalk === 'function') stopTalk();
     stopClock();
     chain = null; cmode = null; speed = 1;
     state = 'home';
@@ -3637,9 +3705,10 @@ if (typeof module !== 'undefined') module.exports = Engine;
     const box = $('skills');
     box.replaceChildren();
     E.SECTIONS.forEach((sc) => {
-      const b = skillCard(sc);
+      const b = skillCard(sc), wrap = document.createElement('div');
       b.addEventListener('click', () => load(continueIndex(sc.id)));
-      box.appendChild(b);
+      wrap.className = 'skill-wrap'; wrap.append(b, spk(() => `${sc.title}. ${sc.blurb}`, `Read “${sc.title}”`));
+      box.appendChild(wrap);
     });
     resetArmed = false; clearTimeout(resetTimer);
     $('reset').textContent = 'Clear my stars';
@@ -3686,7 +3755,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       const once = best[i] === 3 && !secure(i);
       m.setAttribute('aria-label', `${best[i]} of 3 stars${once ? '. Do it once more on a new picture for gold' : ''}`);
       m.innerHTML = '★'.repeat(best[i]) + `<span class="off">${'★'.repeat(3 - best[i])}</span>` + (once ? '<span class="once">1 more for gold</span>' : '');
-      li.append(t, m); ul.appendChild(li);
+      li.append(t, m, spk(() => wordsOf(t))); ul.appendChild(li);
     }
     $('sat-text').textContent = sc.challenge;
     try { localStorage.setItem(CHALLENGE_KEY, sc.id); } catch (e) { /* private mode: the card still shows here */ }
@@ -3713,7 +3782,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
       const m = document.createElement('span'); m.className = 'mini';
       m.setAttribute('aria-label', `${st} of 3 stars`);
       m.innerHTML = '★'.repeat(st) + `<span class="off">${'★'.repeat(3 - st)}</span>`;
-      li.append(t, m); ul.appendChild(li);
+      li.append(t, m, spk(() => wordsOf(t))); ul.appendChild(li);
     }
     // The challenge comes from the skill he found hardest in this match.
     const worst = matchQ.slice().sort((a, b) => (matchStars[a] || 0) - (matchStars[b] || 0))[0];
@@ -4535,40 +4604,126 @@ if (typeof module !== 'undefined') module.exports = Engine;
     showHome();
   });
 
-  // ---------- read aloud (the device's own voice; nothing leaves the iPad) ----------
+  // ---------- the coach's voice: lines recorded in advance (audio/), the device's own voice as a backup ----------
+  // Nothing leaves the iPad: the recordings come from the same place as the game, and only on-device voices are used.
   const canSpeak = 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+  const VOICE = window.FTS_VOICE || { dir: 'audio/', keys: '' };
+  const clips = new Set(String(VOICE.keys).split(' ').filter(Boolean));
+  const canClip = /^https?:$/.test(location.protocol) && !!(window.AudioContext || window.webkitAudioContext) && clips.size > 0;
   let narrate = false, voice = null, unlocked = false;
   function narratePref() { try { return localStorage.getItem('fts-narrate'); } catch (e) { return null; } }
-  { const s = narratePref(); narrate = canSpeak && (s === '1' || (s === null && !!player && !!player.age && player.age <= 7)); }
+  const canTalk = () => canClip || (canSpeak && !!voice);
+  { const s = narratePref(); narrate = (canSpeak || canClip) && (s === '1' || (s === null && !!player && !!player.age && player.age <= 7)); }
   function pickVoice() {
     const junk = /novelty|bells|bad news|good news|whisper|zarvox|trinoids|albert|bahh|boing|bubbles|cellos|deranged|hysterical|jester|organ|superstar|wobble|junior|ralph|fred|kathy|grandpa|grandma|rocko|shelley|flo|eddy|reed|sandy/i;
     const score = (v) => (/^en/i.test(v.lang) ? 20 : 0) + (/en[-_](ZA|GB|AU|IE|NZ)/i.test(v.lang) ? 4 : /en[-_]US/i.test(v.lang) ? 3 : 0)
-      + (/enhanced|premium|natural|neural/i.test(v.name) ? 5 : 0) + (/samantha|daniel|karen|tessa|serena|moira|google uk/i.test(v.name) ? 2 : 0)
+      + (/enhanced|premium|natural|neural/i.test(v.name) ? 5 : 0) + (/daniel|arthur|oliver|malcolm|gordon|aaron|rishi|tom|alex/i.test(v.name) ? 2 : 0)
       + (v.localService ? 1 : 0) - (junk.test(v.name) ? 50 : 0);
     // Only voices that live on this device: an online voice would send the words over the internet.
     const vs = speechSynthesis.getVoices().filter((v) => v.localService);
     voice = vs.length ? vs.sort((a, b) => score(b) - score(a))[0] : null;
-    nb.hidden = !voice;
+    syncTalkers();
   }
-  function say(text) {
-    if (!narrate || !canSpeak || !text || !voice) return;
+  // What he hears: the player's own name is left out (the recordings can't know it), the rest a sentence at a time.
+  // Only where he's spoken to ("YES, Kid!", "Hi Kid!"), so a name that is also a word ("Will", "Look") stays in other sentences.
+  function noName(text) {
+    const nm = player && player.name.trim();
+    if (!nm) return text;
+    const esc = nm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text).replace(new RegExp(`(,\\s*|\\bHi\\s+)${esc}(?=\\s*[.!?,])`, 'g'), (m, pre) => (/^Hi/.test(pre) ? 'Hi' : ''));
+  }
+  function speechPlan(text) {
+    const plan = [];
+    for (const p of E.speechSplit(noName(text))) {
+      const k = E.speechKey(p);
+      if (clips.has(k)) { plan.push({ key: k, text: p }); continue; }
+      const bits = /\d/.test(p) ? E.speechBits(p) : [];
+      if (bits.length && bits.every((b) => clips.has(E.speechKey(b)))) { for (const b of bits) plan.push({ key: E.speechKey(b), text: b }); continue; }
+      plan.push({ text: p });  // not recorded: the device's voice says this bit
+    }
+    return plan;
+  }
+  const bufs = new Map();
+  function clipBuf(key) {
+    if (!bufs.has(key)) {
+      const pr = fetch(`${VOICE.dir}${key}.mp3`).then((r) => { if (!r.ok) throw new Error('no clip'); return r.arrayBuffer(); })
+        .then((b) => new Promise((ok, no) => { const a = audio(); if (!a) { no(new Error('no audio')); return; } const q = a.decodeAudioData(b, ok, no); if (q && q.catch) q.catch(no); }));
+      pr.catch(() => bufs.delete(key));
+      bufs.set(key, pr);
+      // keep only the most recent clips decoded (an iPad has little memory); older ones come back from the browser's cache
+      while (bufs.size > 80) bufs.delete(bufs.keys().next().value);
+    } else { const pr = bufs.get(key); bufs.delete(key); bufs.set(key, pr); }
+    return bufs.get(key);
+  }
+  let talkN = 0, talkSrc = null, talkBtn = null, talkTimer = null;
+  const missed = [];  // bits said by the device voice (the tests check this stays empty)
+  function stopTalk() {
+    talkN++;
+    if (talkSrc) { try { talkSrc.onended = null; talkSrc.stop(); } catch (e) { /* already stopped */ } talkSrc = null; }
+    clearTimeout(talkTimer);
+    if (canSpeak) { try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } }
+    if (talkBtn) { talkBtn.classList.remove('talking'); talkBtn.setAttribute('aria-pressed', 'false'); talkBtn = null; }
+    document.documentElement.dataset.talking = '0';
+  }
+  function deviceSay(text, done) {
+    if (!canSpeak || !voice) { done(); return; }
+    let fin = false;
+    const end = () => { if (fin) return; fin = true; clearTimeout(talkTimer); done(); };
     try {
-      speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.voice = voice; u.lang = voice.lang;
-      u.rate = 0.95; u.pitch = 1.05;
+      const u = new SpeechSynthesisUtterance(E.speechTts(text));
+      u.voice = voice; u.lang = voice.lang; u.rate = 0.95; u.pitch = 1.0;
+      u.onend = end; u.onerror = end;
       speechSynthesis.speak(u);
-    } catch (e) { /* speech is a nice-to-have */ }
+      talkTimer = setTimeout(end, 1500 + text.length * 90);  // iPad sometimes forgets to say it finished
+    } catch (e) { end(); }
+  }
+  // Say a text in the coach's voice, a piece at a time. A newer call (or a tap on a speaker that's talking) stops it.
+  function speak(text, btn) {
+    stopTalk();
+    if (!text || !canTalk()) return;
+    const id = talkN, plan = speechPlan(text), a = canClip ? audio() : null;
+    if (a && navigator.audioSession) { try { navigator.audioSession.type = 'playback'; } catch (e) { /* older iPad */ } }
+    if (btn) { talkBtn = btn; btn.classList.add('talking'); btn.setAttribute('aria-pressed', 'true'); }
+    document.documentElement.dataset.talking = '1';
+    window.FTS_SAID = (window.FTS_SAID || []).concat([plan.map((p) => (p.key ? p.key : `!${p.text}`)).join(' ')]).slice(-40);
+    if (a) for (const p of plan) if (p.key) clipBuf(p.key).catch(() => {});  // fetch them all at once
+    const next = (i) => {
+      if (talkN !== id) return;
+      if (i >= plan.length) { stopTalk(); return; }
+      const p = plan[i], after = () => { if (talkN === id) talkTimer = setTimeout(() => next(i + 1), 110); };
+      const viaDevice = () => { if (p.key) p.key = null; missed.push(p.text); deviceSay(p.text, after); };
+      if (!p.key || !a) { if (!p.key) missed.push(p.text); deviceSay(p.text, after); return; }
+      clipBuf(p.key).then((buf) => {
+        if (talkN !== id) return;
+        const src = a.createBufferSource();
+        src.buffer = buf; src.connect(a.destination);
+        src.onended = () => { if (talkSrc === src) talkSrc = null; after(); };
+        talkSrc = src; src.start();
+      }).catch(viaDevice);
+    };
+    next(0);
+  }
+  // The read-aloud switch: the coach says each new screen by himself.
+  function say(text) { if (window.FTS_VOICE_AUDIT) auditText(text); if (narrate) speak(text); }
+  // For the tests: which bits of what he could hear right now have no recording.
+  const audited = new Set(), auditOut = [];
+  function auditText(t) { for (const p of speechPlan(t)) if (!p.key && !audited.has(p.text)) { audited.add(p.text); auditOut.push(p.text); } }
+  function voiceAudit() {
+    for (const b of document.querySelectorAll('.spk, .hear')) if (b._say && shown(b)) { try { auditText(b._say()); } catch (e) { /* not on screen any more */ } }
+    try { if (state !== 'playing') auditText(currentSpeech()); } catch (e) { /* between screens */ }
+    return auditOut.splice(0);
   }
   // iPad only lets a page talk after a tap, so the first tap wakes the voice up.
   function unlockSpeech() {
-    if (!narrate || unlocked || !canSpeak || !voice) return;
+    if (unlocked || !canTalk()) return;
     unlocked = true;
-    try { const u = new SpeechSynthesisUtterance(' '); u.voice = voice; u.volume = 0; speechSynthesis.speak(u); } catch (e) { /* ignore */ }
+    const a = canClip ? audio() : null;
+    if (a) { try { const b = a.createBuffer(1, 1, 22050), s = a.createBufferSource(); s.buffer = b; s.connect(a.destination); s.start(); } catch (e) { /* ignore */ } }
+    if (narrate && canSpeak && voice) { try { const u = new SpeechSynthesisUtterance(' '); u.voice = voice; u.volume = 0; speechSynthesis.speak(u); } catch (e) { /* ignore */ } }
   }
   const setupSpeech = () => {
-    const opts = pz.type === 'choice' ? pz.options.map((o) => o.label) : null;
-    return `${pz.title}. ${pz.prompt}${opts ? ` Your choices: ${opts.slice(0, -1).join(', ')}, or ${opts[opts.length - 1]}.` : ''}${pz.countdown ? ` You have ${pz.countdown} seconds. Tap Start the clock when you’re ready.` : ''}`;
+    const opts = pz.type === 'choice' ? pz.options.map((o) => `${o.label}.`) : null;
+    return `${pz.title}. ${$('prompt').textContent}${opts ? ` Your choices: ${opts.join(' ')}` : ''}${pz.countdown ? ` You have ${pz.countdown} seconds. Tap Start the clock when you’re ready.` : ''}`;
   };
   function resultSpeech() {
     if (fin) return $('demo-text').textContent;
@@ -4576,12 +4731,13 @@ if (typeof module !== 'undefined') module.exports = Engine;
     const head = ['No stars this time.', 'One star.', 'Two stars.', 'Three stars! Brilliant.'][res.stars];
     const fixes = (res.still ? 'You stayed where you started, so it’s 1 star at most. ' : '') + res.checks.filter((c) => !c.ok).map((c) => c.why).join(' ');
     if (!pz.ask) return `${head} ${fixes} Coach says: ${pz.teach}`;
-    const opts = askOptions().map((o) => o.t);
-    return `${head} ${fixes} Coach asks: ${pz.ask.q} Is it: ${opts.slice(0, -1).join(', ')}, or ${opts[opts.length - 1]}?`;
+    return `${head} ${fixes} ${askSpeech()}`;
   }
+  // The coach's question and its three answers, as he says them (and as "Hear it again" repeats them).
+  const askSpeech = () => `Coach asks: ${pz.ask.q} Is it: ${askOptions().map((o) => `${o.t}?`).join(' ')}`;
   function endSpeech() {
     const sc = E.SECTIONS.find((x) => x.id === sec), list = tierList(sec), t = starsIn(list), max = list.length * 3;
-    return `${sc.title}, done. You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Get ready for the game: ${sc.challenge}`;
+    return `${sc.title}. All done! You got ${t} of ${max} stars. ${t === max ? 'Perfect! ' : ''}Great work. Get ready for the game: ${sc.challenge}`;
   }
   const homeSpeech = () => `${$('home-sub').textContent} ${E.SECTIONS.map((x) => x.title).join('. ')}.`;
   const makeSpeech = () => 'Make your player. Type your name, pick your shirt number, make your look, then pick your age, your academy and your coach.';
@@ -4597,11 +4753,82 @@ if (typeof module !== 'undefined') module.exports = Engine;
     narrate = !narrate;
     try { localStorage.setItem('fts-narrate', narrate ? '1' : '0'); } catch (e) { /* private mode */ }
     syncNarrate();
-    if (narrate) { unlocked = true; say(currentSpeech()); } else if (canSpeak) speechSynthesis.cancel();
+    if (narrate) { unlocked = true; speak(currentSpeech()); } else stopTalk();
   });
   document.addEventListener('pointerdown', (e) => {
-    if (narrate && !unlocked && e.target !== nb && !nb.contains(e.target)) { unlocked = true; say(currentSpeech()); }
+    if (narrate && !unlocked && e.target !== nb && !nb.contains(e.target) && !e.target.closest('.spk, .hear')) { unlocked = true; say(currentSpeech()); }
   }, { capture: true });
+
+  // ---------- speakers: tap one and the coach reads just that part. "Hear it again" says the whole question ----------
+  const SPK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="waves" d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
+  const shown = (n) => n && n.offsetParent !== null;
+  // The words a part shows, without the speaker buttons or hidden marks in it.
+  function wordsOf(n) {
+    const c = n.cloneNode(true);
+    c.querySelectorAll('.spk, .hear, [aria-hidden="true"], .swatch').forEach((x) => x.remove());
+    return c.textContent.replace(/\s+/g, ' ').trim();
+  }
+  function spk(getText, label) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'spk'; b.innerHTML = SPK_ICON;
+    b.setAttribute('aria-label', label || 'Read it to me'); b.setAttribute('aria-pressed', 'false');
+    b.hidden = !canTalk();
+    b._say = () => (typeof getText === 'function' ? getText() : wordsOf(getText));
+    b.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      unlockSpeech();
+      if (b.classList.contains('talking')) { stopTalk(); return; }
+      speak(typeof getText === 'function' ? getText() : wordsOf(getText), b);
+    });
+    return b;
+  }
+  // A speaker beside a part whose words the app changes: the part goes in a row with its speaker.
+  function says(n, getText, cls) {
+    const row = document.createElement('div');
+    row.className = 'says' + (cls ? ` ${cls}` : '');
+    n.parentNode.insertBefore(row, n); row.appendChild(n);
+    row.appendChild(spk(getText || n));
+    return row;
+  }
+  function hear(where, before) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'hear'; b.innerHTML = `${SPK_ICON}<span>Hear it again</span>`;
+    b.setAttribute('aria-pressed', 'false'); b.hidden = !canTalk();
+    b._say = () => (state === 'result' && pz && pz.ask && !$('ask').hidden && !inChain() && !fin ? askSpeech() : currentSpeech());
+    b.addEventListener('click', (e) => {
+      e.preventDefault(); unlockSpeech();
+      if (b.classList.contains('talking')) { stopTalk(); return; }
+      speak(b._say(), b);
+    });
+    where.insertBefore(b, before || where.firstChild);
+    return b;
+  }
+  function syncTalkers() {
+    nb.hidden = !canTalk();
+    document.querySelectorAll('.spk, .hear').forEach((b) => { b.hidden = !canTalk(); });
+  }
+  // the game panel
+  for (const id of ['prompt', 'demo-text', 'ask-q', 'coach']) says($(id), null, 'bubble-row');
+  $('how').parentNode.appendChild(spk($('how')));
+  hear($('play'));
+  hear($('end'));
+  says($('end-sub')); says($('sat-text'));
+  // home
+  says($('home-sub'), null, 'bubble-row');
+  $('hero-what').closest('.hero-next').appendChild(spk(() => `${$('hero-k').textContent.split('·')[0].trim()}: ${$('hero-what').textContent.replace(' · ', '. ')}.`, 'Read the next puzzle'));
+  hear($('home').querySelector('.hero-body'));
+  says($('home-sat-text'));
+  $('match').insertAdjacentElement('afterend', spk(() => `Match mode. ${$('match').querySelector('.match-sub').textContent}`, 'Read Match mode'));
+  // making his player: every heading, and what's still missing
+  for (const n of document.querySelectorAll('#make-form .lbl, #make-form .sublbl')) {
+    const t = n.cloneNode(true); t.querySelectorAll('.lbl-opt').forEach((x) => x.remove());
+    const words = t.textContent.trim();
+    says(n, () => words, 'lbl-row');
+  }
+  says($('make-need')); says($('co-hello'));
+  hear($('make-form'), $('make-form').querySelector('h1').nextSibling);
+  syncTalkers();
+  Object.assign(window.FTS, { voice: () => ({ missed: missed.slice(), clips: clips.size, canClip, can: canTalk(), talking: !!talkBtn || document.documentElement.dataset.talking === '1' }), speechPlan: (t) => speechPlan(t), stopTalk: () => stopTalk(), voiceAudit: () => voiceAudit() });
 
   const sb = $('sound');
   const syncSound = () => sb.setAttribute('aria-pressed', String(soundOn));
@@ -4616,7 +4843,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
 
   // ---------- version: shown on home, and the app fetches itself once at start to pick up a newer version ----------
-  const APP_VERSION = 16;
+  const APP_VERSION = 17;
   $('ver').textContent = `Version ${APP_VERSION}`;
   (async () => {
     if (!/^https?:$/.test(location.protocol)) return;
