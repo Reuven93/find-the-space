@@ -987,7 +987,7 @@ const Engine = (() => {
     press(pz, you) {
       const dd = dist(you, carrier(pz)), ok = dd >= 1.5 && dd <= 4.5;
       return { ok, label: 'You pressed the ball',
-        why: ok ? 'Close enough to stop him, not so close he can go past you.' : dd < 1.5 ? 'Too close: he’ll knock it past you. Stay an arm’s length away.' : 'Too far away. Close him down!' };
+        why: ok ? 'Close enough to stop him, not so close he can go past you.' : dd < 1.5 ? 'Too close: he’ll knock it past you. Stay a big step away.' : 'Too far away. Close him down!' };
     },
   };
   function defendSpot(pz, you) {
@@ -1000,7 +1000,7 @@ const Engine = (() => {
   function defendOutcome(pz, you) {
     const c = carrier(pz), to = pz.threat.to, stopped = evaluateDefend(pz, you).stopped;
     if (!stopped) return { stopped, ball: to, carrierTo: pz.threat.kind !== 'pass' ? to : null, dangerTo: pz.threat.kind === 'pass' ? to : null };
-    if (pz.threat.kind === 'show') return { stopped, ball: pz.threat.out, carrierTo: pz.threat.out, youTo: { x: pz.threat.out.x - 1.6, y: pz.threat.out.y + 1.6 } };
+    if (pz.threat.kind === 'show') return { stopped, ball: pz.threat.out, carrierTo: pz.threat.out, youTo: { x: pz.threat.out.x - 1.6, y: pz.threat.out.y + 1.6 * (Math.sign(W / 2 - pz.threat.out.y) || 1) } };  // on his inside, whichever side he's on
     const s = segInfo(you, c, to);
     return { stopped, ball: s.point, youTo: s.point };
   }
@@ -2104,6 +2104,135 @@ const Engine = (() => {
           set: { you: { x: 45.5, y: 28.5 }, o8: { x: 41, y: 30 }, o4: { x: 51.5, y: 20.5 }, o1: { x: 58.7, y: 21.6 } } },
       ],
     },
+    // ---------- v16: four more full moves (the coach's drafts B, I, D and H) ----------
+    {
+      type: 'chain', section: 'moves', id: 'mv-press', title: 'Press high and score', age: '6-8',
+      prompt: 'A whole move: press their defender, win it and score!',
+      teach: 'When their keeper rolls it out, sprint and close the defender down, a big step away. Win it near their goal? Shoot straight away, before the keeper or their defenders get there.',
+      lesson: 'Win it near their goal? Shoot quickly.',
+      ask: { q: 'You win the ball right near their goal. What do you do?', a: ['Shoot quickly', 'Dribble closer first', 'Pass it back'] },
+      youN: 9, you: { x: 42, y: 20 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 18, y: 12 }, { n: 3, name: 'Leo', x: 18, y: 29 },
+        { n: 6, name: 'Noah', x: 32, y: 19 }, { n: 7, name: 'Ava', x: 40, y: 7 }, { n: 11, name: 'Sam', x: 37, y: 36 }],
+      opps: [{ n: 1, x: 57, y: 21 }, { n: 4, x: 50, y: 26 }, { n: 5, x: 50, y: 13 }, { n: 2, x: 45, y: 35 },
+        { n: 8, x: 34, y: 27 }, { n: 7, x: 34, y: 11 }, { n: 9, x: 26, y: 22 }],
+      steps: [
+        { type: 'defend', ball: 4, run: 8, cap: 'Closed him down',
+          prompt: 'Their keeper has rolled it out to their #4. Sprint at him and close him down, a big step away!',
+          rules: ['press', 'goalsideBall', 'zone'], stopIf: ['press', 'goalsideBall'],
+          zone: { x0: 40, x1: 60, y0: 0, y1: 40, label: 'You pressed up high', ok: 'You went to him, right up near their goal.', fail: 'You dropped back. Up here, go and close him down!' },
+          threat: { kind: 'dribble', to: { x: 40, y: 31 } }, solution: { x: 47, y: 25 } },
+        { type: 'choice', best: 'shoot', cap: 'Shot straight away', intro: 'You won it!',
+          prompt: 'You’ve won it, right near their goal. Quick: what now?',
+          labels: ['You kept the ball', 'Quick to goal', 'The best choice'], safeWhy: 'Nobody could get to you.', noHelpWhy: 'Their defenders had time to get back.',
+          set: { you: { x: 48, y: 26.8 }, o4: { x: 49, y: 30.5 }, o1: { x: 56.2, y: 22.8 }, o5: { x: 51.5, y: 14 } },
+          options: [
+            { key: 'shoot', kind: 'dribble', path: [{ x: 49.8, y: 25.6 }], label: 'Shoot now', helps: true, helpsWhy: 'You set it on your foot and shot before anyone could stop you.', why: 'Near their goal, shoot quickly. You got your shot away before anyone could get to you.' },
+            { key: 'closer', kind: 'dribble', path: [{ x: 55, y: 23.2 }], label: 'Dribble closer', helps: true, why: 'You took it closer, and the keeper came out and grabbed it.' },
+            { key: 'back', kind: 'pass', n: 6, label: 'Pass back to Noah', helps: false, why: 'Safe, but their defenders had time to get back. Up here, shoot!' },
+          ] },
+        { type: 'shoot', cap: 'Low into the bigger gap', intro: 'Shoot!',
+          prompt: 'The keeper has come off his line. Look at him, then tap the goal where you want to shoot.',
+          set: { you: { x: 49.8, y: 25.6 } } },
+      ],
+    },
+    {
+      type: 'chain', section: 'moves', id: 'mv-takeon', title: 'Take him on', age: '6-8',
+      prompt: 'A whole move: one defender in your way. Beat him and score!',
+      teach: 'Near their goal, with one defender in front and nobody free, be brave: take him on. Run straight at him, then go past his side, and shoot early before he gets back.',
+      lesson: '1 against 1 near their goal? Take him on, then shoot.',
+      ask: { q: 'Near their goal, one defender in front of you, nobody free. What do you do?', a: ['Take him on', 'Pass it back', 'Stop and wait for help'] },
+      youN: 10, you: { x: 41.5, y: 21 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 20, y: 12 }, { n: 3, name: 'Leo', x: 20, y: 29 },
+        { n: 6, name: 'Noah', x: 32, y: 17 }, { n: 7, name: 'Ava', x: 40, y: 6 }, { n: 9, name: 'Kai', x: 51, y: 32 }],
+      opps: [{ n: 1, x: 57.5, y: 20 }, { n: 4, x: 50.5, y: 20 }, { n: 5, x: 51, y: 29.2 }, { n: 7, x: 38, y: 9 },
+        { n: 8, x: 35, y: 26.5 }, { n: 9, x: 27, y: 22 }, { n: 2, x: 30, y: 33 }],
+      tie: { o5: 'm9', o7: 'm7', o4: 'you' },
+      steps: [
+        { type: 'choice', best: 'take', riskOk: true, cap: 'Took him on',
+          prompt: 'You’ve got the ball near their goal. One defender is in front of you, and your teammates are marked. What do you do?',
+          options: [
+            { key: 'take', kind: 'dribble', path: [{ x: 45, y: 20.5 }], risky: true, label: 'Take him on', helps: true, why: 'One defender, near their goal, nobody free: go at him!' },
+            { key: 'back', kind: 'pass', n: 6, label: 'Pass back to Noah', helps: false, why: 'Safe, but now their whole team gets back. Up here, take him on!' },
+            { key: 'kai', kind: 'pass', n: 9, label: 'Pass to Kai', helps: true, why: 'Their #5 is right on Kai, so the pass gets cut out.' },
+          ] },
+        { type: 'dribble', maxRun: 14, cap: 'Straight at him, then past', intro: 'Go at him!',
+          prompt: 'Now beat him! Draw your run: straight at him, then past his side.',
+          goal: { type: 'zone', x0: 52, x1: 60, y0: 12, y1: 28, label: 'You got past him', ok: 'Straight at him, then into the space beside him. He’s beaten!', fail: 'Get past him, into the space beside him.' },
+          solution: [{ x: 45, y: 20.5 }, { x: 47.5, y: 20.5 }, { x: 49.5, y: 24 }, { x: 54, y: 24.3 }],
+          set: { you: { x: 45, y: 20.5 } } },
+        { type: 'shoot', cap: 'Shot early, low', intro: 'You’re past him! Shoot early.',
+          prompt: 'He’s turning to chase you. Shoot early! Look at the keeper, then tap the goal.',
+          set: { you: { x: 54, y: 24.3 }, o4: { x: 51, y: 22 }, o1: { x: 58.4, y: 21.9 } } },
+      ],
+    },
+    {
+      type: 'chain', section: 'moves', id: 'mv-switch', title: 'From the far side', age: '8-10',
+      prompt: 'A whole move: the ball is on the other side. Stay wide, then score!',
+      teach: 'When the ball is on the other side, don’t drift over to it. Stay wide: that’s where the space is. When it’s switched to you, look first, turn and drive at goal.',
+      lesson: 'Ball on the other side? Stay wide. Your turn is coming.',
+      ask: { q: 'The ball is on the other side of the pitch. Where do you go?', a: ['Stay out wide on my side', 'Run over to the ball', 'Stand in the middle'] },
+      youN: 11, you: { x: 33, y: 25 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 9 }, { n: 3, name: 'Leo', x: 17, y: 26 },
+        { n: 6, name: 'Noah', x: 27, y: 13 }, { n: 7, name: 'Ava', x: 31, y: 4 }, { n: 9, name: 'Kai', x: 43, y: 13 }],
+      opps: [{ n: 1, x: 57, y: 20 }, { n: 4, x: 47, y: 16 }, { n: 2, x: 46, y: 35.5 }, { n: 7, x: 34, y: 8 },
+        { n: 8, x: 33, y: 17 }, { n: 10, x: 36.5, y: 22.5 }, { n: 9, x: 22, y: 19 }],
+      tie: { o7: 'm7', o4: 'm9', o10: 'you' },
+      steps: [
+        { type: 'space', ball: 6, run: 12, hold: true, cap: 'Stayed wide',
+          prompt: 'Ava has passed inside to Noah. Everyone is drifting towards the ball, you too. Where should you be?',
+          goal: { type: 'zone', x0: 26, x1: 48, y0: 33, y1: 40, label: 'You stayed wide',
+            ok: 'Out wide on the other side, where the space is. Noah can switch it to you.', fail: 'Too narrow. When the ball’s on the other side, stay out wide near the sideline.' } },
+        { type: 'scan', ball: 6, best: 'half', cap: 'Looked, then turned', intro: 'Noah switches it to you!',
+          prompt: 'Here comes the switch, and their #10 is running across at you. Is anyone behind you? Look, then choose how to stand.',
+          open: { x: 45, y: 34 },
+          set: { you: { x: 33, y: 34.5 }, o10: { x: 36.5, y: 30 } },
+          stances: {
+            half: { grade: 'best', why: 'Nobody was behind you, so you could open up. Your first touch takes you away from their #10, into all that space.' },
+            face: { grade: 'bad', why: 'Square-on, you had to stop and turn with the ball. Their #10 got to you first.' },
+            back: { grade: 'ok', why: 'Safe, but with your back to their goal you can’t go forward. Nobody was behind you: open up!' },
+          } },
+        { type: 'dribble', maxRun: 16, cap: 'Drove into the space', intro: 'You turned! Look at all that grass.',
+          prompt: 'Open grass in front of you. Draw your run: drive at their goal!',
+          goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward. There’s grass in front of you: use it.' },
+          solution: [{ x: 36.5, y: 34.3 }, { x: 44, y: 32 }, { x: 49.5, y: 29.5 }],
+          set: { you: { x: 36.5, y: 34.3 }, o10: { x: 36, y: 27 } } },
+        { type: 'shoot', cap: 'Low across the keeper', intro: 'Their #4 has gone to Kai. Shoot!',
+          prompt: 'Their #4 is blocking the pass to Kai. Look at the keeper, then tap the goal where you want to shoot.',
+          set: { you: { x: 49.5, y: 29.5 }, m9: { x: 53, y: 17.5 }, o4: { x: 54.5, y: 20.2 }, o2: { x: 46.5, y: 33.5 }, o1: { x: 58.2, y: 22.4 } } },
+      ],
+    },
+    {
+      type: 'chain', section: 'moves', id: 'mv-getback', title: 'Get back and go again', age: '8-10',
+      prompt: 'A whole move: we lose the ball. Get back, win it, and score!',
+      teach: 'Lost it? Don’t chase him from behind. Sprint back between the ball and our goal, on the inside. Then cut out the pass, and when you win it, go again: their team is still up the pitch.',
+      lesson: 'Lost it? Sprint back goal-side, then go again.',
+      ask: { q: 'Their player has just taken the ball off you. Where do you run?', a: ['Back between the ball and our goal', 'After him, from behind', 'Nowhere: wait for a teammate'] },
+      youN: 8, you: { x: 45, y: 19.5 },
+      mates: [{ n: 1, name: 'Max', x: 3, y: 20 }, { n: 2, name: 'Mia', x: 16, y: 11 }, { n: 3, name: 'Leo', x: 16, y: 28 },
+        { n: 6, name: 'Noah', x: 30, y: 11 }, { n: 11, name: 'Sam', x: 38, y: 34 }, { n: 9, name: 'Kai', x: 50, y: 22 }],
+      opps: [{ n: 1, x: 57.5, y: 20 }, { n: 10, x: 41, y: 14 }, { n: 9, x: 26, y: 14 }, { n: 4, x: 52, y: 26.5 },
+        { n: 5, x: 50, y: 10.5 }, { n: 7, x: 33, y: 30 }, { n: 8, x: 44, y: 26 }],
+      tie: { m6: 'o10' },
+      steps: [
+        { type: 'defend', ball: 10, danger: 10, run: 10, cap: 'Sprinted back goal-side',
+          prompt: 'Their #10 has just won the ball off you! Get back between him and our goal, and stop him running at it.',
+          rules: ['goalsideBall', 'inside', 'tight'], stopIf: ['goalsideBall', 'inside', 'tight'],
+          threat: { kind: 'show', to: { x: 29, y: 17 }, out: { x: 36, y: 4.5 } }, solution: { x: 38.5, y: 16.5 } },
+        { type: 'defend', ball: 10, danger: 9, run: 8, runIn: true, cap: 'Cut out the pass', intro: 'He can’t get past! Noah closes him down.',
+          prompt: 'Noah is pressing their #10. Now block the pass to their #9!',
+          rules: ['lane', 'goalsideBall', 'inside'], stopIf: ['lane'], threat: { kind: 'pass', to: { x: 26, y: 14 } }, solution: { x: 31, y: 8.7 },
+          set: { you: { x: 37, y: 10 }, o10: { x: 35, y: 4.5 }, m6: { x: 32, y: 3.5 }, o8: { x: 42, y: 21 } } },
+        { type: 'dribble', maxRun: 16, cap: 'Drove into the space', intro: 'You won it! Go again!',
+          prompt: 'Their team is still up the pitch. Draw your run into the space!',
+          goal: { type: 'gain', min: 10, label: 'You drove forward', ok: 'You carried it {gain} metres up the pitch.', fail: 'Get further forward. Their team is out of position: go!' },
+          solution: [{ x: 31, y: 8.7 }, { x: 38.5, y: 12 }, { x: 45, y: 14.5 }],
+          set: { you: { x: 31, y: 8.7 }, o8: { x: 41, y: 20.5 } } },
+        { type: 'shoot', cap: 'Shot early', intro: 'The lane is open!',
+          prompt: 'Shoot early, before they get back! Look at the keeper, then tap the goal.',
+          set: { you: { x: 45, y: 14.5 }, m9: { x: 54.5, y: 28 }, o8: { x: 41.5, y: 17.5 }, o5: { x: 52, y: 11.5 }, o4: { x: 51.5, y: 23.5 }, o1: { x: 58, y: 18.6 } } },
+      ],
+    },
   ];
 
   return { finishShot, GOAL_Y0, GOAL_Y1, BAR, LOW, KEEPER_REACH, keeper, keeperView, shotOutcome, evaluateShot, bestAim, composeStep, chainSteps, stepKept, stepEnd, chainStars, CHAIN_STEPS,
@@ -2512,8 +2641,9 @@ if (typeof module !== 'undefined') module.exports = Engine;
         drawLane(b, you, res);
       },
       submit() { res = E.evaluate(pz, you); },
-      play(done) { playPass(E.passer(pz), you, res, done, mateEls.get(E.passer(pz))); },
-      final(quiet) { landedPass(E.passer(pz), you, res, youG, quiet); },
+      // In a full move, `hold` means the pass comes in the next step (look first, then receive): just show the lane.
+      play(done) { if (pz.hold) { wait(500, done); return; } playPass(E.passer(pz), you, res, done, mateEls.get(E.passer(pz))); },
+      final(quiet) { if (pz.hold) { setBall(ballHomeFrom(E.passer(pz))); return; } landedPass(E.passer(pz), you, res, youG, quiet); },
       hasReplay: () => !!passTarget(E.passer(pz), you, res),
       extraTap(p) {
         let q = null, bd = 1.6;
@@ -4126,6 +4256,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   const LOST = {
     defend: 'He got away from you. Let’s rewind and try that bit again.',
     pass: 'They cut out the pass. Let’s rewind and try that bit again.',
+    space: 'The pass couldn’t get to you there. Let’s rewind and try that bit again.',
     choice: 'The move stopped there. Let’s rewind and try that bit again.',
     scan: 'He nicked the ball off you. Let’s rewind and try that bit again.',
     move: 'You couldn’t get the ball there. Let’s rewind and try that bit again.',
@@ -4485,7 +4616,7 @@ if (typeof module !== 'undefined') module.exports = Engine;
   document.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { capture: true });
 
   // ---------- version: shown on home, and the app fetches itself once at start to pick up a newer version ----------
-  const APP_VERSION = 15;
+  const APP_VERSION = 16;
   $('ver').textContent = `Version ${APP_VERSION}`;
   (async () => {
     if (!/^https?:$/.test(location.protocol)) return;
