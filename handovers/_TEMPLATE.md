@@ -1,17 +1,15 @@
 # <Task name>
 
 - **Project:** <project>
-- **Runs on:** Cloud | Mac | Mixed (<why, one line>)
+- **Runs on:** Cloud | Mac | Mixed (<why, one line>) — start the session in: <folder or repo>
 - **Status:** active | waiting on <who/what> | done
 - **Last updated:** YYYY-MM-DD by <Mac session | cloud session>
-- **Next step:** <one line — what the next session should do first>
+- **Next step:** <the full instructions for the next session: what to do first, what to check, what done looks like — written so the one-line resume prompt is enough>
 - **Files:** <inputs used, outputs made — paths; data files stay on the Mac>
 
 ## Resume prompt
-Paste this into a new session to carry on (start the session in the folder it names):
-```
-Carry on from the handover <full path to this file> (repo <owner/repo>). Read it first, then start from its Next step. Runs on: <Cloud | Mac>. Session folder: <folder>.
-```
+One line to paste into the new session (open the session in the folder named under "Runs on"):
+`Carry on from <full path to this file>`
 
 ## Current state
 
